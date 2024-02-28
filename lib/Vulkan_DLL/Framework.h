@@ -4,8 +4,14 @@
 class Framework : public BaseFramework
 {
 public:
-    virtual bool Init() override;
-    virtual void Destroy() override;
-    virtual void Launch() override;
+    bool Init() override;
+    void Destroy() override;
+    void Launch() override;
+    Logger* GetLogger() override;
+    Config* GetConfig() override;
 };
 
+extern "C"
+{
+    EXPORT BaseFramework* createFrameworkInstance();
+}

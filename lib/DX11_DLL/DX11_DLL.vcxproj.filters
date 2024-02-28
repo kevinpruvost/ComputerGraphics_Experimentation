@@ -19,4 +19,7 @@
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
+  <ItemGroup>
+    <None Include="Config_DX11_DLL.yaml" />
+  </ItemGroup>
 </Project>

@@ -1,5 +1,4 @@
 #include "FrameworkLoader.h"
-#include <windows.h>
 #include <exception>
 #include <stdexcept>
 #include <iostream>
@@ -14,10 +13,15 @@ typedef BaseFramework* (*CreateBaseFrameworkFn)();
 
 void FrameworkLoader::LoadFramework(const FrameworkType type)
 {
-    HINSTANCE hDllInstance = nullptr;
-    BaseFramework* fw = nullptr;
-
     const wchar_t * dllName = nullptr;
+
+    if (hDllInstance) {
+        delete m_framework;
+        FreeLibrary(hDllInstance);
+        m_framework = nullptr;
+        hDllInstance = nullptr;
+    }
+
     switch (type)
     {
     case FrameworkType::OpenGL:
@@ -31,23 +35,23 @@ void FrameworkLoader::LoadFramework(const FrameworkType type)
         break;
     }
 
-    hDllInstance = LoadLibrary(dllName);
-
-    if (hDllInstance != nullptr) {
+    if ((hDllInstance = LoadLibraryW(dllName)) != nullptr) {
         // Get function pointer for creating object from DLL
-        CreateBaseFrameworkFn createFramework = reinterpret_cast<CreateBaseFrameworkFn>(GetProcAddress(hDllInstance, "Framework"));
+        void* zboui = GetProcAddress(hDllInstance, "createFrameworkInstance");
+        CreateBaseFrameworkFn createFramework = reinterpret_cast<CreateBaseFrameworkFn>(GetProcAddress(hDllInstance, "createFrameworkInstance"));
 
         if (createFramework != nullptr) {
             // Call function to create object
-            fw = createFramework();
-            if (fw == nullptr)
+            m_framework = createFramework();
+            if (m_framework == nullptr)
             {
                 throw std::runtime_error("Failed to create framework object");
             }
         }
-
-        // Free the DLL module
-        FreeLibrary(hDllInstance);
+        else {
+            // Function not found
+            throw std::runtime_error("Failed to find function in DLL");
+        }
     }
     else {
         // DLL loading failed

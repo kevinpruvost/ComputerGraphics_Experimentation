@@ -3,19 +3,24 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.7.34031.279
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "ComputerGraphics_Experimentation", ".\ComputerGraphics_Experimentation\ComputerGraphics_Experimentation.vcxproj", "{DC53B37C-1174-4692-8AAE-90202C19D796}"
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "ComputerGraphics_Experimentation", "ComputerGraphics_Experimentation\ComputerGraphics_Experimentation.vcxproj", "{DC53B37C-1174-4692-8AAE-90202C19D796}"
+	ProjectSection(ProjectDependencies) = postProject
+		{2880CE71-3EEF-4AB8-9DDC-AC8C4A1594B3} = {2880CE71-3EEF-4AB8-9DDC-AC8C4A1594B3}
+		{811ED502-B3A9-42FF-A7CC-F78297E19A3A} = {811ED502-B3A9-42FF-A7CC-F78297E19A3A}
+		{DB176B2B-8A9D-4D31-8D90-8972E7D2BDE9} = {DB176B2B-8A9D-4D31-8D90-8972E7D2BDE9}
+	EndProjectSection
 EndProject
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "DX11_DLL", ".\lib\DX11_DLL\DX11_DLL.vcxproj", "{DB176B2B-8A9D-4D31-8D90-8972E7D2BDE9}"
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "DX11_DLL", "lib\DX11_DLL\DX11_DLL.vcxproj", "{DB176B2B-8A9D-4D31-8D90-8972E7D2BDE9}"
 EndProject
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "OpenGL_DLL", ".\lib\OpenGL_DLL\OpenGL_DLL.vcxproj", "{2880CE71-3EEF-4AB8-9DDC-AC8C4A1594B3}"
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "OpenGL_DLL", "lib\OpenGL_DLL\OpenGL_DLL.vcxproj", "{2880CE71-3EEF-4AB8-9DDC-AC8C4A1594B3}"
 EndProject
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Vulkan_DLL", ".\lib\Vulkan_DLL\Vulkan_DLL.vcxproj", "{811ED502-B3A9-42FF-A7CC-F78297E19A3A}"
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Vulkan_DLL", "lib\Vulkan_DLL\Vulkan_DLL.vcxproj", "{811ED502-B3A9-42FF-A7CC-F78297E19A3A}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Libraries", "Libraries", "{253FD363-0ABE-4E11-B014-3A4FC83373EE}"
 EndProject
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Yaml-Cpp", ".\lib\Yaml-Cpp\Yaml-Cpp.vcxproj", "{BEBB9EE4-A931-4C3F-8B8D-F8ECAF9335CA}"
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Yaml-Cpp", "lib\Yaml-Cpp\Yaml-Cpp.vcxproj", "{BEBB9EE4-A931-4C3F-8B8D-F8ECAF9335CA}"
 EndProject
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "CommonFramework", ".\lib\CommonFramework\CommonFramework.vcxproj", "{FBD29D65-C553-4E00-B234-48EEC3A495F3}"
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "CommonFramework", "lib\CommonFramework\CommonFramework.vcxproj", "{FBD29D65-C553-4E00-B234-48EEC3A495F3}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

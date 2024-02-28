@@ -1,12 +1,33 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup>
-    <ClInclude Include="Config.h" />
-    <ClInclude Include="..\..\include\common\Logger.h" />
-    <ClInclude Include="..\..\include\common\BaseFramework.h" />
+    <ClCompile Include="Config.cpp">
+      <Filter>Tools</Filter>
+    </ClCompile>
+    <ClCompile Include="BaseFramework.cpp">
+      <Filter>Tools</Filter>
+    </ClCompile>
+    <ClCompile Include="Logger.cpp">
+      <Filter>Tools</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="Config.cpp" />
-    <ClCompile Include="..\..\src\Logger.cpp" />
+    <Filter Include="Tools">
+      <UniqueIdentifier>{d3514bfa-f985-40f5-bc02-7ed408b7da69}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Window">
+      <UniqueIdentifier>{16332fda-39f0-47e9-a6fd-05c92c650b3f}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="include\common\Config.h">
+      <Filter>Tools</Filter>
+    </ClInclude>
+    <ClInclude Include="include\common\Logger.h">
+      <Filter>Tools</Filter>
+    </ClInclude>
+    <ClInclude Include="include\common\BaseFramework.h">
+      <Filter>Tools</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>

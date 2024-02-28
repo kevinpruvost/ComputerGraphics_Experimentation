@@ -1,3 +1,5 @@
+#pragma once
+
 #include <iostream>
 #include <mutex>
 #include <memory>
@@ -19,6 +21,7 @@ public:
     static void Destroy();
     static void Log(const std::string& message) { m_instance->Log_(message); }
     static void Print(const std::string& message) { m_instance->Print_(message); }
+    static Logger * Get() { return m_instance.get(); }
 
     // Function to log with format strings
     template<typename... Args>

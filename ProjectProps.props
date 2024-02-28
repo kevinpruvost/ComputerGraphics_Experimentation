@@ -10,7 +10,8 @@
   </PropertyGroup>
   <ItemDefinitionGroup>
     <ClCompile>
-      <AdditionalIncludeDirectories>$(SolutionDir)\lib\Yaml-Cpp\include;$(ProjectCommonDir);$(LibFolderLocation)/glm;$(LibFolderLocation)/glfw-WIN64/include</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(SolutionDir)\lib\Yaml-Cpp\include;$(SolutionDir)\lib\CommonFramework\include;$(ProjectCommonDir);$(LibFolderLocation)/glm;$(LibFolderLocation)/glfw-WIN64/include</AdditionalIncludeDirectories>
+      <PreprocessorDefinitions>yaml_cpp_EXPORTS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
     </ClCompile>
     <Link>
       <AdditionalDependencies>glfw3.lib;%(AdditionalDependencies)</AdditionalDependencies>
