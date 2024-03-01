@@ -18,7 +18,7 @@ public:
     virtual void Destroy() = 0;
 
     // Launch function
-    virtual void Launch() = 0;
+    virtual int Launch() = 0;
 
     // Get the logger
     virtual Logger * GetLogger() = 0;

@@ -5,6 +5,8 @@
 #include <memory>
 #include <filesystem>
 #include <fstream>
+#include <array>
+#include <unordered_set>
 
 template<typename... Args>
 std::string format(const std::string& fmt, Args... args) {
@@ -25,11 +27,10 @@ public:
 
     // Function to log with format strings
     template<typename... Args>
-    void Log(const std::string& format, Args... args) {
-        std::stringstream ss;
-        // Format the message
-        (ss << ... << args);
-        std::string message = ss.str();
+    static void Log(const std::string& format, Args... args) {
+        int length = snprintf(nullptr, 0, format.c_str(), args...);
+        std::string message(length+1, 0);
+        sprintf(const_cast<char *>(message.c_str()), format.c_str(), args...);
 
         // Log the message
         Log(message);
@@ -37,14 +38,29 @@ public:
 
     // Function to print with format strings
     template<typename... Args>
-    void Print(const std::string& format, Args... args) {
-        std::stringstream ss;
-        // Format the message
-        (ss << ... << args);
-        std::string message = ss.str();
+    static void Print(const std::string& format, Args... args) {
+        int length = snprintf(NULL, 0, format.c_str(), args...);
+        std::string message(length+1, 0);
+        sprintf(const_cast<char *>(message.c_str()), format.c_str(), args...);
 
         // Print the message
         Print(message);
+    }
+
+    // Function to print with format strings
+    template<typename... Args>
+    static void DebugLog(const std::string& format, Args... args) {
+#if _DEBUG
+        Log("[DEBUG]: " + format, args...);
+#endif
+    }
+
+    // Function to print with format strings
+    template<typename... Args>
+    static void DebugPrint(const std::string& format, Args... args) {
+#if _DEBUG
+        Print("[DEBUG]: " + format, args...);
+#endif
     }
 
     ~Logger() = default;

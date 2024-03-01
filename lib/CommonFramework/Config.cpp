@@ -36,3 +36,26 @@ Config* Config::Get()
 {
     return m_instance.get();
 }
+
+WindowSettings Config::WindowSettings() const
+{
+    struct WindowSettings settings;
+    auto windowNode = m_node["window_settings"];
+    settings.name = windowNode["name"].as<std::string>();
+    settings.width = windowNode["width"].as<int>();
+    settings.height = windowNode["height"].as<int>();
+    settings.resizable = windowNode["resizable"].as<bool>();
+    settings.fullscreen = windowNode["fullscreen"].as<bool>();
+    settings.vsync = windowNode["vsync"].as<bool>();
+    settings.focused = windowNode["focused"].as<bool>();
+    settings.refreshRate = windowNode["refreshRate"].as<int>();
+    return settings;
+}
+
+EngineSettings Config::EngineSettings() const
+{
+    struct EngineSettings settings;
+    auto engineNode = m_node["engine_settings"];
+    settings.name = engineNode["name"].as<std::string>();
+    return settings;
+}

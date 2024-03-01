@@ -2,12 +2,12 @@
 
 #include <common/Logger.h>
 
+#include "Application.h"
+
 bool Framework::Init()
 {
     Config::Initialize(CONFIG_FILE_NAME);
     Logger::Initialize(DEFAULT_LOG_FILE_NAME);
-    Logger::Print("test");
-    Logger::Log("Log_test");
     return true;
 }
 
@@ -16,9 +16,17 @@ void Framework::Destroy()
     return;
 }
 
-void Framework::Launch()
+int Framework::Launch()
 {
-    return;
+    try {
+        Application app;
+        app.run();
+    }
+    catch (const std::exception& e) {
+        std::cerr << e.what() << std::endl;
+        return EXIT_FAILURE;
+    }
+    return EXIT_SUCCESS;
 }
 
 Logger* Framework::GetLogger()

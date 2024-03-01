@@ -3,15 +3,37 @@
   <ItemGroup>
     <ClCompile Include="Framework.cpp" />
     <ClCompile Include="dllmain.cpp" />
+    <ClCompile Include="Application.cpp">
+      <Filter>Window</Filter>
+    </ClCompile>
+    <ClCompile Include="ApplicationTools.cpp">
+      <Filter>Window\Tools</Filter>
+    </ClCompile>
+    <ClCompile Include="ApplicationBase.cpp">
+      <Filter>Window</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Framework.h" />
-    <ClInclude Include="resource.h" />
+    <ClInclude Include="Application.h">
+      <Filter>Window</Filter>
+    </ClInclude>
+    <ClInclude Include="ApplicationTools.h">
+      <Filter>Window\Tools</Filter>
+    </ClInclude>
+    <ClInclude Include="ApplicationBase.h">
+      <Filter>Window</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="Config_Vulkan_DLL.yaml" />
   </ItemGroup>
   <ItemGroup>
-    <ResourceCompile Include="Vulkan_DLL.rc" />
+    <Filter Include="Window">
+      <UniqueIdentifier>{d219a98d-b492-4739-acc1-b3bed21715df}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Window\Tools">
+      <UniqueIdentifier>{dd2f848b-83af-4c88-a04b-f6e72161f084}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
 </Project>

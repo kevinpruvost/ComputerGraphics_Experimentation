@@ -24,14 +24,18 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="BaseApplication.cpp" />
     <ClCompile Include="BaseFramework.cpp" />
     <ClCompile Include="Config.cpp" />
     <ClCompile Include="Logger.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="BaseApplication.h" />
     <ClInclude Include="include\common\BaseFramework.h" />
     <ClInclude Include="include\common\Config.h" />
+    <ClInclude Include="include\common\EngineSettings.h" />
     <ClInclude Include="include\common\Logger.h" />
+    <ClInclude Include="include\common\WindowSettings.h" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <VCProjectVersion>17.0</VCProjectVersion>

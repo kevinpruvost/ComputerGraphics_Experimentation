@@ -1,6 +1,8 @@
 #pragma once
 #include <yaml-cpp/yaml.h>
 #include <filesystem>
+#include <common/WindowSettings.h>
+#include <common/EngineSettings.h>
 
 class Config
 {
@@ -13,6 +15,8 @@ public:
     template<typename Key>
     YAML::Node operator[](const Key& key) { return m_node[key]; }
     static Config* Get();
+    WindowSettings WindowSettings() const;
+    EngineSettings EngineSettings() const;
 
     ~Config();
 private:

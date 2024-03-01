@@ -155,10 +155,15 @@
     <PostBuildEvent />
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="Application.h" />
+    <ClInclude Include="ApplicationBase.h" />
+    <ClInclude Include="ApplicationTools.h" />
     <ClInclude Include="Framework.h" />
-    <ClInclude Include="resource.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="Application.cpp" />
+    <ClCompile Include="ApplicationBase.cpp" />
+    <ClCompile Include="ApplicationTools.cpp" />
     <ClCompile Include="dllmain.cpp" />
     <ClCompile Include="Framework.cpp" />
   </ItemGroup>
@@ -174,9 +179,6 @@
     <ProjectReference Include="..\Yaml-Cpp\Yaml-Cpp.vcxproj">
       <Project>{bebb9ee4-a931-4c3f-8b8d-f8ecaf9335ca}</Project>
     </ProjectReference>
-  </ItemGroup>
-  <ItemGroup>
-    <ResourceCompile Include="Vulkan_DLL.rc" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
