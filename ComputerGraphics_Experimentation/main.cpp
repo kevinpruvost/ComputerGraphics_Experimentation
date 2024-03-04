@@ -9,7 +9,7 @@ int main()
 	try
 	{
 		Logger::Initialize("test.txt");
-		FrameworkLoader loader(FrameworkLoader::FrameworkType::Vulkan);
+		FrameworkLoader loader(FrameworkLoader::FrameworkType::OpenGL);
 		BaseFramework* fw = loader.GetFramework();
 		fw->Init();
 		fw->Launch();

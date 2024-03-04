@@ -18,8 +18,7 @@ VKAPI_ATTR VkBool32 VKAPI_CALL debugCallback(
 
 void ApplicationTools::setupDebugMessenger()
 {
-    if (!__enableValidationLayers) return;
-
+#if _DEBUG
     VkDebugUtilsMessengerCreateInfoEXT createInfo{};
     createInfo.sType = VK_STRUCTURE_TYPE_DEBUG_UTILS_MESSENGER_CREATE_INFO_EXT;
     createInfo.messageSeverity = VK_DEBUG_UTILS_MESSAGE_SEVERITY_VERBOSE_BIT_EXT | VK_DEBUG_UTILS_MESSAGE_SEVERITY_WARNING_BIT_EXT | VK_DEBUG_UTILS_MESSAGE_SEVERITY_ERROR_BIT_EXT;
@@ -34,6 +33,7 @@ void ApplicationTools::setupDebugMessenger()
     if (func(_instance, &createInfo, nullptr, &_debugMessenger) != VkResult::VK_SUCCESS) {
         throw std::runtime_error("failed to set up debug messenger!");
     }
+#endif
 }
 
 bool ApplicationTools::checkValidationLayerSupport() {

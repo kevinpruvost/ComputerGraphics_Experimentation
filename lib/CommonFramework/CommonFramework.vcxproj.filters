@@ -13,6 +13,9 @@
     <ClCompile Include="Config.cpp">
       <Filter>Tools\Config</Filter>
     </ClCompile>
+    <ClCompile Include="Exception.cpp">
+      <Filter>Tools</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="Tools">
@@ -43,6 +46,9 @@
     </ClInclude>
     <ClInclude Include="include\common\EngineSettings.h">
       <Filter>Tools\Config</Filter>
+    </ClInclude>
+    <ClInclude Include="include\common\Exception.h">
+      <Filter>Tools</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

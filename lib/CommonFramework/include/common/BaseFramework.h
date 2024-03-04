@@ -2,6 +2,7 @@
 
 #include <common/Logger.h>
 #include <common/Config.h>
+#include <common/Exception.h>
 
 #define EXPORT __declspec(dllexport)
 #define IMPORT __declspec(dllimport)

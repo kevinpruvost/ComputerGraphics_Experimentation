@@ -139,15 +139,28 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="Application.cpp" />
+    <ClCompile Include="ApplicationBase.cpp" />
+    <ClCompile Include="ApplicationTools.cpp" />
     <ClCompile Include="dllmain.cpp" />
+    <ClCompile Include="Framework.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\lib\CommonFramework\CommonFramework.vcxproj">
+    <ProjectReference Include="..\CommonFramework\CommonFramework.vcxproj">
       <Project>{fbd29d65-c553-4e00-b234-48eec3a495f3}</Project>
+    </ProjectReference>
+    <ProjectReference Include="..\glad\glad.vcxproj">
+      <Project>{bc1635d4-c3f0-4ace-9cbf-af0ab85094ea}</Project>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
     <None Include="Config_OpenGL_DLL.yaml" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="Application.h" />
+    <ClInclude Include="ApplicationBase.h" />
+    <ClInclude Include="ApplicationTools.h" />
+    <ClInclude Include="Framework.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

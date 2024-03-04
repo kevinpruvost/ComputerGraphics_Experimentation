@@ -73,12 +73,10 @@ void Application::createInstance()
 
 #if _DEBUG
     checkAvailableExtensions();
-    if (__enableValidationLayers) {
-        if (!checkValidationLayerSupport())
-            throw std::runtime_error("validation layers requested, but not available!");
-        createInfo.enabledLayerCount   = static_cast<uint32_t>(validationLayers.size());
-        createInfo.ppEnabledLayerNames = validationLayers.data();
-    }
+    if (!checkValidationLayerSupport())
+        throw std::runtime_error("validation layers requested, but not available!");
+    createInfo.enabledLayerCount   = static_cast<uint32_t>(validationLayers.size());
+    createInfo.ppEnabledLayerNames = validationLayers.data();
 #endif
 
     const std::vector<const char*> extensions = getRequiredExtensions();

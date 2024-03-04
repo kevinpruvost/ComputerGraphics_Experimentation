@@ -22,6 +22,8 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Yaml-Cpp", "lib\Yaml-Cpp\Ya
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "CommonFramework", "lib\CommonFramework\CommonFramework.vcxproj", "{FBD29D65-C553-4E00-B234-48EEC3A495F3}"
 EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "glad", "lib\glad\glad.vcxproj", "{BC1635D4-C3F0-4ACE-9CBF-AF0AB85094EA}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|x64 = Debug|x64
@@ -78,6 +80,14 @@ Global
 		{FBD29D65-C553-4E00-B234-48EEC3A495F3}.Release|x64.Build.0 = Release|x64
 		{FBD29D65-C553-4E00-B234-48EEC3A495F3}.Release|x86.ActiveCfg = Release|Win32
 		{FBD29D65-C553-4E00-B234-48EEC3A495F3}.Release|x86.Build.0 = Release|Win32
+		{BC1635D4-C3F0-4ACE-9CBF-AF0AB85094EA}.Debug|x64.ActiveCfg = Debug|x64
+		{BC1635D4-C3F0-4ACE-9CBF-AF0AB85094EA}.Debug|x64.Build.0 = Debug|x64
+		{BC1635D4-C3F0-4ACE-9CBF-AF0AB85094EA}.Debug|x86.ActiveCfg = Debug|Win32
+		{BC1635D4-C3F0-4ACE-9CBF-AF0AB85094EA}.Debug|x86.Build.0 = Debug|Win32
+		{BC1635D4-C3F0-4ACE-9CBF-AF0AB85094EA}.Release|x64.ActiveCfg = Release|x64
+		{BC1635D4-C3F0-4ACE-9CBF-AF0AB85094EA}.Release|x64.Build.0 = Release|x64
+		{BC1635D4-C3F0-4ACE-9CBF-AF0AB85094EA}.Release|x86.ActiveCfg = Release|Win32
+		{BC1635D4-C3F0-4ACE-9CBF-AF0AB85094EA}.Release|x86.Build.0 = Release|Win32
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -85,6 +95,7 @@ Global
 	GlobalSection(NestedProjects) = preSolution
 		{BEBB9EE4-A931-4C3F-8B8D-F8ECAF9335CA} = {253FD363-0ABE-4E11-B014-3A4FC83373EE}
 		{FBD29D65-C553-4E00-B234-48EEC3A495F3} = {253FD363-0ABE-4E11-B014-3A4FC83373EE}
+		{BC1635D4-C3F0-4ACE-9CBF-AF0AB85094EA} = {253FD363-0ABE-4E11-B014-3A4FC83373EE}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {5D48C96A-9B43-4C6F-B56B-2D70EB7D674F}
