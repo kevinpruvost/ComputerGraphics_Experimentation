@@ -1,10 +1,8 @@
 #pragma once
 
-#include <common/Config.h>
-#include <common/Logger.h>
+#include <common/ApplicationCommonBase.h>
 
-#define GLFW_INCLUDE_VULKAN
-#include <GLFW/glfw3.h>
+#include <vulkan/vulkan.h>
 
 #define GLM_FORCE_RADIANS
 #define GLM_FORCE_DEPTH_ZERO_TO_ONE
@@ -14,9 +12,10 @@
 #include <iostream>
 #include <functional>
 
-class ApplicationBase
+class ApplicationBase : public ApplicationCommonBase
 {
 protected:
+    ApplicationBase();
     VkInstance _instance;
 };
 

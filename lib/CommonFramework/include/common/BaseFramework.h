@@ -3,9 +3,8 @@
 #include <common/Logger.h>
 #include <common/Config.h>
 #include <common/Exception.h>
-
-#define EXPORT __declspec(dllexport)
-#define IMPORT __declspec(dllimport)
+#include <common/ApplicationCommonBase.h>
+#include <common/DLL.h>
 
 class BaseFramework {
 public:
@@ -26,5 +25,12 @@ public:
 
     // Get the config
     virtual Config * GetConfig() = 0;
+
+    void SetConfig(const Config & config);
+    void SetWindow(Window* w);
+
+protected:
+    ApplicationCommonBase * _app;
+
 private:
 };

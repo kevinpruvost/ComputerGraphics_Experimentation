@@ -1,2 +1,13 @@
 config_name: OpenGL
 version: 0.1a
+window_settings:
+    name: OpenGL_Window
+    width: 1280
+    height: 720
+    resizable: true
+    fullscreen: false
+    vsync: true
+    focused: true
+    refreshRate: 60
+engine_settings:
+    name: OpenGL_Engine

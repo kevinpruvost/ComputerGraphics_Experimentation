@@ -4,22 +4,32 @@
 #include <stdexcept>
 #include <iostream>
 
+#include <common/Window.h>
+
 int main()
 {
 	try
 	{
 		Logger::Initialize("test.txt");
-		FrameworkLoader loader(FrameworkLoader::FrameworkType::OpenGL);
+
+		Window * w = Window::CreateWindowFromAPI(Window::WindowAPI::GLFW);
+		Config & windowConfig = *Config::Load("Config_GLFWWindow.yaml");
+		w->Init(windowConfig);
+
+		FrameworkLoader::FrameworkType engineType = FrameworkLoader::FrameworkType::Vulkan;
+		FrameworkLoader loader(engineType);
 		BaseFramework* fw = loader.GetFramework();
 		fw->Init();
+		fw->SetWindow(w);
 		fw->Launch();
-		fw->GetLogger()->Log("Framework launched with Vulkan\n");
-		Logger::Log("Framework launched with Vulkan\n");
+		fw->GetLogger()->Log("Framework launched with %d\n", engineType);
+
+		delete w;
 	}
 	catch (const std::exception& e)
 	{
 		std::cerr << e.what() << std::endl;
-		return -1;
+		return (int)ErrorCode::Failure;
 	}
-    return 0;
+    return (int)ErrorCode::Success;
 }

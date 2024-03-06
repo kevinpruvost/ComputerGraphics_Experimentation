@@ -1,6 +1,7 @@
 #include "ApplicationTools.h"
 
 ApplicationTools::ApplicationTools()
+    : ApplicationBase()
 {
 }
 

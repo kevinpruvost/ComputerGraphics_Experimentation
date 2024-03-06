@@ -139,7 +139,11 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="Application.cpp" />
+    <ClCompile Include="ApplicationBase.cpp" />
+    <ClCompile Include="ApplicationTools.cpp" />
     <ClCompile Include="dllmain.cpp" />
+    <ClCompile Include="Framework.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\lib\CommonFramework\CommonFramework.vcxproj">
@@ -148,6 +152,12 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="Config_DX11_DLL.yaml" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="Application.h" />
+    <ClInclude Include="ApplicationBase.h" />
+    <ClInclude Include="ApplicationTools.h" />
+    <ClInclude Include="Framework.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

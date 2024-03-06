@@ -5,6 +5,5 @@
 class ApplicationTools : public ApplicationBase
 {
 protected:
-    ApplicationTools();
+    ApplicationTools(const Config& config);
 };
-

@@ -11,10 +11,10 @@
     <ClCompile Include="Application.cpp">
       <Filter>Window</Filter>
     </ClCompile>
-    <ClCompile Include="ApplicationBase.cpp">
-      <Filter>Window</Filter>
-    </ClCompile>
     <ClCompile Include="Framework.cpp" />
+    <ClCompile Include="ApplicationBase.cpp">
+      <Filter>Window\Tools</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="ApplicationTools.h">
@@ -23,10 +23,10 @@
     <ClInclude Include="Application.h">
       <Filter>Window</Filter>
     </ClInclude>
-    <ClInclude Include="ApplicationBase.h">
-      <Filter>Window</Filter>
-    </ClInclude>
     <ClInclude Include="Framework.h" />
+    <ClInclude Include="ApplicationBase.h">
+      <Filter>Window\Tools</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="Window">

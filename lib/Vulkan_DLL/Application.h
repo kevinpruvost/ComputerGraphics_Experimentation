@@ -5,7 +5,8 @@
 class Application : public ApplicationTools
 {
 public:
-    int run();
+    Application();
+    ErrorCode Run() override;
 
 private:
     void initWindow();
@@ -20,7 +21,6 @@ private:
 
     void checkAvailableExtensions();
 
-    GLFWwindow* __w;
     WindowSettings __wsettings;
     EngineSettings __esettings;
 };

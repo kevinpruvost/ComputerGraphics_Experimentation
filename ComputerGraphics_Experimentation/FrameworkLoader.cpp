@@ -1,12 +1,19 @@
 #include "FrameworkLoader.h"
-#include <exception>
-#include <stdexcept>
+#include <common/Exception.h>
 #include <iostream>
 #include <cstdlib>
 
 FrameworkLoader::FrameworkLoader(const FrameworkType type)
+    : __framework(nullptr), __dll(nullptr)
 {
     LoadFramework(type);
+}
+
+FrameworkLoader::~FrameworkLoader()
+{
+    if (__dll) {
+        delete __dll;
+    }
 }
 
 typedef BaseFramework* (*CreateBaseFrameworkFn)();
@@ -15,11 +22,10 @@ void FrameworkLoader::LoadFramework(const FrameworkType type)
 {
     const wchar_t * dllName = nullptr;
 
-    if (hDllInstance) {
-        delete m_framework;
-        FreeLibrary(hDllInstance);
-        m_framework = nullptr;
-        hDllInstance = nullptr;
+    if (__dll) {
+        delete __dll;
+        __framework = nullptr;
+        __dll = nullptr;
     }
 
     switch (type)
@@ -35,33 +41,26 @@ void FrameworkLoader::LoadFramework(const FrameworkType type)
         break;
     }
 
-    if ((hDllInstance = LoadLibraryW(dllName)) != nullptr) {
-        // Get function pointer for creating object from DLL
-        void* zboui = GetProcAddress(hDllInstance, "createFrameworkInstance");
-        CreateBaseFrameworkFn createFramework = reinterpret_cast<CreateBaseFrameworkFn>(GetProcAddress(hDllInstance, "createFrameworkInstance"));
-
-        if (createFramework != nullptr) {
-            // Call function to create object
-            m_framework = createFramework();
-            if (m_framework == nullptr)
-            {
-                throw std::runtime_error("Failed to create framework object");
-            }
-        }
-        else {
-            // Function not found
-            throw std::runtime_error("Failed to find function in DLL");
+    // Load the DLL
+    __dll = new DLL(dllName);
+    CreateBaseFrameworkFn createFramework = reinterpret_cast<CreateBaseFrameworkFn>(__dll->getFunction("createFrameworkInstance"));
+    if (createFramework != nullptr) {
+        // Call function to create object
+        __framework = createFramework();
+        if (__framework == nullptr)
+        {
+            throw DLLException("Failed to create framework object");
         }
     }
     else {
-        // DLL loading failed
-        throw std::runtime_error("Failed to load DLL");
+        // Function not found
+        throw DLLException("Failed to find function in DLL");
     }
 
-    m_frameworkType = type;
+    __frameworkType = type;
 }
 
 BaseFramework* FrameworkLoader::GetFramework() const
 {
-    return m_framework;
+    return __framework;
 }

@@ -8,14 +8,15 @@
 class Application : public ApplicationTools
 {
 public:
-    Application();
-    ErrorCode Run() override;
+    Application(const Config& config);
+    ErrorCode Run();
     ErrorCode Initialize();
     ErrorCode Loop();
     void Terminate();
 
+    Application();
     ~Application();
 
 private:
-    GLFWwindow * __w;
+    GLFWwindow* __w;
 };

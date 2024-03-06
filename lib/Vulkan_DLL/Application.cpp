@@ -2,50 +2,31 @@
 
 #include <common/Logger.h>
 
-int Application::run()
+#include <GLFW/glfw3.h>
+
+#include <functional>
+
+Application::Application()
+    : ApplicationTools()
+{
+}
+
+ErrorCode Application::Run()
 {
     initWindow();
     initVulkan();
-    mainLoop();
+    // Window Loop
+    _w->SetLoopCallback([&]() {
+        Logger::DebugPrint("Zboui");
+    });
+    _w->Loop();
     cleanup();
-    return EXIT_SUCCESS;
+    return ErrorCode::Failure;
 }
 
 void Application::initWindow()
 {
-    __wsettings = Config::Get()->WindowSettings();
-    __esettings = Config::Get()->EngineSettings();
-
-    glfwInit();
-
-    glfwWindowHint(GLFW_CLIENT_API, GLFW_NO_API);
-    glfwWindowHint(GLFW_RESIZABLE, __wsettings.resizable);
-    glfwWindowHint(GLFW_FOCUSED,   __wsettings.focused);
-
-    GLFWvidmode videoMode;
-    videoMode.redBits = videoMode.greenBits = videoMode.blueBits = 8;
-    videoMode.width = __wsettings.width;
-    videoMode.height = __wsettings.height;
-    videoMode.refreshRate = __wsettings.refreshRate;
-
-    glfwWindowHint(GLFW_RED_BITS,     videoMode.redBits);
-    glfwWindowHint(GLFW_GREEN_BITS,   videoMode.greenBits);
-    glfwWindowHint(GLFW_BLUE_BITS,    videoMode.blueBits);
-    glfwWindowHint(GLFW_REFRESH_RATE, videoMode.refreshRate);
-
-    __w = glfwCreateWindow(__wsettings.width, __wsettings.height, __wsettings.name.c_str(), __wsettings.fullscreen ? glfwGetPrimaryMonitor() : nullptr, nullptr);
-
-    Logger::DebugPrint(
-        "GLFW initialized with parameters :\n"
-        "- Window Name: %s\n"
-        "- Width: %d\n"
-        "- Height: %d\n"
-        "- Fullscreen: %d\n"
-        "- Resizable: %d\n"
-        "- Focused: %d\n"
-        "- Refresh Rate: %d",
-        __wsettings.name.c_str(), __wsettings.width, __wsettings.height, __wsettings.fullscreen, __wsettings.resizable, __wsettings.focused, __wsettings.refreshRate);
- }
+}
 
 void Application::initVulkan()
 {
@@ -111,16 +92,9 @@ void Application::checkAvailableExtensions()
     std::vector<VkExtensionProperties> extensions(extensionCount);
     vkEnumerateInstanceExtensionProperties(nullptr, &extensionCount, extensions.data());
 
-    Logger::DebugPrint("available extensions:\n");
+    Logger::DebugPrint("Available extensions:\n");
     for (const auto& extension : extensions) {
         Logger::DebugPrint("\t%s", extension.extensionName);
-    }
-}
-
-void Application::mainLoop()
-{
-    while (!glfwWindowShouldClose(__w)) {
-        glfwPollEvents();
     }
 }
 
@@ -129,8 +103,4 @@ void Application::cleanup()
     ApplicationToolsCleanup();
 
     vkDestroyInstance(_instance, nullptr);
-
-    glfwDestroyWindow(__w);
-
-    glfwTerminate();
 }

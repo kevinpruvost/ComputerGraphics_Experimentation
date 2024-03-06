@@ -1,5 +1,6 @@
 #pragma once
 #include <common/BaseFramework.h>
+#include <common/DLL.h>
 #include <windows.h>
 
 class FrameworkLoader
@@ -13,13 +14,13 @@ public:
     };
 
     FrameworkLoader(const FrameworkType type = FrameworkType::Vulkan);
-    ~FrameworkLoader() = default;
+    ~FrameworkLoader();
 
     void LoadFramework(const FrameworkType type);
     BaseFramework * GetFramework() const;
 
 private:
-    FrameworkType m_frameworkType;
-    HINSTANCE hDllInstance = nullptr;
-    BaseFramework* m_framework;
+    FrameworkType __frameworkType;
+    BaseFramework* __framework;
+    DLL * __dll;
 };

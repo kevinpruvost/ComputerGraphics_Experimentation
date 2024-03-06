@@ -5,6 +5,6 @@
 class ApplicationBase : public ApplicationCommonBase
 {
 protected:
-    ApplicationBase();
+    ApplicationBase(const Config& config);
 };
 

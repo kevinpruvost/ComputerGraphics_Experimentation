@@ -21,8 +21,8 @@ public:
     static void Initialize(const std::filesystem::path & path);
     static void Reset(const std::filesystem::path& path);
     static void Destroy();
-    static void Log(const std::string& message) { m_instance->Log_(message); }
-    static void Print(const std::string& message) { m_instance->Print_(message); }
+    static inline void Log(const std::string& message) { m_instance->Log_(message); m_instance->Print("[LOG]" + message); }
+    static inline void Print(const std::string& message) { m_instance->Print_(message); }
     static Logger * Get() { return m_instance.get(); }
 
     // Function to log with format strings

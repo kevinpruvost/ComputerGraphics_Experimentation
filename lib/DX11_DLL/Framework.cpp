@@ -4,12 +4,9 @@
 
 #include "Application.h"
 
-
 bool Framework::Init()
 {
-    _app = new Application();
-
-    SetConfig(*Config::Load(CONFIG_FILE_NAME));
+    Config::Load(CONFIG_FILE_NAME);
     Logger::Initialize(DEFAULT_LOG_FILE_NAME);
     return true;
 }
@@ -22,10 +19,11 @@ void Framework::Destroy()
 int Framework::Launch()
 {
     try {
-        _app->Run();
+        Application app(*Config::Get());
+        app.Run();
     }
     catch (const std::exception& e) {
-        Logger::Log(e.what());
+        std::cerr << e.what() << std::endl;
         return EXIT_FAILURE;
     }
     return EXIT_SUCCESS;
@@ -38,7 +36,7 @@ Logger* Framework::GetLogger()
 
 Config* Framework::GetConfig()
 {
-    return Config::Get(CONFIG_FILE_NAME);
+    return Config::Get();
 }
 
 // Export the factory function to create an instance of the class

@@ -1,7 +1,7 @@
-config_name: DirectX11
+config_name: GLFWWindow
 version: 0.1a
 window_settings:
-    name: DirectX11_Window
+    name: GLFWWindow
     width: 1280
     height: 720
     resizable: true
@@ -9,5 +9,3 @@ window_settings:
     vsync: true
     focused: true
     refreshRate: 60
-engine_settings:
-    name: DirectX11_Engine

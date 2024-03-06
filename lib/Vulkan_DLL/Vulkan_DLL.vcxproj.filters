@@ -10,7 +10,7 @@
       <Filter>Window\Tools</Filter>
     </ClCompile>
     <ClCompile Include="ApplicationBase.cpp">
-      <Filter>Window</Filter>
+      <Filter>Window\Tools</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -22,7 +22,7 @@
       <Filter>Window\Tools</Filter>
     </ClInclude>
     <ClInclude Include="ApplicationBase.h">
-      <Filter>Window</Filter>
+      <Filter>Window\Tools</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

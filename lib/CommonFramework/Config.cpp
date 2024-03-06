@@ -1,6 +1,6 @@
 #include <common/Config.h>
 
-std::unique_ptr<Config> Config::m_instance = nullptr;
+std::unordered_map<std::string, std::unique_ptr<Config>> Config::m_instances;
 
 Config::Config(const std::string & filename)
     : m_node(YAML::LoadFile(filename))
@@ -17,24 +17,25 @@ Config::~Config()
 {
 }
 
-void Config::Initialize(const std::filesystem::path& path)
+Config * Config::Load(const std::filesystem::path& path)
 {
-    m_instance.reset(new Config((path).string()));
+    Config* c = nullptr;
+    m_instances[path.string()] = std::unique_ptr<Config>((c = new Config(path.string())));
+    return c;
 }
 
 void Config::Reset(const std::filesystem::path& path)
 {
-    Initialize(path);
+    Load(path);
 }
 
 void Config::Destroy()
 {
-    m_instance.release();
 }
 
-Config* Config::Get()
+Config* Config::Get(const std::filesystem::path& path)
 {
-    return m_instance.get();
+    return m_instances.at(path.string()).get();
 }
 
 WindowSettings Config::WindowSettings() const

@@ -27,9 +27,16 @@ void Logger::Destroy()
     m_instance.release();
 }
 
+std::string timeStamp() {
+    std::ostringstream strStream;
+    std::time_t t = std::time(nullptr);
+    strStream << "[" << std::put_time(std::localtime(&t), "%F %T %Z") << "] ";
+    return strStream.str();
+}
+
 void Logger::Log_(const std::string& message)
 {
-    file_ << message << std::endl;
+    file_ << timeStamp() << message << std::endl;
 }
 
 void Logger::Print_(const std::string& message)

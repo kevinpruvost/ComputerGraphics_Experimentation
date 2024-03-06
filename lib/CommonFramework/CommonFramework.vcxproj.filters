@@ -7,14 +7,20 @@
     <ClCompile Include="Logger.cpp">
       <Filter>Tools</Filter>
     </ClCompile>
-    <ClCompile Include="BaseApplication.cpp">
-      <Filter>Window</Filter>
-    </ClCompile>
     <ClCompile Include="Config.cpp">
       <Filter>Tools\Config</Filter>
     </ClCompile>
     <ClCompile Include="Exception.cpp">
       <Filter>Tools</Filter>
+    </ClCompile>
+    <ClCompile Include="Window.cpp">
+      <Filter>Window</Filter>
+    </ClCompile>
+    <ClCompile Include="ApplicationCommonBase.cpp">
+      <Filter>Application</Filter>
+    </ClCompile>
+    <ClCompile Include="DLL.cpp">
+      <Filter>DLL</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -27,6 +33,12 @@
     <Filter Include="Tools\Config">
       <UniqueIdentifier>{f45d554b-2f4d-4cf3-bb6d-7b906fbd3653}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Application">
+      <UniqueIdentifier>{ceb1220c-adbb-45b8-997a-e0dcf84d8cd1}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="DLL">
+      <UniqueIdentifier>{f6e91598-6386-4c50-be16-8ec081b6e339}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="include\common\Logger.h">
@@ -34,9 +46,6 @@
     </ClInclude>
     <ClInclude Include="include\common\BaseFramework.h">
       <Filter>Tools</Filter>
-    </ClInclude>
-    <ClInclude Include="BaseApplication.h">
-      <Filter>Window</Filter>
     </ClInclude>
     <ClInclude Include="include\common\Config.h">
       <Filter>Tools\Config</Filter>
@@ -48,6 +57,21 @@
       <Filter>Tools\Config</Filter>
     </ClInclude>
     <ClInclude Include="include\common\Exception.h">
+      <Filter>Tools</Filter>
+    </ClInclude>
+    <ClInclude Include="include\common\Common.h">
+      <Filter>Tools</Filter>
+    </ClInclude>
+    <ClInclude Include="include\common\ApplicationCommonBase.h">
+      <Filter>Application</Filter>
+    </ClInclude>
+    <ClInclude Include="include\common\Window.h">
+      <Filter>Window</Filter>
+    </ClInclude>
+    <ClInclude Include="include\common\DLL.h">
+      <Filter>DLL</Filter>
+    </ClInclude>
+    <ClInclude Include="include\common\Callback.h">
       <Filter>Tools</Filter>
     </ClInclude>
   </ItemGroup>
