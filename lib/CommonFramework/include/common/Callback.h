@@ -10,7 +10,7 @@ template<typename ReturnType = void, typename... Args>
 class Callback : public std::unique_ptr<CallbackContainer<ReturnType, Args...>>
 {
 public:
-	Callback(const CallbackContainer<ReturnType, Args...>& callback = []() {})
+	Callback(const CallbackContainer<ReturnType, Args...>& callback)
 		: std::unique_ptr<CallbackContainer<ReturnType, Args...>>(new CallbackContainer<ReturnType, Args...>(callback))
 	{
 	}

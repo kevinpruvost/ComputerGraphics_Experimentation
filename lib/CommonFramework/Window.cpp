@@ -42,13 +42,14 @@ Window* Window::CreateWindowFromAPI(const WindowAPI& api)
     }
     else {
         // Function not found
-        throw DLLException("Failed to find function in DLL");
+        throw DLLException("Failed to find function in DLL: {}", dllName);
     }
     return window;
 }
 
 Window::Window(const WindowAPI& api)
-    : __api{ api }
+    : InputSystem()
+    , __api{ api }
     , _loopCallback{ nullptr }
 {
 }

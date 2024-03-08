@@ -26,7 +26,7 @@ void* DLL::getFunction(const char* functionName) const
 #ifdef _WIN32
     void* funcPtr = reinterpret_cast<void*>(GetProcAddress((HMODULE)__dllHandle, functionName));
     if (!funcPtr) {
-        throw DLLException("Failed to get function pointer.");
+        throw DLLException("Failed to get function pointer: {}", functionName);
     }
     return funcPtr;
 #else
@@ -42,7 +42,7 @@ void DLL::loadDLL(const std::filesystem::path& filePath) {
 #ifdef _WIN32
     __dllHandle = LoadLibraryA(filePath.string().c_str());
     if (!__dllHandle) {
-        throw std::runtime_error("Failed to load DLL.");
+        throw RuntimeException("Failed to load DLL: {}", filePath.string().c_str());
     }
 #else
     dllHandle = dlopen(filePath.string().c_str(), RTLD_LAZY);

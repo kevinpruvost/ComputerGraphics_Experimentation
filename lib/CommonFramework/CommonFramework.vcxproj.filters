@@ -22,6 +22,9 @@
     <ClCompile Include="DLL.cpp">
       <Filter>DLL</Filter>
     </ClCompile>
+    <ClCompile Include="InputSystem.cpp">
+      <Filter>Window</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="Tools">
@@ -73,6 +76,9 @@
     </ClInclude>
     <ClInclude Include="include\common\Callback.h">
       <Filter>Tools</Filter>
+    </ClInclude>
+    <ClInclude Include="include\common\InputSystem.h">
+      <Filter>Window</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

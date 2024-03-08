@@ -24,6 +24,7 @@
     <ClCompile Include="Config.cpp" />
     <ClCompile Include="DLL.cpp" />
     <ClCompile Include="Exception.cpp" />
+    <ClCompile Include="InputSystem.cpp" />
     <ClCompile Include="Logger.cpp" />
     <ClCompile Include="Window.cpp" />
   </ItemGroup>
@@ -36,6 +37,7 @@
     <ClInclude Include="include\common\DLL.h" />
     <ClInclude Include="include\common\EngineSettings.h" />
     <ClInclude Include="include\common\Exception.h" />
+    <ClInclude Include="include\common\InputSystem.h" />
     <ClInclude Include="include\common\Logger.h" />
     <ClInclude Include="include\common\Window.h" />
     <ClInclude Include="include\common\WindowSettings.h" />

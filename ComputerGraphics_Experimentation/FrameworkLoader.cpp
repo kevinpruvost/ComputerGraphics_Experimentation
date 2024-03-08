@@ -54,7 +54,7 @@ void FrameworkLoader::LoadFramework(const FrameworkType type)
     }
     else {
         // Function not found
-        throw DLLException("Failed to find function in DLL");
+        throw DLLException("Failed to find function in DLL: {}", dllName);
     }
 
     __frameworkType = type;
