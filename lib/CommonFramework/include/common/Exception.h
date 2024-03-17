@@ -1,16 +1,16 @@
 #pragma once
 
 #include <common/Error.h>
+#include <common/Format.h>
 
 #include <exception>
-#include <format>
 
 class Exception : public std::exception
 {
 public:
     template <typename... Args>
-    Exception(const std::format_string<Args...> str, Args&& ... args)
-        : std::exception(std::vformat(str.get(), std::make_format_args(args...)).c_str())
+    Exception(const fmt::format_string<Args...> str, Args&& ... args)
+        : std::exception(Common::format(str, std::forward<Args...>(args...)).c_str())
     {
 
     }

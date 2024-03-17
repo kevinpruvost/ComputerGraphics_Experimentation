@@ -1,4 +1,5 @@
 #include <common/Logger.h>
+#include <common/Format.h>
 
 std::unique_ptr<Logger> Logger::m_instance = nullptr;
 
@@ -41,5 +42,5 @@ void Logger::Log_(const std::string& message)
 
 void Logger::Print_(const std::string& message)
 {
-    std::cout << message << std::endl;
+    puts(message.c_str());
 }

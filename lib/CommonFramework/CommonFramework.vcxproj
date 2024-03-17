@@ -26,6 +26,7 @@
     <ClCompile Include="Exception.cpp" />
     <ClCompile Include="InputSystem.cpp" />
     <ClCompile Include="Logger.cpp" />
+    <ClCompile Include="Shader.cpp" />
     <ClCompile Include="Window.cpp" />
   </ItemGroup>
   <ItemGroup>
@@ -37,12 +38,17 @@
     <ClInclude Include="include\common\DLL.h" />
     <ClInclude Include="include\common\EngineSettings.h" />
     <ClInclude Include="include\common\Exception.h" />
+    <ClInclude Include="include\common\Format.h" />
     <ClInclude Include="include\common\InputSystem.h" />
     <ClInclude Include="include\common\Logger.h" />
     <ClInclude Include="include\common\Window.h" />
     <ClInclude Include="include\common\WindowSettings.h" />
+    <ClInclude Include="Shader.h" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\SPIRV-Cross\SPIRV-Cross.vcxproj">
+      <Project>{a2745227-6c00-413c-9c77-5b4ae2e14903}</Project>
+    </ProjectReference>
     <ProjectReference Include="..\Yaml-Cpp\Yaml-Cpp.vcxproj">
       <Project>{bebb9ee4-a931-4c3f-8b8d-f8ecaf9335ca}</Project>
     </ProjectReference>

@@ -25,6 +25,9 @@
     <ClCompile Include="InputSystem.cpp">
       <Filter>Window</Filter>
     </ClCompile>
+    <ClCompile Include="Shader.cpp">
+      <Filter>Graphics</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="Tools">
@@ -41,6 +44,9 @@
     </Filter>
     <Filter Include="DLL">
       <UniqueIdentifier>{f6e91598-6386-4c50-be16-8ec081b6e339}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Graphics">
+      <UniqueIdentifier>{42a58650-47fd-4097-8f60-ffedcd0bdd59}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -79,6 +85,12 @@
     </ClInclude>
     <ClInclude Include="include\common\InputSystem.h">
       <Filter>Window</Filter>
+    </ClInclude>
+    <ClInclude Include="include\common\Format.h">
+      <Filter>Tools</Filter>
+    </ClInclude>
+    <ClInclude Include="Shader.h">
+      <Filter>Graphics</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

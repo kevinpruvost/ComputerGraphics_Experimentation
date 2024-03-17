@@ -16,7 +16,7 @@ int main()
 		Config & windowConfig = *Config::Load("Config_GLFWWindow.yaml");
 		w->Init(windowConfig);
 
-		FrameworkLoader::FrameworkType engineType = FrameworkLoader::FrameworkType::Vulkan;
+		FrameworkLoader::FrameworkType engineType = FrameworkLoader::FrameworkType::OpenGL;
 		FrameworkLoader loader(engineType);
 		BaseFramework* fw = loader.GetFramework();
 		fw->Init();

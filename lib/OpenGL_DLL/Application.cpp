@@ -33,6 +33,9 @@ ErrorCode Application::Initialize()
 
 ErrorCode Application::Loop()
 {
+    _w->SetLoopCallback([&]() {
+        Logger::DebugPrint("Zboui");
+    });
     _w->Loop();
     return ErrorCode::Success;
 }
