@@ -23,27 +23,40 @@
     <ClCompile Include="BaseFramework.cpp" />
     <ClCompile Include="Config.cpp" />
     <ClCompile Include="DLL.cpp" />
+    <ClCompile Include="Drawable3D.cpp" />
     <ClCompile Include="Exception.cpp" />
+    <ClCompile Include="FrameworkLoader.cpp" />
     <ClCompile Include="InputSystem.cpp" />
     <ClCompile Include="Logger.cpp" />
+    <ClCompile Include="Mesh.cpp" />
+    <ClCompile Include="Object.cpp" />
     <ClCompile Include="Shader.cpp" />
+    <ClCompile Include="ShaderPipeline.cpp" />
+    <ClCompile Include="Vector.cpp" />
     <ClCompile Include="Window.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="include\common\ApplicationCommonBase.h" />
     <ClInclude Include="include\common\BaseFramework.h" />
     <ClInclude Include="include\common\Callback.h" />
+    <ClInclude Include="include\common\Cast.h" />
     <ClInclude Include="include\common\Common.h" />
     <ClInclude Include="include\common\Config.h" />
     <ClInclude Include="include\common\DLL.h" />
+    <ClInclude Include="include\common\Drawable3D.h" />
     <ClInclude Include="include\common\EngineSettings.h" />
     <ClInclude Include="include\common\Exception.h" />
     <ClInclude Include="include\common\Format.h" />
+    <ClInclude Include="include\common\FrameworkLoader.h" />
     <ClInclude Include="include\common\InputSystem.h" />
     <ClInclude Include="include\common\Logger.h" />
+    <ClInclude Include="include\common\Mesh.h" />
+    <ClInclude Include="include\common\Object.h" />
+    <ClInclude Include="include\common\Shader.h" />
+    <ClInclude Include="include\common\ShaderPipeline.h" />
+    <ClInclude Include="include\common\Vector.h" />
     <ClInclude Include="include\common\Window.h" />
     <ClInclude Include="include\common\WindowSettings.h" />
-    <ClInclude Include="Shader.h" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\SPIRV-Cross\SPIRV-Cross.vcxproj">

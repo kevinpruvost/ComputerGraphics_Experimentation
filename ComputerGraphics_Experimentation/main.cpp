@@ -1,10 +1,58 @@
-#include "FrameworkLoader.h"
+#include <common/FrameworkLoader.h>
 #include <common/Logger.h>
 
 #include <stdexcept>
 #include <iostream>
 
 #include <common/Window.h>
+#include <common/Shader.h>
+#include <common/ShaderPipeline.h>
+#include <common/Mesh.h>
+
+class Scene
+{
+public:
+	Scene() {
+		auto shaderFrag = Shader::CreateShader(
+			"resources/shader_test.frag",
+			Shader::ShaderType::Fragment
+		);
+		auto shaderVert = Shader::CreateShader(
+			"resources/shader_test.vert",
+			Shader::ShaderType::Vertex
+		);
+
+		m_shader = ShaderPipeline::CreateShaderPipeline({shaderVert, shaderFrag});
+
+		m_mesh = Mesh::CreateMesh();
+		m_mesh->SetVertices({
+			{-0.5f, -0.5f, 0.0f}, // Left  
+			{0.5f, -0.5f, 0.0f }, // Right 
+			{0.0f, 0.5f, 0.0f  }  // Top   
+		});
+
+		delete shaderFrag;
+		delete shaderVert;
+	}
+
+	~Scene()
+	{
+		if (m_shader) delete m_shader;
+		if (m_mesh) delete m_mesh;
+	}
+
+public:
+	ShaderPipeline * m_shader;
+	Mesh * m_mesh;
+};
+
+void scene()
+{
+	static Scene s;
+
+	s.m_shader->Use();
+	s.m_mesh->Draw();
+}
 
 int main()
 {
@@ -15,6 +63,7 @@ int main()
 		Window * w = Window::CreateWindowFromAPI(Window::WindowAPI::GLFW);
 		Config & windowConfig = *Config::Load("Config_GLFWWindow.yaml");
 		w->Init(windowConfig);
+		w->SetSceneLoopCallback(scene);
 
 		FrameworkLoader::FrameworkType engineType = FrameworkLoader::FrameworkType::OpenGL;
 		FrameworkLoader loader(engineType);

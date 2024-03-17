@@ -1,22 +1,19 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup>
-    <Filter Include="common">
-      <UniqueIdentifier>{48b45f28-ae97-4d3a-90b6-3985662b693d}</UniqueIdentifier>
+    <Filter Include="Resource Files">
+      <UniqueIdentifier>{929dcdd7-6b07-407d-8c62-2c8a2347c2e1}</UniqueIdentifier>
     </Filter>
-    <Filter Include="FrameworkLoader">
-      <UniqueIdentifier>{6e668f14-23aa-4525-ab8c-7f226c5fa4d1}</UniqueIdentifier>
-    </Filter>
-  </ItemGroup>
-  <ItemGroup>
-    <ClInclude Include="FrameworkLoader.h">
-      <Filter>FrameworkLoader</Filter>
-    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp" />
-    <ClCompile Include="FrameworkLoader.cpp">
-      <Filter>FrameworkLoader</Filter>
-    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="resources\shader_test.frag">
+      <Filter>Resource Files</Filter>
+    </None>
+    <None Include="resources\shader_test.vert">
+      <Filter>Resource Files</Filter>
+    </None>
   </ItemGroup>
 </Project>

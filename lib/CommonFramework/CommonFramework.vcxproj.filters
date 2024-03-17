@@ -28,6 +28,22 @@
     <ClCompile Include="Shader.cpp">
       <Filter>Graphics</Filter>
     </ClCompile>
+    <ClCompile Include="FrameworkLoader.cpp">
+      <Filter>Tools</Filter>
+    </ClCompile>
+    <ClCompile Include="ShaderPipeline.cpp">
+      <Filter>Graphics</Filter>
+    </ClCompile>
+    <ClCompile Include="Mesh.cpp">
+      <Filter>Graphics</Filter>
+    </ClCompile>
+    <ClCompile Include="Object.cpp" />
+    <ClCompile Include="Vector.cpp">
+      <Filter>Graphics</Filter>
+    </ClCompile>
+    <ClCompile Include="Drawable3D.cpp">
+      <Filter>Graphics</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="Tools">
@@ -89,7 +105,26 @@
     <ClInclude Include="include\common\Format.h">
       <Filter>Tools</Filter>
     </ClInclude>
-    <ClInclude Include="Shader.h">
+    <ClInclude Include="include\common\Shader.h">
+      <Filter>Graphics</Filter>
+    </ClInclude>
+    <ClInclude Include="include\common\FrameworkLoader.h">
+      <Filter>Tools</Filter>
+    </ClInclude>
+    <ClInclude Include="include\common\ShaderPipeline.h">
+      <Filter>Graphics</Filter>
+    </ClInclude>
+    <ClInclude Include="include\common\Cast.h">
+      <Filter>Tools</Filter>
+    </ClInclude>
+    <ClInclude Include="include\common\Mesh.h">
+      <Filter>Graphics</Filter>
+    </ClInclude>
+    <ClInclude Include="include\common\Object.h" />
+    <ClInclude Include="include\common\Vector.h">
+      <Filter>Graphics</Filter>
+    </ClInclude>
+    <ClInclude Include="include\common\Drawable3D.h">
       <Filter>Graphics</Filter>
     </ClInclude>
   </ItemGroup>

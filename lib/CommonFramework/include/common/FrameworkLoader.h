@@ -18,9 +18,10 @@ public:
 
     void LoadFramework(const FrameworkType type);
     BaseFramework * GetFramework() const;
+public:
+    static DLL * EngineDll;
 
 private:
     FrameworkType __frameworkType;
     BaseFramework* __framework;
-    DLL * __dll;
 };

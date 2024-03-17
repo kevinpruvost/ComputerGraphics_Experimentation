@@ -80,6 +80,13 @@ ErrorCode GLFWWindow::_Init()
 
 ErrorCode GLFWWindow::Loop()
 {
+    if (_appLoopCallback == nullptr) {
+        throw RuntimeException("App loop callback is not set");
+    }
+    if (_sceneLoopCallback == nullptr) {
+        throw RuntimeException("Scene loop callback is not set");
+    }
+
     while (!glfwWindowShouldClose(__mainW)) {
         // Processing input
         if (glfwGetKey(__mainW, GLFW_KEY_ESCAPE) == GLFW_PRESS)
@@ -87,11 +94,12 @@ ErrorCode GLFWWindow::Loop()
             glfwSetWindowShouldClose(__mainW, true);
         }
 
-        _loopCallback();
-
         // Display
         glClearColor(0.2f, 0.3f, 0.3f, 1.0f);
         glClear(GL_COLOR_BUFFER_BIT);
+
+        _appLoopCallback();
+        _sceneLoopCallback();
 
         glfwSwapBuffers(__mainW);
 

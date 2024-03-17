@@ -30,7 +30,7 @@ Window* Window::CreateWindowFromAPI(const WindowAPI& api)
 
     typedef Window* (*CreateWindowFn)();
 
-    CreateWindowFn createFramework = reinterpret_cast<CreateWindowFn>(__dll->getFunction("createWindowInstance"));
+    CreateWindowFn createFramework = __dll->getFunction<CreateWindowFn>("createWindowInstance");
     Window* window = nullptr;
     if (createFramework != nullptr) {
         // Call function to create object
@@ -50,22 +50,33 @@ Window* Window::CreateWindowFromAPI(const WindowAPI& api)
 Window::Window(const WindowAPI& api)
     : InputSystem()
     , __api{ api }
-    , _loopCallback{ nullptr }
+    , _sceneLoopCallback{ nullptr }
+    , _appLoopCallback { nullptr }
 {
 }
 
-void Window::SetLoopCallback(CallbackContainer<void> callback)
+void Window::SetSceneLoopCallback(CallbackContainer<void> callback)
 {
-    _loopCallback = callback;
+    _sceneLoopCallback = callback;
 }
 
-void Window::SetLoopCallback(Callback<void> callback)
+void Window::SetSceneLoopCallback(Callback<void> callback)
 {
-    _loopCallback = callback;
+    _sceneLoopCallback = callback;
 }
 
 ErrorCode Window::Init(const Config& config)
 {
     _settings = config.WindowSettings();
     return _Init();
+}
+
+void Window::SetApplicationLoopCallback(CallbackContainer<void> callback)
+{
+    _appLoopCallback = callback;
+}
+
+void Window::SetApplicationLoopCallback(Callback<void> callback)
+{
+    _appLoopCallback = callback;
 }

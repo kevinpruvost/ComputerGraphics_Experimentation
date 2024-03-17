@@ -14,7 +14,7 @@
     </PostBuildEvent>
     <ClCompile>
       <PreprocessorDefinitions>CONFIG_FILE_NAME="Config_$(ProjectName).yaml";DEFAULT_LOG_FILE_NAME="Log_$(ProjectName).txt";%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <AdditionalIncludeDirectories>$(SolutionDir)lib\SPIRV-Cross\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
   </ItemDefinitionGroup>
   <ItemGroup />

@@ -15,6 +15,15 @@
     <ClCompile Include="ApplicationBase.cpp">
       <Filter>Window\Tools</Filter>
     </ClCompile>
+    <ClCompile Include="Shader.cpp">
+      <Filter>Graphics</Filter>
+    </ClCompile>
+    <ClCompile Include="ShaderPipeline.cpp">
+      <Filter>Graphics</Filter>
+    </ClCompile>
+    <ClCompile Include="Mesh.cpp">
+      <Filter>Graphics</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="ApplicationTools.h">
@@ -27,6 +36,15 @@
     <ClInclude Include="ApplicationBase.h">
       <Filter>Window\Tools</Filter>
     </ClInclude>
+    <ClInclude Include="Shader.h">
+      <Filter>Graphics</Filter>
+    </ClInclude>
+    <ClInclude Include="ShaderPipeline.h">
+      <Filter>Graphics</Filter>
+    </ClInclude>
+    <ClInclude Include="Mesh.h">
+      <Filter>Graphics</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="Window">
@@ -34,6 +52,9 @@
     </Filter>
     <Filter Include="Window\Tools">
       <UniqueIdentifier>{29546b51-85c5-44af-ac67-9fcf7c311aed}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Graphics">
+      <UniqueIdentifier>{6014eaec-1c43-44c4-b9bd-3961a2d5dbc1}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
 </Project>

@@ -18,6 +18,11 @@ public:
     explicit DLL(const std::filesystem::path& filePath);
     ~DLL();
 
+    template<typename T>
+    inline T getFunction(const char* functionName) const
+    {
+        return reinterpret_cast<T>(getFunction(functionName));
+    }
     void* getFunction(const char* functionName) const;
 
 private:

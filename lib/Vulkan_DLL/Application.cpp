@@ -16,7 +16,7 @@ ErrorCode Application::Run()
     initWindow();
     initVulkan();
     // Window Loop
-    _w->SetLoopCallback([&]() {
+    _w->SetApplicationLoopCallback([&]() {
         Logger::DebugPrint("Zboui");
     });
     _w->Loop();

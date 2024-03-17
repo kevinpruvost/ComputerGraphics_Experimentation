@@ -48,15 +48,19 @@ public:
 	virtual ErrorCode SetWindowResizable(bool enabled) = 0;
 	virtual ErrorCode SetWindowFocused(bool focused) = 0;
 
-	void SetLoopCallback(CallbackContainer<void> callback);
-	void SetLoopCallback(Callback<void> callback);
+	void SetSceneLoopCallback(CallbackContainer<void> callback);
+	void SetSceneLoopCallback(Callback<void> callback);
+
+	void SetApplicationLoopCallback(CallbackContainer<void> callback);
+	void SetApplicationLoopCallback(Callback<void> callback);
 
 protected:
 	Window(const WindowAPI & api);
 
 protected:
 	WindowSettings _settings;
-	Callback<void> _loopCallback;
+	Callback<void> _sceneLoopCallback;
+	Callback<void> _appLoopCallback;
 
 private:
 	const WindowAPI __api;

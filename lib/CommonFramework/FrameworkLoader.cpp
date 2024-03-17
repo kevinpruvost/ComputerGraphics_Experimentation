@@ -1,18 +1,20 @@
-#include "FrameworkLoader.h"
+#include <common/FrameworkLoader.h>
 #include <common/Exception.h>
 #include <iostream>
 #include <cstdlib>
 
+DLL* FrameworkLoader::EngineDll = nullptr;
+
 FrameworkLoader::FrameworkLoader(const FrameworkType type)
-    : __framework(nullptr), __dll(nullptr)
+    : __framework(nullptr)
 {
     LoadFramework(type);
 }
 
 FrameworkLoader::~FrameworkLoader()
 {
-    if (__dll) {
-        delete __dll;
+    if (EngineDll) {
+        delete EngineDll;
     }
 }
 
@@ -22,10 +24,10 @@ void FrameworkLoader::LoadFramework(const FrameworkType type)
 {
     const wchar_t * dllName = nullptr;
 
-    if (__dll) {
-        delete __dll;
+    if (EngineDll) {
+        delete EngineDll;
         __framework = nullptr;
-        __dll = nullptr;
+        EngineDll = nullptr;
     }
 
     switch (type)
@@ -42,8 +44,8 @@ void FrameworkLoader::LoadFramework(const FrameworkType type)
     }
 
     // Load the DLL
-    __dll = new DLL(dllName);
-    CreateBaseFrameworkFn createFramework = reinterpret_cast<CreateBaseFrameworkFn>(__dll->getFunction("createFrameworkInstance"));
+    EngineDll = new DLL(dllName);
+    CreateBaseFrameworkFn createFramework = EngineDll->getFunction<CreateBaseFrameworkFn>("createFrameworkInstance");
     if (createFramework != nullptr) {
         // Call function to create object
         __framework = createFramework();

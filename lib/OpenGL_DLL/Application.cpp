@@ -33,7 +33,7 @@ ErrorCode Application::Initialize()
 
 ErrorCode Application::Loop()
 {
-    _w->SetLoopCallback([&]() {
+    _w->SetApplicationLoopCallback([&]() {
         Logger::DebugPrint("Zboui");
     });
     _w->Loop();
