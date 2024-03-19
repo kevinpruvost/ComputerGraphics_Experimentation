@@ -33,6 +33,7 @@
     <ClCompile Include="Shader.cpp" />
     <ClCompile Include="ShaderPipeline.cpp" />
     <ClCompile Include="Vector.cpp" />
+    <ClCompile Include="Vertex.cpp" />
     <ClCompile Include="Window.cpp" />
   </ItemGroup>
   <ItemGroup>
@@ -55,6 +56,7 @@
     <ClInclude Include="include\common\Shader.h" />
     <ClInclude Include="include\common\ShaderPipeline.h" />
     <ClInclude Include="include\common\Vector.h" />
+    <ClInclude Include="include\common\Vertex.h" />
     <ClInclude Include="include\common\Window.h" />
     <ClInclude Include="include\common\WindowSettings.h" />
   </ItemGroup>

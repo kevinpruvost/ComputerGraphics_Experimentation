@@ -2,6 +2,8 @@
 
 #include <common/Logger.h>
 
+#include "BufferManager.h"
+
 #include "Application.h"
 
 bool Framework::Init()
@@ -10,12 +12,20 @@ bool Framework::Init()
 
     SetConfig(*Config::Load(CONFIG_FILE_NAME));
     Logger::Initialize(DEFAULT_LOG_FILE_NAME);
+
+    if (!gladLoadGL())
+    {
+        Logger::Log("Failed to initialize GLAD");
+        return false;
+    }
+    BufferManager::Initialize();
     return true;
 }
 
 void Framework::Destroy()
 {
     if (_app) delete _app;
+    BufferManager::Destroy();
     return;
 }
 

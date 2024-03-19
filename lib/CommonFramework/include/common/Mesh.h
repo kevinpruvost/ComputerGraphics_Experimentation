@@ -2,7 +2,6 @@
 
 #include <common/DLL.h>
 #include <common/Drawable3D.h>
-#include <common/Vector.h>
 
 class Mesh : public Drawable3D
 {

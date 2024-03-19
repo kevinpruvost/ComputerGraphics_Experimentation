@@ -6,7 +6,7 @@
 class Mesh_OGL : public Mesh
 {
 public:
-    void SetVertices(const Vec3Array& vertices) override;
+    void SetVertices(const VertexArray& vertices) override;
     void Draw() override;
 
 private:
@@ -14,7 +14,7 @@ private:
     GLuint m_vbo;
     GLuint m_ebo;
     int m_indicesCount;
-    Vec3Array m_vertices;
+    VertexArray m_vertices;
 };
 
 extern "C"

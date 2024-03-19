@@ -3,6 +3,7 @@
   <ItemGroup>
     <Filter Include="Resource Files">
       <UniqueIdentifier>{929dcdd7-6b07-407d-8c62-2c8a2347c2e1}</UniqueIdentifier>
+      <Extensions>*.frag, *.vert</Extensions>
     </Filter>
   </ItemGroup>
   <ItemGroup>

@@ -24,6 +24,9 @@
     <ClCompile Include="Mesh.cpp">
       <Filter>Graphics</Filter>
     </ClCompile>
+    <ClCompile Include="BufferManager.cpp">
+      <Filter>Graphics</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="ApplicationTools.h">
@@ -43,6 +46,9 @@
       <Filter>Graphics</Filter>
     </ClInclude>
     <ClInclude Include="Mesh.h">
+      <Filter>Graphics</Filter>
+    </ClInclude>
+    <ClInclude Include="BufferManager.h">
       <Filter>Graphics</Filter>
     </ClInclude>
   </ItemGroup>

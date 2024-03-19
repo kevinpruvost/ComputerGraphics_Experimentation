@@ -1,7 +1,25 @@
 #include "GLFWWindow.h"
 
+#include <common/Logger.h>
+
 #define STB_IMAGE_IMPLEMENTATION
 #include <stb/stb_image.h>
+
+#ifdef _WIN32
+#include <windows.h>
+void glfw_onError(int error, const char* description)
+{
+    // print message in Windows popup dialog box
+    wchar_t wdescription[1024];
+    MultiByteToWideChar(CP_ACP, 0, description, -1, wdescription, 1024);
+    MessageBox(NULL, wdescription, L"GLFW error", MB_OK);
+}
+#else
+void glfw_onError(int error, const char* description)
+{
+    Logger::Log("GLFW error: {}", description);
+}
+#endif
 
 GLFWWindow::GLFWWindow()
     : Window(Window::WindowAPI::GLFW)
@@ -21,6 +39,8 @@ EXPORT Window * createWindowInstance() {
 ErrorCode GLFWWindow::_Init()
 {
     glfwInit();
+
+    glfwSetErrorCallback(glfw_onError);
 
     glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
     glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 3);

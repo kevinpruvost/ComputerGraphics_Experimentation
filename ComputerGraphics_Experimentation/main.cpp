@@ -26,9 +26,9 @@ public:
 
 		m_mesh = Mesh::CreateMesh();
 		m_mesh->SetVertices({
-			{-0.5f, -0.5f, 0.0f}, // Left  
-			{0.5f, -0.5f, 0.0f }, // Right 
-			{0.0f, 0.5f, 0.0f  }  // Top   
+			{{ -0.5f, -0.5f, 0.0f }},  // Left  
+			{{ 0.5f,  -0.5f, 0.0f }},  // Right 
+			{{ 0.0f,   0.5f, 0.0f  }}  // Top   
 		});
 
 		delete shaderFrag;
@@ -46,12 +46,12 @@ public:
 	Mesh * m_mesh;
 };
 
+Scene * s;
+
 void scene()
 {
-	static Scene s;
-
-	s.m_shader->Use();
-	s.m_mesh->Draw();
+	s->m_shader->Use();
+	s->m_mesh->Draw();
 }
 
 int main()
@@ -70,9 +70,14 @@ int main()
 		BaseFramework* fw = loader.GetFramework();
 		fw->Init();
 		fw->SetWindow(w);
+
+		s = new Scene();
+
 		fw->Launch();
 		fw->GetLogger()->Log("Framework launched with %d\n", engineType);
 
+		delete s;
+		delete fw;
 		delete w;
 	}
 	catch (const std::exception& e)

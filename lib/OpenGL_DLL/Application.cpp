@@ -23,11 +23,6 @@ ErrorCode Application::Run()
 
 ErrorCode Application::Initialize()
 {
-    if (!gladLoadGL())
-    {
-        Logger::Log("Failed to initialize GLAD");
-        return ErrorCode::Failure;
-    }
     return ErrorCode::Success;
 }
 

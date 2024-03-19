@@ -44,6 +44,9 @@
     <ClCompile Include="Drawable3D.cpp">
       <Filter>Graphics</Filter>
     </ClCompile>
+    <ClCompile Include="Vertex.cpp">
+      <Filter>Graphics</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="Tools">
@@ -125,6 +128,9 @@
       <Filter>Graphics</Filter>
     </ClInclude>
     <ClInclude Include="include\common\Drawable3D.h">
+      <Filter>Graphics</Filter>
+    </ClInclude>
+    <ClInclude Include="include\common\Vertex.h">
       <Filter>Graphics</Filter>
     </ClInclude>
   </ItemGroup>
