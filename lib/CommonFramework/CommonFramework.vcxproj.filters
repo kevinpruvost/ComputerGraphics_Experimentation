@@ -34,7 +34,7 @@
     <ClCompile Include="ShaderPipeline.cpp">
       <Filter>Graphics</Filter>
     </ClCompile>
-    <ClCompile Include="Mesh.cpp">
+    <ClCompile Include="Model.cpp">
       <Filter>Graphics</Filter>
     </ClCompile>
     <ClCompile Include="Object.cpp" />
@@ -45,6 +45,18 @@
       <Filter>Graphics</Filter>
     </ClCompile>
     <ClCompile Include="Vertex.cpp">
+      <Filter>Graphics</Filter>
+    </ClCompile>
+    <ClCompile Include="Model_Parser.cpp">
+      <Filter>Graphics</Filter>
+    </ClCompile>
+    <ClCompile Include="Face.cpp">
+      <Filter>Graphics</Filter>
+    </ClCompile>
+    <ClCompile Include="Material.cpp">
+      <Filter>Graphics</Filter>
+    </ClCompile>
+    <ClCompile Include="Mesh.cpp">
       <Filter>Graphics</Filter>
     </ClCompile>
   </ItemGroup>
@@ -120,7 +132,7 @@
     <ClInclude Include="include\common\Cast.h">
       <Filter>Tools</Filter>
     </ClInclude>
-    <ClInclude Include="include\common\Mesh.h">
+    <ClInclude Include="include\common\Model.h">
       <Filter>Graphics</Filter>
     </ClInclude>
     <ClInclude Include="include\common\Object.h" />
@@ -131,6 +143,15 @@
       <Filter>Graphics</Filter>
     </ClInclude>
     <ClInclude Include="include\common\Vertex.h">
+      <Filter>Graphics</Filter>
+    </ClInclude>
+    <ClInclude Include="include\common\Face.h">
+      <Filter>Graphics</Filter>
+    </ClInclude>
+    <ClInclude Include="include\common\Material.h">
+      <Filter>Graphics</Filter>
+    </ClInclude>
+    <ClInclude Include="include\common\Mesh.h">
       <Filter>Graphics</Filter>
     </ClInclude>
   </ItemGroup>

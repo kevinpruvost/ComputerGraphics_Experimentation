@@ -1,29 +1,37 @@
 #include "BufferManager.h"
 
+#include <common/Exception.h>
+
 #include <vector>
 #include <array>
 
 std::vector<std::array<GLuint, BufferManager::BlockSize>> VBOs, VAOs, EBOs;
 uint32_t VBOIndex = 0, VAOIndex = 0, EBOIndex = 0;
 
-static void AddVBOs()
+static inline void AddVBOs()
 {
     std::array<GLuint, BufferManager::BlockSize> vbos;
     glGenBuffers(BufferManager::BlockSize, vbos.data());
+    if (vbos[0] == GL_INVALID_VALUE)
+        throw RuntimeException("Failed to generate VBOs");
     VBOs.push_back(vbos);
 }
 
-static void AddVAOs()
+static inline void AddVAOs()
 {
     std::array<GLuint, BufferManager::BlockSize> vaos;
     glGenVertexArrays(BufferManager::BlockSize, vaos.data());
+    if (vaos[0] == GL_INVALID_VALUE)
+        throw RuntimeException("Failed to generate VAOs");
     VAOs.push_back(vaos);
 }
 
-static void AddEBOs()
+static inline void AddEBOs()
 {
     std::array<GLuint, BufferManager::BlockSize> ebos;
     glGenBuffers(BufferManager::BlockSize, ebos.data());
+    if (ebos[0] == GL_INVALID_VALUE)
+        throw RuntimeException("Failed to generate EBOs");
     EBOs.push_back(ebos);
 }
 
@@ -48,10 +56,7 @@ GLuint BufferManager::GetVBO()
 {
     ++VBOIndex;
     if (VBOIndex >= BufferManager::BlockSize * VBOs.size())
-    {
-        VBOs.push_back({});
-        glGenBuffers(BufferManager::BlockSize, VBOs.back().data());
-    }
+        AddVBOs();
     return VBOs[VBOIndex / BufferManager::BlockSize][VBOIndex % BufferManager::BlockSize];
 }
 
@@ -59,10 +64,7 @@ GLuint BufferManager::GetVAO()
 {
     ++VAOIndex;
     if (VAOIndex >= BufferManager::BlockSize * VAOs.size())
-    {
-        VAOs.push_back({});
-        glGenVertexArrays(BufferManager::BlockSize, VAOs.back().data());
-    }
+        AddVAOs();
     return VAOs[VAOIndex / BufferManager::BlockSize][VAOIndex % BufferManager::BlockSize];
 }
 
@@ -70,9 +72,6 @@ GLuint BufferManager::GetEBO()
 {
     ++EBOIndex;
     if (EBOIndex >= BufferManager::BlockSize * EBOs.size())
-    {
-        EBOs.push_back({});
-        glGenBuffers(BufferManager::BlockSize, EBOs.back().data());
-    }
+        AddEBOs();
     return EBOs[EBOIndex / BufferManager::BlockSize][EBOIndex % BufferManager::BlockSize];
 }

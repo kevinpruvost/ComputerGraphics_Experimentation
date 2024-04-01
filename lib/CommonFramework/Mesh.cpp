@@ -1,7 +1,7 @@
 #include <common/Mesh.h>
 #include <common/FrameworkLoader.h>
 
-typedef Mesh * (*CreateMeshFn)();
+typedef Mesh* (*CreateMeshFn)();
 
 Mesh* Mesh::CreateMesh()
 {

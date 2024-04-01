@@ -8,14 +8,13 @@
 class Vertex
 {
 public:
-    Vertex(const glm::vec3 & position = glm::vec3(),
-           const glm::vec3 & normals = glm::vec3(),
-           const glm::vec2 & texCoords = glm::vec2());
+    Vertex();
+    Vertex(const glm::vec3& position, const glm::vec3& normal, const glm::vec2& texCoord);
     ~Vertex();
 
-    glm::vec3 pos;
-    glm::vec3 normal;
-    glm::vec2 texCoord;
+    glm::vec3 p;
+    glm::vec3 n;
+    glm::vec2 t;
 };
 
 typedef std::vector<Vertex> VertexArray;

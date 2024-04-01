@@ -7,7 +7,7 @@
 #include <common/Window.h>
 #include <common/Shader.h>
 #include <common/ShaderPipeline.h>
-#include <common/Mesh.h>
+#include <common/Model.h>
 
 class Scene
 {
@@ -24,12 +24,12 @@ public:
 
 		m_shader = ShaderPipeline::CreateShaderPipeline({shaderVert, shaderFrag});
 
-		m_mesh = Mesh::CreateMesh();
-		m_mesh->SetVertices({
-			{{ -0.5f, -0.5f, 0.0f }},  // Left  
-			{{ 0.5f,  -0.5f, 0.0f }},  // Right 
-			{{ 0.0f,   0.5f, 0.0f  }}  // Top   
-		});
+		m_model = Model::CreateModel("resources\\Shrek\\Shrek.obj");
+		//m_mesh->SetVertices({
+		//	{{ -0.5f, -0.5f, 0.0f }},  // Left  
+		//	{{ 0.5f,  -0.5f, 0.0f }},  // Right 
+		//	{{ 0.0f,   0.5f, 0.0f  }}  // Top   
+		//});
 
 		delete shaderFrag;
 		delete shaderVert;
@@ -38,12 +38,12 @@ public:
 	~Scene()
 	{
 		if (m_shader) delete m_shader;
-		if (m_mesh) delete m_mesh;
+		if (m_model) delete m_model;
 	}
 
 public:
 	ShaderPipeline * m_shader;
-	Mesh * m_mesh;
+	Model * m_model;
 };
 
 Scene * s;
@@ -51,7 +51,7 @@ Scene * s;
 void scene()
 {
 	s->m_shader->Use();
-	s->m_mesh->Draw();
+	s->m_model->Draw();
 }
 
 int main()

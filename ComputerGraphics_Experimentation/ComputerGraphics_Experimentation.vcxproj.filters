@@ -16,5 +16,19 @@
     <None Include="resources\shader_test.vert">
       <Filter>Resource Files</Filter>
     </None>
+    <None Include="resources\Shrek\Shrek.mtl">
+      <Filter>Resource Files</Filter>
+    </None>
+  </ItemGroup>
+  <ItemGroup>
+    <Object Include="resources\Assignment1\eight.uniform.obj">
+      <Filter>Resource Files</Filter>
+    </Object>
+    <Object Include="resources\Backpack\backpack.obj">
+      <Filter>Resource Files</Filter>
+    </Object>
+    <Object Include="resources\Shrek\Shrek.obj">
+      <Filter>Resource Files</Filter>
+    </Object>
   </ItemGroup>
 </Project>
