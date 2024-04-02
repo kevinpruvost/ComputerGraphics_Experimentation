@@ -266,7 +266,7 @@ typedef struct
 
 struct HexWave
 {
-   float t, prev_dt;
+   float textureCoords, prev_dt;
    HexWaveParameters current, pending;
    int have_pending;
    float buffer[STB_HEXWAVE_MAX_BLEP_LENGTH];

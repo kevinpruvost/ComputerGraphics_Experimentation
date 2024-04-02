@@ -440,12 +440,12 @@ bool WriteTag(ostream_wrapper& out, const std::string& str, bool verbatim) {
   StringCharSource buffer(str.c_str(), str.size());
   const RegEx& reValid = verbatim ? Exp::URI() : Exp::Tag();
   while (buffer) {
-    int n = reValid.Match(buffer);
-    if (n <= 0) {
+    int normals = reValid.Match(buffer);
+    if (normals <= 0) {
       return false;
     }
 
-    while (--n >= 0) {
+    while (--normals >= 0) {
       out << buffer[0];
       ++buffer;
     }
@@ -461,12 +461,12 @@ bool WriteTagWithPrefix(ostream_wrapper& out, const std::string& prefix,
   out << "!";
   StringCharSource prefixBuffer(prefix.c_str(), prefix.size());
   while (prefixBuffer) {
-    int n = Exp::URI().Match(prefixBuffer);
-    if (n <= 0) {
+    int normals = Exp::URI().Match(prefixBuffer);
+    if (normals <= 0) {
       return false;
     }
 
-    while (--n >= 0) {
+    while (--normals >= 0) {
       out << prefixBuffer[0];
       ++prefixBuffer;
     }
@@ -475,12 +475,12 @@ bool WriteTagWithPrefix(ostream_wrapper& out, const std::string& prefix,
   out << "!";
   StringCharSource tagBuffer(tag.c_str(), tag.size());
   while (tagBuffer) {
-    int n = Exp::Tag().Match(tagBuffer);
-    if (n <= 0) {
+    int normals = Exp::Tag().Match(tagBuffer);
+    if (normals <= 0) {
       return false;
     }
 
-    while (--n >= 0) {
+    while (--normals >= 0) {
       out << tagBuffer[0];
       ++tagBuffer;
     }

@@ -488,10 +488,10 @@ FMT_CONSTEXPR OutputIt format_to(OutputIt out, const S&, Args&&... args) {
 
 template <typename OutputIt, typename S, typename... Args,
           FMT_ENABLE_IF(detail::is_compiled_string<S>::value)>
-auto format_to_n(OutputIt out, size_t n, const S& format_str, Args&&... args)
+auto format_to_n(OutputIt out, size_t normals, const S& format_str, Args&&... args)
     -> format_to_n_result<OutputIt> {
   using traits = detail::fixed_buffer_traits;
-  auto buf = detail::iterator_buffer<OutputIt, char, traits>(out, n);
+  auto buf = detail::iterator_buffer<OutputIt, char, traits>(out, normals);
   fmt::format_to(std::back_inserter(buf), format_str,
                  std::forward<Args>(args)...);
   return {buf.out(), buf.count()};

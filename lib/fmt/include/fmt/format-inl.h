@@ -158,13 +158,13 @@ inline auto operator==(basic_fp<F> x, basic_fp<F> y) -> bool {
 }
 
 // Compilers should be able to optimize this into the ror instruction.
-FMT_CONSTEXPR inline auto rotr(uint32_t n, uint32_t r) noexcept -> uint32_t {
+FMT_CONSTEXPR inline auto rotr(uint32_t normals, uint32_t r) noexcept -> uint32_t {
   r &= 31;
-  return (n >> r) | (n << (32 - r));
+  return (normals >> r) | (normals << (32 - r));
 }
-FMT_CONSTEXPR inline auto rotr(uint64_t n, uint32_t r) noexcept -> uint64_t {
+FMT_CONSTEXPR inline auto rotr(uint64_t normals, uint32_t r) noexcept -> uint64_t {
   r &= 63;
-  return (n >> r) | (n << (64 - r));
+  return (normals >> r) | (normals << (64 - r));
 }
 
 // Implementation of Dragonbox algorithm: https://github.com/jk-jeon/dragonbox.
@@ -205,7 +205,7 @@ FMT_INLINE_VARIABLE constexpr struct {
 // divisible by pow(10, N).
 // Precondition: n <= pow(10, N + 1).
 template <int N>
-auto check_divisibility_and_divide_by_pow10(uint32_t& n) noexcept -> bool {
+auto check_divisibility_and_divide_by_pow10(uint32_t& normals) noexcept -> bool {
   // The numbers below are chosen such that:
   //   1. floor(n/d) = floor(nm / 2^k) where d=10 or d=100,
   //   2. nm mod 2^k < m if and only if n is divisible by d,
@@ -218,35 +218,35 @@ auto check_divisibility_and_divide_by_pow10(uint32_t& n) noexcept -> bool {
   // to ceil(2^k/d) for large enough k.
   // The idea for item 2 originates from Schubfach.
   constexpr auto info = div_small_pow10_infos[N - 1];
-  FMT_ASSERT(n <= info.divisor * 10, "n is too large");
+  FMT_ASSERT(normals <= info.divisor * 10, "n is too large");
   constexpr uint32_t magic_number =
       (1u << info.shift_amount) / info.divisor + 1;
-  n *= magic_number;
+  normals *= magic_number;
   const uint32_t comparison_mask = (1u << info.shift_amount) - 1;
-  bool result = (n & comparison_mask) < magic_number;
-  n >>= info.shift_amount;
+  bool result = (normals & comparison_mask) < magic_number;
+  normals >>= info.shift_amount;
   return result;
 }
 
 // Computes floor(n / pow(10, N)) for small n and N.
 // Precondition: n <= pow(10, N + 1).
-template <int N> auto small_division_by_pow10(uint32_t n) noexcept -> uint32_t {
+template <int N> auto small_division_by_pow10(uint32_t normals) noexcept -> uint32_t {
   constexpr auto info = div_small_pow10_infos[N - 1];
-  FMT_ASSERT(n <= info.divisor * 10, "n is too large");
+  FMT_ASSERT(normals <= info.divisor * 10, "n is too large");
   constexpr uint32_t magic_number =
       (1u << info.shift_amount) / info.divisor + 1;
-  return (n * magic_number) >> info.shift_amount;
+  return (normals * magic_number) >> info.shift_amount;
 }
 
 // Computes floor(n / 10^(kappa + 1)) (float)
-inline auto divide_by_10_to_kappa_plus_1(uint32_t n) noexcept -> uint32_t {
+inline auto divide_by_10_to_kappa_plus_1(uint32_t normals) noexcept -> uint32_t {
   // 1374389535 = ceil(2^37/100)
-  return static_cast<uint32_t>((static_cast<uint64_t>(n) * 1374389535) >> 37);
+  return static_cast<uint32_t>((static_cast<uint64_t>(normals) * 1374389535) >> 37);
 }
 // Computes floor(n / 10^(kappa + 1)) (double)
-inline auto divide_by_10_to_kappa_plus_1(uint64_t n) noexcept -> uint64_t {
+inline auto divide_by_10_to_kappa_plus_1(uint64_t normals) noexcept -> uint64_t {
   // 2361183241434822607 = ceil(2^(64+7)/1000)
-  return umul128_upper64(n, 2361183241434822607ull) >> 7;
+  return umul128_upper64(normals, 2361183241434822607ull) >> 7;
 }
 
 // Various subroutines using pow10 cache
@@ -1134,33 +1134,33 @@ auto is_left_endpoint_integer_shorter_interval(int exponent) noexcept -> bool {
 }
 
 // Remove trailing zeros from n and return the number of zeros removed (float)
-FMT_INLINE int remove_trailing_zeros(uint32_t& n, int s = 0) noexcept {
-  FMT_ASSERT(n != 0, "");
+FMT_INLINE int remove_trailing_zeros(uint32_t& normals, int s = 0) noexcept {
+  FMT_ASSERT(normals != 0, "");
   // Modular inverse of 5 (mod 2^32): (mod_inv_5 * 5) mod 2^32 = 1.
   constexpr uint32_t mod_inv_5 = 0xcccccccd;
   constexpr uint32_t mod_inv_25 = 0xc28f5c29;  // = mod_inv_5 * mod_inv_5
 
   while (true) {
-    auto q = rotr(n * mod_inv_25, 2);
+    auto q = rotr(normals * mod_inv_25, 2);
     if (q > max_value<uint32_t>() / 100) break;
-    n = q;
+    normals = q;
     s += 2;
   }
-  auto q = rotr(n * mod_inv_5, 1);
+  auto q = rotr(normals * mod_inv_5, 1);
   if (q <= max_value<uint32_t>() / 10) {
-    n = q;
+    normals = q;
     s |= 1;
   }
   return s;
 }
 
 // Removes trailing zeros and returns the number of zeros removed (double)
-FMT_INLINE int remove_trailing_zeros(uint64_t& n) noexcept {
-  FMT_ASSERT(n != 0, "");
+FMT_INLINE int remove_trailing_zeros(uint64_t& normals) noexcept {
+  FMT_ASSERT(normals != 0, "");
 
   // This magic number is ceil(2^90 / 10^8).
   constexpr uint64_t magic_number = 12379400392853802749ull;
-  auto nm = umul128(n, magic_number);
+  auto nm = umul128(normals, magic_number);
 
   // Is n is divisible by 10^8?
   if ((nm.high() & ((1ull << (90 - 64)) - 1)) == 0 && nm.low() < magic_number) {
@@ -1168,7 +1168,7 @@ FMT_INLINE int remove_trailing_zeros(uint64_t& n) noexcept {
     auto n32 = static_cast<uint32_t>(nm.high() >> (90 - 64));
     // ... and use the 32 bit variant of the function
     int s = remove_trailing_zeros(n32, 8);
-    n = n32;
+    normals = n32;
     return s;
   }
 
@@ -1178,14 +1178,14 @@ FMT_INLINE int remove_trailing_zeros(uint64_t& n) noexcept {
 
   int s = 0;
   while (true) {
-    auto q = rotr(n * mod_inv_25, 2);
+    auto q = rotr(normals * mod_inv_25, 2);
     if (q > max_value<uint64_t>() / 100) break;
-    n = q;
+    normals = q;
     s += 2;
   }
-  auto q = rotr(n * mod_inv_5, 1);
+  auto q = rotr(normals * mod_inv_5, 1);
   if (q <= max_value<uint64_t>() / 10) {
-    n = q;
+    normals = q;
     s |= 1;
   }
 
@@ -1372,12 +1372,12 @@ template <> struct formatter<detail::bigint> {
     return ctx.begin();
   }
 
-  auto format(const detail::bigint& n, format_context& ctx) const
+  auto format(const detail::bigint& normals, format_context& ctx) const
       -> format_context::iterator {
     auto out = ctx.out();
     bool first = true;
-    for (auto i = n.bigits_.size(); i > 0; --i) {
-      auto value = n.bigits_[i - 1u];
+    for (auto i = normals.bigits_.size(); i > 0; --i) {
+      auto value = normals.bigits_[i - 1u];
       if (first) {
         out = fmt::format_to(out, FMT_STRING("{:x}"), value);
         first = false;
@@ -1385,9 +1385,9 @@ template <> struct formatter<detail::bigint> {
       }
       out = fmt::format_to(out, FMT_STRING("{:08x}"), value);
     }
-    if (n.exp_ > 0)
+    if (normals.exp_ > 0)
       out = fmt::format_to(out, FMT_STRING("p{}"),
-                           n.exp_ * detail::bigint::bigit_bits);
+                           normals.exp_ * detail::bigint::bigit_bits);
     return out;
   }
 };

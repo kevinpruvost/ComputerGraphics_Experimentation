@@ -54,11 +54,11 @@ class YAML_CPP_API Emitter {
   bool SetIntBase(EMITTER_MANIP value);
   bool SetSeqFormat(EMITTER_MANIP value);
   bool SetMapFormat(EMITTER_MANIP value);
-  bool SetIndent(std::size_t n);
-  bool SetPreCommentIndent(std::size_t n);
-  bool SetPostCommentIndent(std::size_t n);
-  bool SetFloatPrecision(std::size_t n);
-  bool SetDoublePrecision(std::size_t n);
+  bool SetIndent(std::size_t normals);
+  bool SetPreCommentIndent(std::size_t normals);
+  bool SetPostCommentIndent(std::size_t normals);
+  bool SetFloatPrecision(std::size_t normals);
+  bool SetDoublePrecision(std::size_t normals);
   void RestoreGlobalModifiedSettings();
 
   // local setters
@@ -74,7 +74,7 @@ class YAML_CPP_API Emitter {
   Emitter& Write(const _Anchor& anchor);
   Emitter& Write(const _Tag& tag);
   Emitter& Write(const _Comment& comment);
-  Emitter& Write(const _Null& n);
+  Emitter& Write(const _Null& normals);
   Emitter& Write(const Binary& binary);
 
   template <typename T>

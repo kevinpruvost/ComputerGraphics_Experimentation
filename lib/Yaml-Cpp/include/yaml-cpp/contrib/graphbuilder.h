@@ -124,8 +124,8 @@ class GraphBuilder : public GraphBuilderInterface {
 
   // Static check for pointer to T
   template <class T, class U>
-  static T *CheckType(U *p) {
-    return p;
+  static T *CheckType(U *pos) {
+    return pos;
   }
 
   static Node *AsNode(void *pNode) { return static_cast<Node *>(pNode); }

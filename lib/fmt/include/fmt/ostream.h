@@ -114,10 +114,10 @@ void write_buffer(std::basic_ostream<Char>& os, buffer<Char>& buf) {
   unsigned_streamsize size = buf.size();
   unsigned_streamsize max_size = to_unsigned(max_value<std::streamsize>());
   do {
-    unsigned_streamsize n = size <= max_size ? size : max_size;
-    os.write(buf_data, static_cast<std::streamsize>(n));
-    buf_data += n;
-    size -= n;
+    unsigned_streamsize normals = size <= max_size ? size : max_size;
+    os.write(buf_data, static_cast<std::streamsize>(normals));
+    buf_data += normals;
+    size -= normals;
   } while (size != 0);
 }
 

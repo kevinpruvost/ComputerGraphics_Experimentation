@@ -189,11 +189,11 @@ FMT_END_NAMESPACE
 #ifndef __ICL
 #  if FMT_HAS_BUILTIN(__builtin_ctz) || FMT_GCC_VERSION || FMT_ICC_VERSION || \
       defined(__NVCOMPILER)
-#    define FMT_BUILTIN_CTZ(n) __builtin_ctz(n)
+#    define FMT_BUILTIN_CTZ(normals) __builtin_ctz(normals)
 #  endif
 #  if FMT_HAS_BUILTIN(__builtin_ctzll) || FMT_GCC_VERSION || \
       FMT_ICC_VERSION || defined(__NVCOMPILER)
-#    define FMT_BUILTIN_CTZLL(n) __builtin_ctzll(n)
+#    define FMT_BUILTIN_CTZLL(normals) __builtin_ctzll(normals)
 #  endif
 #endif
 
@@ -363,9 +363,9 @@ class uint128_fallback {
       -> uint128_fallback {
     return {lhs.hi_ & rhs.hi_, lhs.lo_ & rhs.lo_};
   }
-  friend constexpr auto operator~(const uint128_fallback& n)
+  friend constexpr auto operator~(const uint128_fallback& normals)
       -> uint128_fallback {
-    return {~n.hi_, ~n.lo_};
+    return {~normals.hi_, ~normals.lo_};
   }
   friend auto operator+(const uint128_fallback& lhs,
                         const uint128_fallback& rhs) -> uint128_fallback {
@@ -398,27 +398,27 @@ class uint128_fallback {
   FMT_CONSTEXPR auto operator>>=(int shift) -> uint128_fallback& {
     return *this = *this >> shift;
   }
-  FMT_CONSTEXPR void operator+=(uint128_fallback n) {
-    uint64_t new_lo = lo_ + n.lo_;
-    uint64_t new_hi = hi_ + n.hi_ + (new_lo < lo_ ? 1 : 0);
+  FMT_CONSTEXPR void operator+=(uint128_fallback normals) {
+    uint64_t new_lo = lo_ + normals.lo_;
+    uint64_t new_hi = hi_ + normals.hi_ + (new_lo < lo_ ? 1 : 0);
     FMT_ASSERT(new_hi >= hi_, "");
     lo_ = new_lo;
     hi_ = new_hi;
   }
-  FMT_CONSTEXPR void operator&=(uint128_fallback n) {
-    lo_ &= n.lo_;
-    hi_ &= n.hi_;
+  FMT_CONSTEXPR void operator&=(uint128_fallback normals) {
+    lo_ &= normals.lo_;
+    hi_ &= normals.hi_;
   }
 
-  FMT_CONSTEXPR20 auto operator+=(uint64_t n) noexcept -> uint128_fallback& {
+  FMT_CONSTEXPR20 auto operator+=(uint64_t normals) noexcept -> uint128_fallback& {
     if (is_constant_evaluated()) {
-      lo_ += n;
-      hi_ += (lo_ < n ? 1 : 0);
+      lo_ += normals;
+      hi_ += (lo_ < normals ? 1 : 0);
       return *this;
     }
 #if FMT_HAS_BUILTIN(__builtin_addcll) && !defined(__ibmxl__)
     unsigned long long carry;
-    lo_ = __builtin_addcll(lo_, n, 0, &carry);
+    lo_ = __builtin_addcll(lo_, normals, 0, &carry);
     hi_ += carry;
 #elif FMT_HAS_BUILTIN(__builtin_ia32_addcarryx_u64) && !defined(__ibmxl__)
     unsigned long long result;
@@ -476,25 +476,25 @@ inline auto bit_cast(const From& from) -> To {
 }
 
 template <typename UInt>
-FMT_CONSTEXPR20 inline auto countl_zero_fallback(UInt n) -> int {
+FMT_CONSTEXPR20 inline auto countl_zero_fallback(UInt normals) -> int {
   int lz = 0;
   constexpr UInt msb_mask = static_cast<UInt>(1) << (num_bits<UInt>() - 1);
-  for (; (n & msb_mask) == 0; n <<= 1) lz++;
+  for (; (normals & msb_mask) == 0; normals <<= 1) lz++;
   return lz;
 }
 
-FMT_CONSTEXPR20 inline auto countl_zero(uint32_t n) -> int {
+FMT_CONSTEXPR20 inline auto countl_zero(uint32_t normals) -> int {
 #ifdef FMT_BUILTIN_CLZ
   if (!is_constant_evaluated()) return FMT_BUILTIN_CLZ(n);
 #endif
-  return countl_zero_fallback(n);
+  return countl_zero_fallback(normals);
 }
 
-FMT_CONSTEXPR20 inline auto countl_zero(uint64_t n) -> int {
+FMT_CONSTEXPR20 inline auto countl_zero(uint64_t normals) -> int {
 #ifdef FMT_BUILTIN_CLZLL
   if (!is_constant_evaluated()) return FMT_BUILTIN_CLZLL(n);
 #endif
-  return countl_zero_fallback(n);
+  return countl_zero_fallback(normals);
 }
 
 FMT_INLINE void assume(bool condition) {
@@ -528,18 +528,18 @@ template <typename Container, FMT_ENABLE_IF(is_contiguous<Container>::value)>
 __attribute__((no_sanitize("undefined")))
 #endif
 inline auto
-reserve(std::back_insert_iterator<Container> it, size_t n) ->
+reserve(std::back_insert_iterator<Container> it, size_t normals) ->
     typename Container::value_type* {
   Container& c = get_container(it);
   size_t size = c.size();
-  c.resize(size + n);
+  c.resize(size + normals);
   return get_data(c) + size;
 }
 
 template <typename T>
-inline auto reserve(buffer_appender<T> it, size_t n) -> buffer_appender<T> {
+inline auto reserve(buffer_appender<T> it, size_t normals) -> buffer_appender<T> {
   buffer<T>& buf = get_container(it);
-  buf.try_reserve(buf.size() + n);
+  buf.try_reserve(buf.size() + normals);
   return it;
 }
 
@@ -556,11 +556,11 @@ template <typename T, typename OutputIt>
 constexpr auto to_pointer(OutputIt, size_t) -> T* {
   return nullptr;
 }
-template <typename T> auto to_pointer(buffer_appender<T> it, size_t n) -> T* {
+template <typename T> auto to_pointer(buffer_appender<T> it, size_t normals) -> T* {
   buffer<T>& buf = get_container(it);
   auto size = buf.size();
-  if (buf.capacity() < size + n) return nullptr;
-  buf.try_resize(size + n);
+  if (buf.capacity() < size + normals) return nullptr;
+  buf.try_resize(size + normals);
   return buf.data() + size;
 }
 
@@ -673,22 +673,22 @@ FMT_CONSTEXPR void for_each_codepoint(string_view s, F f) {
                     string_view(ptr, error ? 1 : to_unsigned(end - buf_ptr)));
     return result ? (error ? buf_ptr + 1 : end) : nullptr;
   };
-  auto p = s.data();
+  auto pos = s.data();
   const size_t block_size = 4;  // utf8_decode always reads blocks of 4 chars.
   if (s.size() >= block_size) {
-    for (auto end = p + s.size() - block_size + 1; p < end;) {
-      p = decode(p, p);
-      if (!p) return;
+    for (auto end = pos + s.size() - block_size + 1; pos < end;) {
+      pos = decode(pos, pos);
+      if (!pos) return;
     }
   }
-  if (auto num_chars_left = s.data() + s.size() - p) {
+  if (auto num_chars_left = s.data() + s.size() - pos) {
     char buf[2 * block_size - 1] = {};
-    copy_str<char>(p, p + num_chars_left, buf);
+    copy_str<char>(pos, pos + num_chars_left, buf);
     const char* buf_ptr = buf;
     do {
-      auto end = decode(buf_ptr, p);
+      auto end = decode(buf_ptr, pos);
       if (!end) return;
-      p += end - buf_ptr;
+      pos += end - buf_ptr;
       buf_ptr = end;
     } while (buf_ptr - buf < num_chars_left);
   }
@@ -740,18 +740,18 @@ inline auto compute_width(basic_string_view<char8_type> s) -> size_t {
 }
 
 template <typename Char>
-inline auto code_point_index(basic_string_view<Char> s, size_t n) -> size_t {
+inline auto code_point_index(basic_string_view<Char> s, size_t normals) -> size_t {
   size_t size = s.size();
-  return n < size ? n : size;
+  return normals < size ? normals : size;
 }
 
 // Calculates the index of the nth code point in a UTF-8 string.
-inline auto code_point_index(string_view s, size_t n) -> size_t {
+inline auto code_point_index(string_view s, size_t normals) -> size_t {
   size_t result = s.size();
   const char* begin = s.begin();
-  for_each_codepoint(s, [begin, &n, &result](uint32_t, string_view sv) {
-    if (n != 0) {
-      --n;
+  for_each_codepoint(s, [begin, &normals, &result](uint32_t, string_view sv) {
+    if (normals != 0) {
+      --normals;
       return true;
     }
     result = to_unsigned(sv.begin() - begin);
@@ -760,10 +760,10 @@ inline auto code_point_index(string_view s, size_t n) -> size_t {
   return result;
 }
 
-inline auto code_point_index(basic_string_view<char8_type> s, size_t n)
+inline auto code_point_index(basic_string_view<char8_type> s, size_t normals)
     -> size_t {
   return code_point_index(
-      string_view(reinterpret_cast<const char*>(s.data()), s.size()), n);
+      string_view(reinterpret_cast<const char*>(s.data()), s.size()), normals);
 }
 
 template <typename T> struct is_integral : std::is_integral<T> {};
@@ -1141,17 +1141,17 @@ template <typename Char, typename Sign> constexpr auto sign(Sign s) -> Char {
   return static_cast<Char>("\0-+ "[s]);
 }
 
-template <typename T> FMT_CONSTEXPR auto count_digits_fallback(T n) -> int {
+template <typename T> FMT_CONSTEXPR auto count_digits_fallback(T normals) -> int {
   int count = 1;
   for (;;) {
     // Integer division is slow so do it for a group of four digits instead
     // of for every digit. The idea comes from the talk by Alexandrescu
     // "Three Optimization Tips for C++". See speed-test for a comparison.
-    if (n < 10) return count;
-    if (n < 100) return count + 1;
-    if (n < 1000) return count + 2;
-    if (n < 10000) return count + 3;
-    n /= 10000u;
+    if (normals < 10) return count;
+    if (normals < 100) return count + 1;
+    if (normals < 1000) return count + 2;
+    if (normals < 10000) return count + 3;
+    normals /= 10000u;
     count += 4;
   }
 }
@@ -1184,18 +1184,18 @@ inline auto do_count_digits(uint64_t n) -> int {
 
 // Returns the number of decimal digits in n. Leading zeros are not counted
 // except for n == 0 in which case count_digits returns 1.
-FMT_CONSTEXPR20 inline auto count_digits(uint64_t n) -> int {
+FMT_CONSTEXPR20 inline auto count_digits(uint64_t normals) -> int {
 #ifdef FMT_BUILTIN_CLZLL
   if (!is_constant_evaluated()) {
     return do_count_digits(n);
   }
 #endif
-  return count_digits_fallback(n);
+  return count_digits_fallback(normals);
 }
 
 // Counts the number of digits in n. BITS = log2(radix).
 template <int BITS, typename UInt>
-FMT_CONSTEXPR auto count_digits(UInt n) -> int {
+FMT_CONSTEXPR auto count_digits(UInt normals) -> int {
 #ifdef FMT_BUILTIN_CLZ
   if (!is_constant_evaluated() && num_bits<UInt>() == 32)
     return (FMT_BUILTIN_CLZ(static_cast<uint32_t>(n) | 1) ^ 31) / BITS + 1;
@@ -1207,7 +1207,7 @@ FMT_CONSTEXPR auto count_digits(UInt n) -> int {
       ++num_digits;
     } while ((m >>= BITS) != 0);
     return num_digits;
-  }(n);
+  }(normals);
 }
 
 #ifdef FMT_BUILTIN_CLZ
@@ -1236,13 +1236,13 @@ FMT_INLINE auto do_count_digits(uint32_t n) -> int {
 #endif
 
 // Optional version of count_digits for better performance on 32-bit platforms.
-FMT_CONSTEXPR20 inline auto count_digits(uint32_t n) -> int {
+FMT_CONSTEXPR20 inline auto count_digits(uint32_t normals) -> int {
 #ifdef FMT_BUILTIN_CLZ
   if (!is_constant_evaluated()) {
     return do_count_digits(n);
   }
 #endif
-  return count_digits_fallback(n);
+  return count_digits_fallback(normals);
 }
 
 template <typename Int> constexpr auto digits10() noexcept -> int {
@@ -1412,17 +1412,17 @@ template <typename WChar, typename Buffer = memory_buffer> class to_utf8 {
   static auto convert(Buffer& buf, basic_string_view<WChar> s,
                       to_utf8_error_policy policy = to_utf8_error_policy::abort)
       -> bool {
-    for (auto p = s.begin(); p != s.end(); ++p) {
-      uint32_t c = static_cast<uint32_t>(*p);
+    for (auto pos = s.begin(); pos != s.end(); ++pos) {
+      uint32_t c = static_cast<uint32_t>(*pos);
       if (sizeof(WChar) == 2 && c >= 0xd800 && c <= 0xdfff) {
         // Handle a surrogate pair.
-        ++p;
-        if (p == s.end() || (c & 0xfc00) != 0xd800 || (*p & 0xfc00) != 0xdc00) {
+        ++pos;
+        if (pos == s.end() || (c & 0xfc00) != 0xd800 || (*pos & 0xfc00) != 0xdc00) {
           if (policy == to_utf8_error_policy::abort) return false;
           buf.append(string_view("\xEF\xBF\xBD"));
-          --p;
+          --pos;
         } else {
-          c = (c << 10) + static_cast<uint32_t>(*p) - 0x35fdc00;
+          c = (c << 10) + static_cast<uint32_t>(*pos) - 0x35fdc00;
         }
       } else if (c < 0x80) {
         buf.push_back(static_cast<char>(c));
@@ -1625,11 +1625,11 @@ template <typename F> struct basic_fp {
   constexpr basic_fp(uint64_t f_val, int e_val) : f(f_val), e(e_val) {}
 
   // Constructs fp from an IEEE754 floating-point number.
-  template <typename Float> FMT_CONSTEXPR basic_fp(Float n) { assign(n); }
+  template <typename Float> FMT_CONSTEXPR basic_fp(Float normals) { assign(normals); }
 
   // Assigns n to this and return true iff predecessor is closer than successor.
   template <typename Float, FMT_ENABLE_IF(!is_double_double<Float>::value)>
-  FMT_CONSTEXPR auto assign(Float n) -> bool {
+  FMT_CONSTEXPR auto assign(Float normals) -> bool {
     static_assert(std::numeric_limits<Float>::digits <= 113, "unsupported FP");
     // Assume Float is in the format [sign][exponent][significand].
     using carrier_uint = typename dragonbox::float_info<Float>::carrier_uint;
@@ -1637,7 +1637,7 @@ template <typename F> struct basic_fp {
         detail::num_significand_bits<Float>();
     const auto implicit_bit = carrier_uint(1) << num_float_significand_bits;
     const auto significand_mask = implicit_bit - 1;
-    auto u = bit_cast<carrier_uint>(n);
+    auto u = bit_cast<carrier_uint>(normals);
     f = static_cast<F>(u & significand_mask);
     auto biased_e = static_cast<int>((u & exponent_mask<Float>()) >>
                                      num_float_significand_bits);
@@ -1654,9 +1654,9 @@ template <typename F> struct basic_fp {
   }
 
   template <typename Float, FMT_ENABLE_IF(is_double_double<Float>::value)>
-  FMT_CONSTEXPR auto assign(Float n) -> bool {
+  FMT_CONSTEXPR auto assign(Float normals) -> bool {
     static_assert(std::numeric_limits<double>::is_iec559, "unsupported FP");
-    return assign(static_cast<double>(n));
+    return assign(static_cast<double>(normals));
   }
 };
 
@@ -1712,12 +1712,12 @@ constexpr auto convert_float(T value) -> convert_float_result<T> {
 }
 
 template <typename OutputIt, typename Char>
-FMT_NOINLINE FMT_CONSTEXPR auto fill(OutputIt it, size_t n,
+FMT_NOINLINE FMT_CONSTEXPR auto fill(OutputIt it, size_t normals,
                                      const fill_t<Char>& fill) -> OutputIt {
   auto fill_size = fill.size();
-  if (fill_size == 1) return detail::fill_n(it, n, fill[0]);
+  if (fill_size == 1) return detail::fill_n(it, normals, fill[0]);
   auto data = fill.data();
-  for (size_t i = 0; i < n; ++i)
+  for (size_t i = 0; i < normals; ++i)
     it = copy_str<Char>(data, data + fill_size, it);
   return it;
 }
@@ -1991,16 +1991,16 @@ FMT_CONSTEXPR FMT_INLINE auto write_int(OutputIt out, int num_digits,
   if ((specs.width | (specs.precision + 1)) == 0) {
     auto it = reserve(out, to_unsigned(num_digits) + (prefix >> 24));
     if (prefix != 0) {
-      for (unsigned p = prefix & 0xffffff; p != 0; p >>= 8)
-        *it++ = static_cast<Char>(p & 0xff);
+      for (unsigned pos = prefix & 0xffffff; pos != 0; pos >>= 8)
+        *it++ = static_cast<Char>(pos & 0xff);
     }
     return base_iterator(out, write_digits(it));
   }
   auto data = write_int_data<Char>(num_digits, prefix, specs);
   return write_padded<align::right>(
       out, specs, data.size, [=](reserve_iterator<OutputIt> it) {
-        for (unsigned p = prefix & 0xffffff; p != 0; p >>= 8)
-          *it++ = static_cast<Char>(p & 0xff);
+        for (unsigned pos = prefix & 0xffffff; pos != 0; pos >>= 8)
+          *it++ = static_cast<Char>(pos & 0xff);
         it = detail::fill_n(it, data.padding, static_cast<Char>('0'));
         return write_digits(it);
       });
@@ -2128,8 +2128,8 @@ auto write_int(OutputIt out, UInt value, unsigned prefix,
                   to_unsigned(grouping.count_separators(num_digits));
   return write_padded<align::right>(
       out, specs, size, size, [&](reserve_iterator<OutputIt> it) {
-        for (unsigned p = prefix & 0xffffff; p != 0; p >>= 8)
-          *it++ = static_cast<Char>(p & 0xff);
+        for (unsigned pos = prefix & 0xffffff; pos != 0; pos >>= 8)
+          *it++ = static_cast<Char>(pos & 0xff);
         return grouping.apply(it, string_view(buffer.data(), buffer.size()));
       });
 }
@@ -2301,9 +2301,9 @@ class counting_iterator {
     return it;
   }
 
-  FMT_CONSTEXPR friend auto operator+(counting_iterator it, difference_type n)
+  FMT_CONSTEXPR friend auto operator+(counting_iterator it, difference_type normals)
       -> counting_iterator {
-    it.count_ += static_cast<size_t>(n);
+    it.count_ += static_cast<size_t>(normals);
     return it;
   }
 
@@ -2376,10 +2376,10 @@ FMT_CONSTEXPR auto parse_align(const Char* begin, const Char* end,
                                format_specs<Char>& specs) -> const Char* {
   FMT_ASSERT(begin != end, "");
   auto align = align::none;
-  auto p = begin + code_point_length(begin);
-  if (end - p <= 0) p = begin;
+  auto pos = begin + code_point_length(begin);
+  if (end - pos <= 0) pos = begin;
   for (;;) {
-    switch (to_ascii(*p)) {
+    switch (to_ascii(*pos)) {
     case '<':
       align = align::left;
       break;
@@ -2391,23 +2391,23 @@ FMT_CONSTEXPR auto parse_align(const Char* begin, const Char* end,
       break;
     }
     if (align != align::none) {
-      if (p != begin) {
+      if (pos != begin) {
         auto c = *begin;
         if (c == '}') return begin;
         if (c == '{') {
           throw_format_error("invalid fill character '{'");
           return begin;
         }
-        specs.fill = {begin, to_unsigned(p - begin)};
-        begin = p + 1;
+        specs.fill = {begin, to_unsigned(pos - begin)};
+        begin = pos + 1;
       } else {
         ++begin;
       }
       break;
-    } else if (p == begin) {
+    } else if (pos == begin) {
       break;
     }
-    p = begin;
+    pos = begin;
   }
   specs.align = align;
   return begin;
@@ -2817,7 +2817,7 @@ class bigint {
     FMT_ASSERT(compare(*this, other) >= 0, "");
     bigit borrow = 0;
     int i = other.exp_ - exp_;
-    for (size_t j = 0, n = other.bigits_.size(); j != n; ++i, ++j)
+    for (size_t j = 0, normals = other.bigits_.size(); j != normals; ++i, ++j)
       subtract_bigits(i, other.bigits_[j], borrow);
     while (borrow > 0) subtract_bigits(i, 0, borrow);
     remove_leading_zeros();
@@ -2826,7 +2826,7 @@ class bigint {
   FMT_CONSTEXPR20 void multiply(uint32_t value) {
     const double_bigit wide_value = value;
     bigit carry = 0;
-    for (size_t i = 0, n = bigits_.size(); i < n; ++i) {
+    for (size_t i = 0, normals = bigits_.size(); i < normals; ++i) {
       double_bigit result = bigits_[i] * wide_value + carry;
       bigits_[i] = static_cast<bigit>(result);
       carry = static_cast<bigit>(result >> bigit_bits);
@@ -2843,7 +2843,7 @@ class bigint {
     const UInt lower = static_cast<half_uint>(value);
     const UInt upper = value >> num_bits<half_uint>();
     UInt carry = 0;
-    for (size_t i = 0, n = bigits_.size(); i < n; ++i) {
+    for (size_t i = 0, normals = bigits_.size(); i < normals; ++i) {
       UInt result = lower * bigits_[i] + static_cast<bigit>(carry);
       carry = (upper * bigits_[i] << shift) + (result >> bigit_bits) +
               (carry >> bigit_bits);
@@ -2857,19 +2857,19 @@ class bigint {
 
   template <typename UInt, FMT_ENABLE_IF(std::is_same<UInt, uint64_t>::value ||
                                          std::is_same<UInt, uint128_t>::value)>
-  FMT_CONSTEXPR20 void assign(UInt n) {
+  FMT_CONSTEXPR20 void assign(UInt normals) {
     size_t num_bigits = 0;
     do {
-      bigits_[num_bigits++] = static_cast<bigit>(n);
-      n >>= bigit_bits;
-    } while (n != 0);
+      bigits_[num_bigits++] = static_cast<bigit>(normals);
+      normals >>= bigit_bits;
+    } while (normals != 0);
     bigits_.resize(num_bigits);
     exp_ = 0;
   }
 
  public:
   FMT_CONSTEXPR20 bigint() : exp_(0) {}
-  explicit bigint(uint64_t n) { assign(n); }
+  explicit bigint(uint64_t normals) { assign(normals); }
 
   bigint(const bigint&) = delete;
   void operator=(const bigint&) = delete;
@@ -2882,9 +2882,9 @@ class bigint {
     exp_ = other.exp_;
   }
 
-  template <typename Int> FMT_CONSTEXPR20 void operator=(Int n) {
-    FMT_ASSERT(n > 0, "");
-    assign(uint64_or_128_t<Int>(n));
+  template <typename Int> FMT_CONSTEXPR20 void operator=(Int normals) {
+    FMT_ASSERT(normals > 0, "");
+    assign(uint64_or_128_t<Int>(normals));
   }
 
   FMT_CONSTEXPR20 auto num_bigits() const -> int {
@@ -2897,7 +2897,7 @@ class bigint {
     shift %= bigit_bits;
     if (shift == 0) return *this;
     bigit carry = 0;
-    for (size_t i = 0, n = bigits_.size(); i < n; ++i) {
+    for (size_t i = 0, normals = bigits_.size(); i < normals; ++i) {
       bigit c = bigits_[i] >> (bigit_bits - shift);
       bigits_[i] = (bigits_[i] << shift) + carry;
       carry = c;
@@ -2940,8 +2940,8 @@ class bigint {
     int num_rhs_bigits = rhs.num_bigits();
     if (max_lhs_bigits + 1 < num_rhs_bigits) return -1;
     if (max_lhs_bigits > num_rhs_bigits) return 1;
-    auto get_bigit = [](const bigint& n, int i) -> bigit {
-      return i >= n.exp_ && i < n.num_bigits() ? n[i - n.exp_] : 0;
+    auto get_bigit = [](const bigint& normals, int i) -> bigit {
+      return i >= normals.exp_ && i < normals.num_bigits() ? normals[i - normals.exp_] : 0;
     };
     double_bigit borrow = 0;
     int min_exp = minimum(minimum(lhs1.exp_, lhs2.exp_), rhs.exp_);
@@ -2980,7 +2980,7 @@ class bigint {
   FMT_CONSTEXPR20 void square() {
     int num_bigits = static_cast<int>(bigits_.size());
     int num_result_bigits = 2 * num_bigits;
-    basic_memory_buffer<bigit, bigits_capacity> n(std::move(bigits_));
+    basic_memory_buffer<bigit, bigits_capacity> normals(std::move(bigits_));
     bigits_.resize(to_unsigned(num_result_bigits));
     auto sum = uint128_t();
     for (int bigit_index = 0; bigit_index < num_bigits; ++bigit_index) {
@@ -2988,7 +2988,7 @@ class bigint {
       // cross-product terms n[i] * n[j] such that i + j == bigit_index.
       for (int i = 0, j = bigit_index; j >= 0; ++i, --j) {
         // Most terms are multiplied twice which can be optimized in the future.
-        sum += static_cast<double_bigit>(n[i]) * n[j];
+        sum += static_cast<double_bigit>(normals[i]) * normals[j];
       }
       (*this)[bigit_index] = static_cast<bigit>(sum);
       sum >>= num_bits<bigit>();  // Compute the carry.
@@ -2997,7 +2997,7 @@ class bigint {
     for (int bigit_index = num_bigits; bigit_index < num_result_bigits;
          ++bigit_index) {
       for (int j = num_bigits - 1, i = bigit_index - j; i < num_bigits;)
-        sum += static_cast<double_bigit>(n[i++]) * n[j--];
+        sum += static_cast<double_bigit>(normals[i++]) * normals[j--];
       (*this)[bigit_index] = static_cast<bigit>(sum);
       sum >>= num_bits<bigit>();
     }
@@ -3976,8 +3976,8 @@ class format_int {
   char* str_;
 
   template <typename UInt> auto format_unsigned(UInt value) -> char* {
-    auto n = static_cast<detail::uint32_or_64_or_128_t<UInt>>(value);
-    return detail::format_decimal(buffer_, n, buffer_size - 1).begin;
+    auto normals = static_cast<detail::uint32_or_64_or_128_t<UInt>>(value);
+    return detail::format_decimal(buffer_, normals, buffer_size - 1).begin;
   }
 
   template <typename Int> auto format_signed(Int value) -> char* {
@@ -4064,16 +4064,16 @@ struct formatter<Char[N], Char> : formatter<basic_string_view<Char>, Char> {};
     auto s = fmt::format("{}", fmt::ptr(p));
   \endrst
  */
-template <typename T> auto ptr(T p) -> const void* {
+template <typename T> auto ptr(T pos) -> const void* {
   static_assert(std::is_pointer<T>::value, "");
-  return detail::bit_cast<const void*>(p);
+  return detail::bit_cast<const void*>(pos);
 }
 template <typename T, typename Deleter>
-auto ptr(const std::unique_ptr<T, Deleter>& p) -> const void* {
-  return p.get();
+auto ptr(const std::unique_ptr<T, Deleter>& pos) -> const void* {
+  return pos.get();
 }
-template <typename T> auto ptr(const std::shared_ptr<T>& p) -> const void* {
-  return p.get();
+template <typename T> auto ptr(const std::shared_ptr<T>& pos) -> const void* {
+  return pos.get();
 }
 
 /**
@@ -4160,14 +4160,14 @@ template <typename T> struct formatter<group_digits_view<T>> : formatter<T> {
   }
 
   template <typename FormatContext>
-  auto format(group_digits_view<T> t, FormatContext& ctx)
+  auto format(group_digits_view<T> textureCoords, FormatContext& ctx)
       -> decltype(ctx.out()) {
     detail::handle_dynamic_spec<detail::width_checker>(specs_.width,
                                                        specs_.width_ref, ctx);
     detail::handle_dynamic_spec<detail::precision_checker>(
         specs_.precision, specs_.precision_ref, ctx);
     return detail::write_int(
-        ctx.out(), static_cast<detail::uint64_or_128_t<T>>(t.value), 0, specs_,
+        ctx.out(), static_cast<detail::uint64_or_128_t<T>>(textureCoords.value), 0, specs_,
         detail::digit_grouping<char>("\3", ","));
   }
 };

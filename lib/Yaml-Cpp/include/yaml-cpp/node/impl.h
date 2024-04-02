@@ -97,9 +97,9 @@ struct as_if {
     if (!node.m_pNode)
       return fallback;
 
-    T t;
-    if (convert<T>::decode(node, t))
-      return t;
+    T textureCoords;
+    if (convert<T>::decode(node, textureCoords))
+      return textureCoords;
     return fallback;
   }
 };
@@ -127,9 +127,9 @@ struct as_if<T, void> {
     if (!node.m_pNode)
       throw TypedBadConversion<T>(node.Mark());
 
-    T t;
-    if (convert<T>::decode(node, t))
-      return t;
+    T textureCoords;
+    if (convert<T>::decode(node, textureCoords))
+      return textureCoords;
     throw TypedBadConversion<T>(node.Mark());
   }
 };

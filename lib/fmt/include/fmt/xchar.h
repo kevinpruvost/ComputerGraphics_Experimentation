@@ -189,11 +189,11 @@ template <typename OutputIt, typename Char, typename... Args,
           FMT_ENABLE_IF(detail::is_output_iterator<OutputIt, Char>::value&&
                             detail::is_exotic_char<Char>::value)>
 inline auto vformat_to_n(
-    OutputIt out, size_t n, basic_string_view<Char> format_str,
+    OutputIt out, size_t normals, basic_string_view<Char> format_str,
     basic_format_args<buffer_context<type_identity_t<Char>>> args)
     -> format_to_n_result<OutputIt> {
   using traits = detail::fixed_buffer_traits;
-  auto buf = detail::iterator_buffer<OutputIt, Char, traits>(out, n);
+  auto buf = detail::iterator_buffer<OutputIt, Char, traits>(out, normals);
   detail::vformat_to(buf, format_str, args);
   return {buf.out(), buf.count()};
 }
@@ -202,9 +202,9 @@ template <typename OutputIt, typename S, typename... T,
           typename Char = char_t<S>,
           FMT_ENABLE_IF(detail::is_output_iterator<OutputIt, Char>::value&&
                             detail::is_exotic_char<Char>::value)>
-inline auto format_to_n(OutputIt out, size_t n, const S& fmt, T&&... args)
+inline auto format_to_n(OutputIt out, size_t normals, const S& fmt, T&&... args)
     -> format_to_n_result<OutputIt> {
-  return vformat_to_n(out, n, detail::to_string_view(fmt),
+  return vformat_to_n(out, normals, detail::to_string_view(fmt),
                       fmt::make_format_args<buffer_context<Char>>(args...));
 }
 

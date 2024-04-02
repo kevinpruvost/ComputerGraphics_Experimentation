@@ -21,6 +21,7 @@ public:
     void CreateFromFile(const std::filesystem::path & path);
 
     virtual void SetVertices(const VertexArray& vertices) = 0;
+    VertexArray GetVertices() const;
     virtual void SetIndices(const TriangleArray& indices) = 0;
 
     void AddMesh(Mesh * mesh);
@@ -31,6 +32,7 @@ protected:
 
     std::vector<std::shared_ptr<Mesh>> _meshes;
     std::vector<std::shared_ptr<Material>> _materials;
+    VertexArray _vertices;
 
 private:
     // Parser

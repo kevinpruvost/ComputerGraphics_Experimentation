@@ -29,7 +29,7 @@ class ptr_vector {
   std::size_t size() const { return m_data.size(); }
   bool empty() const { return m_data.empty(); }
 
-  void push_back(std::unique_ptr<T>&& t) { m_data.push_back(std::move(t)); }
+  void push_back(std::unique_ptr<T>&& textureCoords) { m_data.push_back(std::move(textureCoords)); }
   T& operator[](std::size_t i) { return *m_data[i]; }
   const T& operator[](std::size_t i) const { return *m_data[i]; }
 

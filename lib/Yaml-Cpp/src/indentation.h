@@ -14,25 +14,25 @@
 
 namespace YAML {
 struct Indentation {
-  Indentation(std::size_t n_) : n(n_) {}
-  std::size_t n;
+  Indentation(std::size_t n_) : normals(n_) {}
+  std::size_t normals;
 };
 
 inline ostream_wrapper& operator<<(ostream_wrapper& out,
                                    const Indentation& indent) {
-  for (std::size_t i = 0; i < indent.n; i++)
+  for (std::size_t i = 0; i < indent.normals; i++)
     out << ' ';
   return out;
 }
 
 struct IndentTo {
-  IndentTo(std::size_t n_) : n(n_) {}
-  std::size_t n;
+  IndentTo(std::size_t n_) : normals(n_) {}
+  std::size_t normals;
 };
 
 inline ostream_wrapper& operator<<(ostream_wrapper& out,
                                    const IndentTo& indent) {
-  while (out.col() < indent.n)
+  while (out.col() < indent.normals)
     out << ' ';
   return out;
 }

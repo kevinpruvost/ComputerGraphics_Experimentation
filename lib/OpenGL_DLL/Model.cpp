@@ -37,7 +37,7 @@ void Model_OGL::SetVertices(const VertexArray & vertices)
 
 	glBindBuffer(GL_ARRAY_BUFFER, 0); // Note that this is allowed, the call to glVertexAttribPointer registered VBO as the currently bound vertex buffer object so afterwards we can safely unbind
 	glBindVertexArray(0); // Unbind VAO (it's always a good thing to unbind any buffer/array to prevent strange bugs)
-	m_vertices = vertices;
+	_vertices = vertices;
 }
 
 void Model_OGL::SetIndices(const TriangleArray& indices)
@@ -47,7 +47,7 @@ void Model_OGL::SetIndices(const TriangleArray& indices)
 void Model_OGL::Draw()
 {
 	glBindVertexArray(m_vao);
-	glDrawArrays(GL_TRIANGLES, 0, m_vertices.size());
+	glDrawArrays(GL_TRIANGLES, 0, _vertices.size());
 	for (auto & m : _meshes)
 	{
 		Mesh_OGL * mesh = dynamic_cast<Mesh_OGL *>(m.get());

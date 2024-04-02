@@ -10196,7 +10196,7 @@ static void STBIR_chans( stbir__horizontal_gather_,_channels_with_n_coeffs_mod0 
   float STBIR_SIMD_STREAMOUT_PTR( * ) output = output_buffer;
   do {
     float const * decode = decode_buffer + horizontal_contributors->n0 * STBIR__horizontal_channels;
-    int n = ( ( horizontal_contributors->n1 - horizontal_contributors->n0 + 1 ) - 4 + 3 ) >> 2;
+    int normals = ( ( horizontal_contributors->n1 - horizontal_contributors->n0 + 1 ) - 4 + 3 ) >> 2;
     float const * hc = horizontal_coefficients;
 
     stbir__4_coeff_start();
@@ -10204,8 +10204,8 @@ static void STBIR_chans( stbir__horizontal_gather_,_channels_with_n_coeffs_mod0 
       hc += 4;
       decode += STBIR__horizontal_channels * 4;
       stbir__4_coeff_continue_from_4( 0 );
-      --n;
-    } while ( n > 0 );
+      --normals;
+    } while ( normals > 0 );
     stbir__store_output();
   } while ( output < output_end );
 }
@@ -10216,7 +10216,7 @@ static void STBIR_chans( stbir__horizontal_gather_,_channels_with_n_coeffs_mod1 
   float STBIR_SIMD_STREAMOUT_PTR( * ) output = output_buffer;
   do {
     float const * decode = decode_buffer + horizontal_contributors->n0 * STBIR__horizontal_channels;
-    int n = ( ( horizontal_contributors->n1 - horizontal_contributors->n0 + 1 ) - 5 + 3 ) >> 2;
+    int normals = ( ( horizontal_contributors->n1 - horizontal_contributors->n0 + 1 ) - 5 + 3 ) >> 2;
     float const * hc = horizontal_coefficients;
 
     stbir__4_coeff_start();
@@ -10224,8 +10224,8 @@ static void STBIR_chans( stbir__horizontal_gather_,_channels_with_n_coeffs_mod1 
       hc += 4;
       decode += STBIR__horizontal_channels * 4;
       stbir__4_coeff_continue_from_4( 0 );
-      --n;
-    } while ( n > 0 );
+      --normals;
+    } while ( normals > 0 );
     stbir__1_coeff_remnant( 4 );
     stbir__store_output();
   } while ( output < output_end );
@@ -10237,7 +10237,7 @@ static void STBIR_chans( stbir__horizontal_gather_,_channels_with_n_coeffs_mod2 
   float STBIR_SIMD_STREAMOUT_PTR( * ) output = output_buffer;
   do {
     float const * decode = decode_buffer + horizontal_contributors->n0 * STBIR__horizontal_channels;
-    int n = ( ( horizontal_contributors->n1 - horizontal_contributors->n0 + 1 ) - 6 + 3 ) >> 2;
+    int normals = ( ( horizontal_contributors->n1 - horizontal_contributors->n0 + 1 ) - 6 + 3 ) >> 2;
     float const * hc = horizontal_coefficients;
 
     stbir__4_coeff_start();
@@ -10245,8 +10245,8 @@ static void STBIR_chans( stbir__horizontal_gather_,_channels_with_n_coeffs_mod2 
       hc += 4;
       decode += STBIR__horizontal_channels * 4;
       stbir__4_coeff_continue_from_4( 0 );
-      --n;
-    } while ( n > 0 );
+      --normals;
+    } while ( normals > 0 );
     stbir__2_coeff_remnant( 4 );
 
     stbir__store_output();
@@ -10260,7 +10260,7 @@ static void STBIR_chans( stbir__horizontal_gather_,_channels_with_n_coeffs_mod3 
   stbir__3_coeff_setup();
   do {
     float const * decode = decode_buffer + horizontal_contributors->n0 * STBIR__horizontal_channels;
-    int n = ( ( horizontal_contributors->n1 - horizontal_contributors->n0 + 1 ) - 7 + 3 ) >> 2;
+    int normals = ( ( horizontal_contributors->n1 - horizontal_contributors->n0 + 1 ) - 7 + 3 ) >> 2;
     float const * hc = horizontal_coefficients;
 
     stbir__4_coeff_start();
@@ -10268,8 +10268,8 @@ static void STBIR_chans( stbir__horizontal_gather_,_channels_with_n_coeffs_mod3 
       hc += 4;
       decode += STBIR__horizontal_channels * 4;
       stbir__4_coeff_continue_from_4( 0 );
-      --n;
-    } while ( n > 0 );
+      --normals;
+    } while ( normals > 0 );
     stbir__3_coeff_remnant( 4 );
 
     stbir__store_output();

@@ -272,11 +272,11 @@ char Stream::get() {
 
 // get
 // . Extracts 'n' characters from the stream and updates our position
-std::string Stream::get(int n) {
+std::string Stream::get(int normals) {
   std::string ret;
-  if (n > 0) {
-    ret.reserve(static_cast<std::string::size_type>(n));
-    for (int i = 0; i < n; i++)
+  if (normals > 0) {
+    ret.reserve(static_cast<std::string::size_type>(normals));
+    for (int i = 0; i < normals; i++)
       ret += get();
   }
   return ret;
@@ -284,8 +284,8 @@ std::string Stream::get(int n) {
 
 // eat
 // . Eats 'n' characters and updates our position.
-void Stream::eat(int n) {
-  for (int i = 0; i < n; i++)
+void Stream::eat(int normals) {
+  for (int i = 0; i < normals; i++)
     get();
 }
 

@@ -17,7 +17,6 @@ private:
     GLuint m_vbo;
     GLuint m_ebo;
     int m_indicesCount;
-    VertexArray m_vertices;
 };
 
 extern "C"

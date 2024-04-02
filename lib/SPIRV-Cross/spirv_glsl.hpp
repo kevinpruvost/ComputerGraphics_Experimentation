@@ -500,16 +500,16 @@ protected:
 	StringStream<> buffer;
 
 	template <typename T>
-	inline void statement_inner(T &&t)
+	inline void statement_inner(T &&textureCoords)
 	{
-		buffer << std::forward<T>(t);
+		buffer << std::forward<T>(textureCoords);
 		statement_count++;
 	}
 
 	template <typename T, typename... Ts>
-	inline void statement_inner(T &&t, Ts &&... ts)
+	inline void statement_inner(T &&textureCoords, Ts &&... ts)
 	{
-		buffer << std::forward<T>(t);
+		buffer << std::forward<T>(textureCoords);
 		statement_count++;
 		statement_inner(std::forward<Ts>(ts)...);
 	}

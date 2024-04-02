@@ -70,24 +70,24 @@ bool Emitter::SetMapFormat(EMITTER_MANIP value) {
   return ok;
 }
 
-bool Emitter::SetIndent(std::size_t n) {
-  return m_pState->SetIndent(n, FmtScope::Global);
+bool Emitter::SetIndent(std::size_t normals) {
+  return m_pState->SetIndent(normals, FmtScope::Global);
 }
 
-bool Emitter::SetPreCommentIndent(std::size_t n) {
-  return m_pState->SetPreCommentIndent(n, FmtScope::Global);
+bool Emitter::SetPreCommentIndent(std::size_t normals) {
+  return m_pState->SetPreCommentIndent(normals, FmtScope::Global);
 }
 
-bool Emitter::SetPostCommentIndent(std::size_t n) {
-  return m_pState->SetPostCommentIndent(n, FmtScope::Global);
+bool Emitter::SetPostCommentIndent(std::size_t normals) {
+  return m_pState->SetPostCommentIndent(normals, FmtScope::Global);
 }
 
-bool Emitter::SetFloatPrecision(std::size_t n) {
-  return m_pState->SetFloatPrecision(n, FmtScope::Global);
+bool Emitter::SetFloatPrecision(std::size_t normals) {
+  return m_pState->SetFloatPrecision(normals, FmtScope::Global);
 }
 
-bool Emitter::SetDoublePrecision(std::size_t n) {
-  return m_pState->SetDoublePrecision(n, FmtScope::Global);
+bool Emitter::SetDoublePrecision(std::size_t normals) {
+  return m_pState->SetDoublePrecision(normals, FmtScope::Global);
 }
 
 void Emitter::RestoreGlobalModifiedSettings() {

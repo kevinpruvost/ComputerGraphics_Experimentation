@@ -144,6 +144,7 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="dllmain.cpp" />
+    <ClCompile Include="GLFWInput.cpp" />
     <ClCompile Include="GLFWWindow.cpp" />
   </ItemGroup>
   <ItemGroup>

@@ -21,6 +21,7 @@
   <ItemGroup>
     <ClCompile Include="ApplicationCommonBase.cpp" />
     <ClCompile Include="BaseFramework.cpp" />
+    <ClCompile Include="Camera.cpp" />
     <ClCompile Include="Config.cpp" />
     <ClCompile Include="DLL.cpp" />
     <ClCompile Include="Drawable3D.cpp" />
@@ -44,6 +45,7 @@
     <ClInclude Include="include\common\ApplicationCommonBase.h" />
     <ClInclude Include="include\common\BaseFramework.h" />
     <ClInclude Include="include\common\Callback.h" />
+    <ClInclude Include="include\common\Camera.h" />
     <ClInclude Include="include\common\Cast.h" />
     <ClInclude Include="include\common\Common.h" />
     <ClInclude Include="include\common\Config.h" />
@@ -57,6 +59,8 @@
     <ClInclude Include="include\common\InputSystem.h" />
     <ClInclude Include="include\common\Logger.h" />
     <ClInclude Include="include\common\Material.h" />
+    <ClInclude Include="include\common\Math_Base.h" />
+    <ClInclude Include="include\common\Memory.h" />
     <ClInclude Include="include\common\Mesh.h" />
     <ClInclude Include="include\common\Model.h" />
     <ClInclude Include="include\common\Object.h" />

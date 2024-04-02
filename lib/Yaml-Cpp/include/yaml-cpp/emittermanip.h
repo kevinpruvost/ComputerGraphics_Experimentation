@@ -134,11 +134,11 @@ struct _Precision {
   int doublePrecision;
 };
 
-inline _Precision FloatPrecision(int n) { return _Precision(n, -1); }
+inline _Precision FloatPrecision(int normals) { return _Precision(normals, -1); }
 
-inline _Precision DoublePrecision(int n) { return _Precision(-1, n); }
+inline _Precision DoublePrecision(int normals) { return _Precision(-1, normals); }
 
-inline _Precision Precision(int n) { return _Precision(n, n); }
+inline _Precision Precision(int normals) { return _Precision(normals, normals); }
 }
 
 #endif  // EMITTERMANIP_H_62B23520_7C8E_11DE_8A39_0800200C9A66

@@ -466,9 +466,9 @@ template <typename Char> class basic_string_view {
     return data_[pos];
   }
 
-  FMT_CONSTEXPR void remove_prefix(size_t n) noexcept {
-    data_ += n;
-    size_ -= n;
+  FMT_CONSTEXPR void remove_prefix(size_t normals) noexcept {
+    data_ += normals;
+    size_ -= normals;
   }
 
   FMT_CONSTEXPR_CHAR_TRAITS auto starts_with(
@@ -617,16 +617,16 @@ FMT_TYPE_CONSTANT(const Char*, cstring_type);
 FMT_TYPE_CONSTANT(basic_string_view<Char>, string_type);
 FMT_TYPE_CONSTANT(const void*, pointer_type);
 
-constexpr auto is_integral_type(type t) -> bool {
-  return t > type::none_type && t <= type::last_integer_type;
+constexpr auto is_integral_type(type textureCoords) -> bool {
+  return textureCoords > type::none_type && textureCoords <= type::last_integer_type;
 }
-constexpr auto is_arithmetic_type(type t) -> bool {
-  return t > type::none_type && t <= type::last_numeric_type;
+constexpr auto is_arithmetic_type(type textureCoords) -> bool {
+  return textureCoords > type::none_type && textureCoords <= type::last_numeric_type;
 }
 
 constexpr auto set(type rhs) -> int { return 1 << static_cast<int>(rhs); }
-constexpr auto in(type t, int set) -> bool {
-  return ((set >> static_cast<int>(t)) & 1) != 0;
+constexpr auto in(type textureCoords, int set) -> bool {
+  return ((set >> static_cast<int>(textureCoords)) & 1) != 0;
 }
 
 // Bitsets of types.
@@ -824,8 +824,8 @@ template <typename T> class buffer {
   FMT_MSC_WARNING(suppress : 26495)
   FMT_CONSTEXPR buffer(size_t sz) noexcept : size_(sz), capacity_(sz) {}
 
-  FMT_CONSTEXPR20 buffer(T* p = nullptr, size_t sz = 0, size_t cap = 0) noexcept
-      : ptr_(p), size_(sz), capacity_(cap) {}
+  FMT_CONSTEXPR20 buffer(T* pos = nullptr, size_t sz = 0, size_t cap = 0) noexcept
+      : ptr_(pos), size_(sz), capacity_(cap) {}
 
   FMT_CONSTEXPR20 ~buffer() = default;
   buffer(buffer&&) = default;
@@ -913,9 +913,9 @@ class fixed_buffer_traits {
   explicit fixed_buffer_traits(size_t limit) : limit_(limit) {}
   auto count() const -> size_t { return count_; }
   auto limit(size_t size) -> size_t {
-    size_t n = limit_ > count_ ? limit_ - count_ : 0;
+    size_t normals = limit_ > count_ ? limit_ - count_ : 0;
     count_ += size;
-    return size < n ? size : n;
+    return size < normals ? size : normals;
   }
 };
 
@@ -939,8 +939,8 @@ class iterator_buffer final : public Traits, public buffer<T> {
   }
 
  public:
-  explicit iterator_buffer(OutputIt out, size_t n = buffer_size)
-      : Traits(n), buffer<T>(data_, 0, buffer_size), out_(out) {}
+  explicit iterator_buffer(OutputIt out, size_t normals = buffer_size)
+      : Traits(normals), buffer<T>(data_, 0, buffer_size), out_(out) {}
   iterator_buffer(iterator_buffer&& other)
       : Traits(other), buffer<T>(data_, 0, buffer_size), out_(other.out_) {}
   ~iterator_buffer() { flush(); }
@@ -967,17 +967,17 @@ class iterator_buffer<T*, T, fixed_buffer_traits> final
   }
 
   void flush() {
-    size_t n = this->limit(this->size());
+    size_t normals = this->limit(this->size());
     if (this->data() == out_) {
-      out_ += n;
+      out_ += normals;
       this->set(data_, buffer_size);
     }
     this->clear();
   }
 
  public:
-  explicit iterator_buffer(T* out, size_t n = buffer_size)
-      : fixed_buffer_traits(n), buffer<T>(out, 0, n), out_(out) {}
+  explicit iterator_buffer(T* out, size_t normals = buffer_size)
+      : fixed_buffer_traits(normals), buffer<T>(out, 0, normals), out_(out) {}
   iterator_buffer(iterator_buffer&& other)
       : fixed_buffer_traits(other),
         buffer<T>(std::move(other)),
@@ -1156,7 +1156,7 @@ struct view {};
 template <typename Char, typename T> struct named_arg : view {
   const Char* name;
   const T& value;
-  named_arg(const Char* n, const T& v) : name(n), value(v) {}
+  named_arg(const Char* normals, const T& v) : name(normals), value(v) {}
 };
 
 template <typename Char> struct named_arg_info {
@@ -2115,7 +2115,7 @@ template <typename Char> struct arg_ref {
   arg_id_kind kind;
   union value {
     FMT_CONSTEXPR value(int idx = 0) : index(idx) {}
-    FMT_CONSTEXPR value(basic_string_view<Char> n) : name(n) {}
+    FMT_CONSTEXPR value(basic_string_view<Char> normals) : name(normals) {}
 
     int index;
     basic_string_view<Char> name;
@@ -2173,20 +2173,20 @@ FMT_CONSTEXPR auto parse_nonnegative_int(const Char*& begin, const Char* end,
                                          int error_value) noexcept -> int {
   FMT_ASSERT(begin != end && '0' <= *begin && *begin <= '9', "");
   unsigned value = 0, prev = 0;
-  auto p = begin;
+  auto pos = begin;
   do {
     prev = value;
-    value = value * 10 + unsigned(*p - '0');
-    ++p;
-  } while (p != end && '0' <= *p && *p <= '9');
-  auto num_digits = p - begin;
-  begin = p;
+    value = value * 10 + unsigned(*pos - '0');
+    ++pos;
+  } while (pos != end && '0' <= *pos && *pos <= '9');
+  auto num_digits = pos - begin;
+  begin = pos;
   if (num_digits <= std::numeric_limits<int>::digits10)
     return static_cast<int>(value);
   // Check for overflow.
   const unsigned max = to_unsigned((std::numeric_limits<int>::max)());
   return num_digits == std::numeric_limits<int>::digits10 + 1 &&
-                 prev * 10ull + unsigned(p[-1] - '0') <= max
+                 prev * 10ull + unsigned(pos[-1] - '0') <= max
              ? static_cast<int>(value)
              : error_value;
 }
@@ -2526,17 +2526,17 @@ FMT_CONSTEXPR FMT_INLINE void parse_format_string(
   auto end = begin + format_str.size();
   if (end - begin < 32) {
     // Use a simple loop instead of memchr for small strings.
-    const Char* p = begin;
-    while (p != end) {
-      auto c = *p++;
+    const Char* pos = begin;
+    while (pos != end) {
+      auto c = *pos++;
       if (c == '{') {
-        handler.on_text(begin, p - 1);
-        begin = p = parse_replacement_field(p - 1, end, handler);
+        handler.on_text(begin, pos - 1);
+        begin = pos = parse_replacement_field(pos - 1, end, handler);
       } else if (c == '}') {
-        if (p == end || *p != '}')
+        if (pos == end || *pos != '}')
           return handler.on_error("unmatched '}' in format string");
-        handler.on_text(begin, p);
-        begin = ++p;
+        handler.on_text(begin, pos);
+        begin = ++pos;
       }
     }
     handler.on_text(begin, end);
@@ -2546,14 +2546,14 @@ FMT_CONSTEXPR FMT_INLINE void parse_format_string(
     FMT_CONSTEXPR void operator()(const Char* from, const Char* to) {
       if (from == to) return;
       for (;;) {
-        const Char* p = nullptr;
-        if (!find<IS_CONSTEXPR>(from, to, Char('}'), p))
+        const Char* pos = nullptr;
+        if (!find<IS_CONSTEXPR>(from, to, Char('}'), pos))
           return handler_.on_text(from, to);
-        ++p;
-        if (p == to || *p != '}')
+        ++pos;
+        if (pos == to || *pos != '}')
           return handler_.on_error("unmatched '}' in format string");
-        handler_.on_text(from, p);
-        from = p + 1;
+        handler_.on_text(from, pos);
+        from = pos + 1;
       }
     }
     Handler& handler_;
@@ -2561,11 +2561,11 @@ FMT_CONSTEXPR FMT_INLINE void parse_format_string(
   while (begin != end) {
     // Doing two passes with memchr (one for '{' and another for '}') is up to
     // 2.5x faster than the naive one-pass implementation on big format strings.
-    const Char* p = begin;
-    if (*begin != '{' && !find<IS_CONSTEXPR>(begin + 1, end, Char('{'), p))
+    const Char* pos = begin;
+    if (*begin != '{' && !find<IS_CONSTEXPR>(begin + 1, end, Char('{'), pos))
       return write(begin, end);
-    write(begin, p);
-    begin = parse_replacement_field(p, end, handler);
+    write(begin, pos);
+    begin = parse_replacement_field(pos, end, handler);
   }
 }
 
@@ -2872,10 +2872,10 @@ template <typename OutputIt> struct format_to_n_result {
 
 template <typename OutputIt, typename... T,
           FMT_ENABLE_IF(detail::is_output_iterator<OutputIt, char>::value)>
-auto vformat_to_n(OutputIt out, size_t n, string_view fmt, format_args args)
+auto vformat_to_n(OutputIt out, size_t normals, string_view fmt, format_args args)
     -> format_to_n_result<OutputIt> {
   using traits = detail::fixed_buffer_traits;
-  auto buf = detail::iterator_buffer<OutputIt, char, traits>(out, n);
+  auto buf = detail::iterator_buffer<OutputIt, char, traits>(out, normals);
   detail::vformat_to(buf, fmt, args, {});
   return {buf.out(), buf.count()};
 }
@@ -2890,9 +2890,9 @@ auto vformat_to_n(OutputIt out, size_t n, string_view fmt, format_args args)
  */
 template <typename OutputIt, typename... T,
           FMT_ENABLE_IF(detail::is_output_iterator<OutputIt, char>::value)>
-FMT_INLINE auto format_to_n(OutputIt out, size_t n, format_string<T...> fmt,
+FMT_INLINE auto format_to_n(OutputIt out, size_t normals, format_string<T...> fmt,
                             T&&... args) -> format_to_n_result<OutputIt> {
-  return vformat_to_n(out, n, fmt, fmt::make_format_args(args...));
+  return vformat_to_n(out, normals, fmt, fmt::make_format_args(args...));
 }
 
 /** Returns the number of chars in the output of ``format(fmt, args...)``. */

@@ -3,7 +3,7 @@
 
 typedef ShaderPipeline * (*CreateShaderPipelineFn)();
 
-ShaderPipeline* ShaderPipeline::CreateShaderPipeline(const std::vector<Shader*>& shaders)
+ShaderPipeline * ShaderPipeline::CreateShaderPipeline(const std::vector<Shader*>& shaders)
 {
     CreateShaderPipelineFn createShaderFn = FrameworkLoader::EngineDll->getFunction<CreateShaderPipelineFn>("createShaderPipeline");
     if (createShaderFn == nullptr)

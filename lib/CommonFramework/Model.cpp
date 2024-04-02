@@ -34,7 +34,11 @@ void Model::CreateFromFile(const std::filesystem::path& path)
     {
         throw RuntimeException("Unsupported file format: {0}", extension.string().c_str());
     }
-    //SetVertices();
+}
+
+VertexArray Model::GetVertices() const
+{
+    return _vertices;
 }
 
 void Model::AddMesh(Mesh* mesh)

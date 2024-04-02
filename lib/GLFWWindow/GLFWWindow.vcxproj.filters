@@ -3,6 +3,7 @@
   <ItemGroup>
     <ClCompile Include="dllmain.cpp" />
     <ClCompile Include="GLFWWindow.cpp" />
+    <ClCompile Include="GLFWInput.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="GLFWWindow.h" />

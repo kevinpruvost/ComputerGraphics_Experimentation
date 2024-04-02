@@ -1,6 +1,6 @@
 #include "Shader.h"
 
-#include <glm/gtc/type_ptr.hpp>
+#include <common/Math_Base.h>
 
 void Shader_OGL::SetShaderSource(const std::string& shaderSource, const ShaderType type)
 {
@@ -46,21 +46,6 @@ void Shader_OGL::SetShaderSource(const std::string& shaderSource, const ShaderTy
         glGetShaderInfoLog(m_shaderId, 512, NULL, infoLog);
         std::cout << "ERROR::SHADER::VERTEX::COMPILATION_FAILED\n" << infoLog << std::endl;
     }
-}
-
-void Shader_OGL::SetUniformMatrix4(const std::string& name, const glm::mat4& matrix)
-{
-    glUniformMatrix4fv(GetUniformLocation(name.c_str()), 1, GL_FALSE, glm::value_ptr(matrix));
-}
-
-void Shader_OGL::SetUniformVec3(const std::string& name, const glm::vec3& vec)
-{
-    glUniform3fv(GetUniformLocation(name.c_str()), 1, glm::value_ptr(vec));
-}
-
-void Shader_OGL::SetUniformVec4(const std::string& name, const glm::vec4& vec)
-{
-    glUniform4fv(GetUniformLocation(name.c_str()), 1, glm::value_ptr(vec));
 }
 
 GLuint Shader_OGL::GetShaderId() const

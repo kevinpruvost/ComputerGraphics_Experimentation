@@ -1316,7 +1316,7 @@ protected:
 
 		void sort();
 		bool operator()(uint32_t mbr_idx1, uint32_t mbr_idx2);
-		MemberSorter(SPIRType &t, Meta &m, SortAspect sa);
+		MemberSorter(SPIRType &textureCoords, Meta &m, SortAspect sa);
 
 		SPIRType &type;
 		Meta &meta;

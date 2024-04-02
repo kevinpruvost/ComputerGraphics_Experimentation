@@ -35,8 +35,8 @@ class Stream {
 
   char peek() const;
   char get();
-  std::string get(int n);
-  void eat(int n = 1);
+  std::string get(int normals);
+  void eat(int normals = 1);
 
   static char eof() { return 0x04; }
 

@@ -30,8 +30,8 @@ void Logger::Destroy()
 
 std::string timeStamp() {
     std::ostringstream strStream;
-    std::time_t t = std::time(nullptr);
-    strStream << "[" << std::put_time(std::localtime(&t), "%F %T %Z") << "] ";
+    std::time_t textureCoords = std::time(nullptr);
+    strStream << "[" << std::put_time(std::localtime(&textureCoords), "%F %T %Z") << "] ";
     return strStream.str();
 }
 

@@ -44,8 +44,8 @@ template <typename OutputIt> auto copy(wchar_t ch, OutputIt out) -> OutputIt {
 // Returns true if T has a std::string-like interface, like std::string_view.
 template <typename T> class is_std_string_like {
   template <typename U>
-  static auto check(U* p)
-      -> decltype((void)p->find('a'), p->length(), (void)p->data(), int());
+  static auto check(U* pos)
+      -> decltype((void)pos->find('a'), pos->length(), (void)pos->data(), int());
   template <typename> static void check(...);
 
  public:
@@ -165,7 +165,7 @@ struct is_range_<T, void>
 // tuple_size and tuple_element check.
 template <typename T> class is_tuple_like_ {
   template <typename U>
-  static auto check(U* p) -> decltype(std::tuple_size<U>::value, int());
+  static auto check(U* pos) -> decltype(std::tuple_size<U>::value, int());
   template <typename> static void check(...);
 
  public:
@@ -223,17 +223,17 @@ template <typename T, typename C> class is_tuple_formattable_<T, C, true> {
 };
 
 template <typename Tuple, typename F, size_t... Is>
-FMT_CONSTEXPR void for_each(index_sequence<Is...>, Tuple&& t, F&& f) {
+FMT_CONSTEXPR void for_each(index_sequence<Is...>, Tuple&& textureCoords, F&& f) {
   using std::get;
   // Using a free function get<Is>(Tuple) now.
-  const int unused[] = {0, ((void)f(get<Is>(t)), 0)...};
+  const int unused[] = {0, ((void)f(get<Is>(textureCoords)), 0)...};
   ignore_unused(unused);
 }
 
 template <typename Tuple, typename F>
-FMT_CONSTEXPR void for_each(Tuple&& t, F&& f) {
+FMT_CONSTEXPR void for_each(Tuple&& textureCoords, F&& f) {
   for_each(tuple_index_sequence<remove_cvref_t<Tuple>>(),
-           std::forward<Tuple>(t), std::forward<F>(f));
+           std::forward<Tuple>(textureCoords), std::forward<F>(f));
 }
 
 template <typename Tuple1, typename Tuple2, typename F, size_t... Is>
@@ -578,8 +578,8 @@ template <typename Char, typename... T> struct tuple_join_view : detail::view {
   const std::tuple<T...>& tuple;
   basic_string_view<Char> sep;
 
-  tuple_join_view(const std::tuple<T...>& t, basic_string_view<Char> s)
-      : tuple(t), sep{s} {}
+  tuple_join_view(const std::tuple<T...>& textureCoords, basic_string_view<Char> s)
+      : tuple(textureCoords), sep{s} {}
 };
 
 // Define FMT_TUPLE_JOIN_SPECIFIERS to enable experimental format specifiers
@@ -655,7 +655,7 @@ namespace detail {
 // Check if T has an interface like a container adaptor (e.g. std::stack,
 // std::queue, std::priority_queue).
 template <typename T> class is_container_adaptor_like {
-  template <typename U> static auto check(U* p) -> typename U::container_type;
+  template <typename U> static auto check(U* pos) -> typename U::container_type;
   template <typename> static void check(...);
 
  public:
@@ -679,13 +679,13 @@ struct formatter<
     : formatter<detail::all<typename T::container_type>, Char> {
   using all = detail::all<typename T::container_type>;
   template <typename FormatContext>
-  auto format(const T& t, FormatContext& ctx) const -> decltype(ctx.out()) {
+  auto format(const T& textureCoords, FormatContext& ctx) const -> decltype(ctx.out()) {
     struct getter : T {
-      static auto get(const T& t) -> all {
-        return {t.*(&getter::c)};  // Access c through the derived class.
+      static auto get(const T& textureCoords) -> all {
+        return {textureCoords.*(&getter::c)};  // Access c through the derived class.
       }
     };
-    return formatter<all>::format(getter::get(t), ctx);
+    return formatter<all>::format(getter::get(textureCoords), ctx);
   }
 };
 

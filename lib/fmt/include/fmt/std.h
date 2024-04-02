@@ -86,17 +86,17 @@ FMT_BEGIN_NAMESPACE
 namespace detail {
 
 template <typename Char, typename PathChar>
-auto get_path_string(const std::filesystem::path& p,
+auto get_path_string(const std::filesystem::path& pos,
                      const std::basic_string<PathChar>& native) {
   if constexpr (std::is_same_v<Char, char> && std::is_same_v<PathChar, wchar_t>)
     return to_utf8<wchar_t>(native, to_utf8_error_policy::replace);
   else
-    return p.string<Char>();
+    return pos.string<Char>();
 }
 
 template <typename Char, typename PathChar>
 void write_escaped_path(basic_memory_buffer<Char>& quoted,
-                        const std::filesystem::path& p,
+                        const std::filesystem::path& pos,
                         const std::basic_string<PathChar>& native) {
   if constexpr (std::is_same_v<Char, char> &&
                 std::is_same_v<PathChar, wchar_t>) {
@@ -108,7 +108,7 @@ void write_escaped_path(basic_memory_buffer<Char>& quoted,
     write_escaped_string<std::filesystem::path::value_type>(
         std::back_inserter(quoted), native);
   } else {
-    write_escaped_string<Char>(std::back_inserter(quoted), p.string<Char>());
+    write_escaped_string<Char>(std::back_inserter(quoted), pos.string<Char>());
   }
 }
 
@@ -142,10 +142,10 @@ template <typename Char> struct formatter<std::filesystem::path, Char> {
   }
 
   template <typename FormatContext>
-  auto format(const std::filesystem::path& p, FormatContext& ctx) const {
+  auto format(const std::filesystem::path& pos, FormatContext& ctx) const {
     auto specs = specs_;
 #  ifdef _WIN32
-    auto path_string = !path_type_ ? p.native() : p.generic_wstring();
+    auto path_string = !path_type_ ? pos.native() : pos.generic_wstring();
 #  else
     auto path_string = !path_type_ ? p.native() : p.generic_string();
 #  endif
@@ -153,11 +153,11 @@ template <typename Char> struct formatter<std::filesystem::path, Char> {
     detail::handle_dynamic_spec<detail::width_checker>(specs.width, width_ref_,
                                                        ctx);
     if (!debug_) {
-      auto s = detail::get_path_string<Char>(p, path_string);
+      auto s = detail::get_path_string<Char>(pos, path_string);
       return detail::write(ctx.out(), basic_string_view<Char>(s), specs);
     }
     auto quoted = basic_memory_buffer<Char>();
-    detail::write_escaped_path(quoted, p, path_string);
+    detail::write_escaped_path(quoted, pos, path_string);
     return detail::write(ctx.out(),
                          basic_string_view<Char>(quoted.data(), quoted.size()),
                          specs);

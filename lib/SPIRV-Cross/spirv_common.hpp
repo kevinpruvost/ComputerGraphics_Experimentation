@@ -54,15 +54,15 @@ namespace SPIRV_CROSS_NAMESPACE
 namespace inner
 {
 template <typename T>
-void join_helper(StringStream<> &stream, T &&t)
+void join_helper(StringStream<> &stream, T &&textureCoords)
 {
-	stream << std::forward<T>(t);
+	stream << std::forward<T>(textureCoords);
 }
 
 template <typename T, typename... Ts>
-void join_helper(StringStream<> &stream, T &&t, Ts &&... ts)
+void join_helper(StringStream<> &stream, T &&textureCoords, Ts &&... ts)
 {
-	stream << std::forward<T>(t);
+	stream << std::forward<T>(textureCoords);
 	join_helper(stream, std::forward<Ts>(ts)...);
 }
 } // namespace inner
@@ -210,9 +210,9 @@ inline std::string merge(const SmallVector<std::string> &list, const char *betwe
 // Make sure we don't accidentally call this with float or doubles with SFINAE.
 // Have to use the radix-aware overload.
 template <typename T, typename std::enable_if<!std::is_floating_point<T>::value, int>::type = 0>
-inline std::string convert_to_string(const T &t)
+inline std::string convert_to_string(const T &textureCoords)
 {
-	return std::to_string(t);
+	return std::to_string(textureCoords);
 }
 
 static inline std::string convert_to_string(int32_t value)
@@ -267,12 +267,12 @@ static inline void fixup_radix_point(char *str, char radix_point)
 	}
 }
 
-inline std::string convert_to_string(float t, char locale_radix_point)
+inline std::string convert_to_string(float textureCoords, char locale_radix_point)
 {
 	// std::to_string for floating point values is broken.
 	// Fallback to something more sane.
 	char buf[64];
-	sprintf(buf, SPIRV_CROSS_FLT_FMT, t);
+	sprintf(buf, SPIRV_CROSS_FLT_FMT, textureCoords);
 	fixup_radix_point(buf, locale_radix_point);
 
 	// Ensure that the literal is float.
@@ -281,12 +281,12 @@ inline std::string convert_to_string(float t, char locale_radix_point)
 	return buf;
 }
 
-inline std::string convert_to_string(double t, char locale_radix_point)
+inline std::string convert_to_string(double textureCoords, char locale_radix_point)
 {
 	// std::to_string for floating point values is broken.
 	// Fallback to something more sane.
 	char buf[64];
-	sprintf(buf, SPIRV_CROSS_FLT_FMT, t);
+	sprintf(buf, SPIRV_CROSS_FLT_FMT, textureCoords);
 	fixup_radix_point(buf, locale_radix_point);
 
 	// Ensure that the literal is float.

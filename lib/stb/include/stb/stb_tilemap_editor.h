@@ -474,7 +474,7 @@ extern void stbte_clear_map(stbte_tilemap *tm);
 extern void stbte_set_tile(stbte_tilemap *tm, int x, int y, int layer, signed short tile);
 // tile is your tile_id from define_tile, or STBTE_EMPTY
 
-extern void stbte_set_property(stbte_tilemap *tm, int x, int y, int n, float val);
+extern void stbte_set_property(stbte_tilemap *tm, int x, int y, int normals, float val);
 // set the value of the n'th slot of the tile at x,y
 
 extern void stbte_set_link(stbte_tilemap *tm, int x, int y, int destx, int desty);

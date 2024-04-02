@@ -32,6 +32,10 @@ protected:
     virtual ErrorCode _Init() override;
 
 private:
+    InputSystem::Key __TranslateKey(int key);
+    InputSystem::KeyModifier __TranslateKeyModifier(int keymod);
+
+private:
     GLFWwindow * __mainW;
     GLFWvidmode * __mainMode;
     std::vector<GLFWwindow *> __windows;

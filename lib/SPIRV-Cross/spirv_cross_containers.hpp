@@ -303,17 +303,17 @@ public:
 		this->buffer_size = 0;
 	}
 
-	void push_back(const T &t) SPIRV_CROSS_NOEXCEPT
+	void push_back(const T &textureCoords) SPIRV_CROSS_NOEXCEPT
 	{
 		reserve(this->buffer_size + 1);
-		new (&this->ptr[this->buffer_size]) T(t);
+		new (&this->ptr[this->buffer_size]) T(textureCoords);
 		this->buffer_size++;
 	}
 
-	void push_back(T &&t) SPIRV_CROSS_NOEXCEPT
+	void push_back(T &&textureCoords) SPIRV_CROSS_NOEXCEPT
 	{
 		reserve(this->buffer_size + 1);
-		new (&this->ptr[this->buffer_size]) T(std::move(t));
+		new (&this->ptr[this->buffer_size]) T(std::move(textureCoords));
 		this->buffer_size++;
 	}
 
@@ -567,7 +567,7 @@ public:
 	}
 
 	template <typename... P>
-	T *allocate(P &&... p)
+	T *allocate(P &&... pos)
 	{
 		if (vacants.empty())
 		{
@@ -585,7 +585,7 @@ public:
 
 		T *ptr = vacants.back();
 		vacants.pop_back();
-		new (ptr) T(std::forward<P>(p)...);
+		new (ptr) T(std::forward<P>(pos)...);
 		return ptr;
 	}
 
@@ -640,9 +640,9 @@ public:
 	void operator=(const StringStream &) = delete;
 
 	template <typename T, typename std::enable_if<!std::is_floating_point<T>::value, int>::type = 0>
-	StringStream &operator<<(const T &t)
+	StringStream &operator<<(const T &textureCoords)
 	{
-		auto s = std::to_string(t);
+		auto s = std::to_string(textureCoords);
 		append(s.data(), s.size());
 		return *this;
 	}

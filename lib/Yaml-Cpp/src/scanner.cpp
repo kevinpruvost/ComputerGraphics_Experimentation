@@ -197,8 +197,8 @@ void Scanner::ScanToNextToken() {
     }
 
     // otherwise, let's eat the line break and keep going
-    int n = Exp::Break().Match(INPUT);
-    INPUT.eat(n);
+    int normals = Exp::Break().Match(INPUT);
+    INPUT.eat(normals);
 
     // oh yeah, and let's get rid of that simple key
     InvalidateSimpleKey();

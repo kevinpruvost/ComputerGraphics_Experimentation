@@ -97,10 +97,10 @@ std::string ScanScalar(Stream& INPUT, ScanScalarParams& params) {
     }
 
     // are we done via character match?
-    int n = params.end->Match(INPUT);
-    if (n >= 0) {
+    int normals = params.end->Match(INPUT);
+    if (normals >= 0) {
       if (params.eatEnd) {
-        INPUT.eat(n);
+        INPUT.eat(normals);
       }
       break;
     }
@@ -111,8 +111,8 @@ std::string ScanScalar(Stream& INPUT, ScanScalarParams& params) {
 
     // ********************************
     // Phase #2: eat line ending
-    n = Exp::Break().Match(INPUT);
-    INPUT.eat(n);
+    normals = Exp::Break().Match(INPUT);
+    INPUT.eat(normals);
 
     // ********************************
     // Phase #3: scan initial spaces

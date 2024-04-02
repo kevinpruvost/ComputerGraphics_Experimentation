@@ -4173,11 +4173,11 @@ void CompilerGLSL::emit_subgroup_arithmetic_workaround(const std::string &func, 
 		op_symbol = "*=";
 	}
 
-	for (const TypeInfo &t : type_infos)
+	for (const TypeInfo &textureCoords : type_infos)
 	{
-		statement(t.type, " ", func, "(", t.type, " v)");
+		statement(textureCoords.type, " ", func, "(", textureCoords.type, " v)");
 		begin_scope();
-		statement(t.type, " ", result, " = ", t.identity, ";");
+		statement(textureCoords.type, " ", result, " = ", textureCoords.identity, ";");
 		statement("uvec4 active_threads = subgroupBallot(true);");
 		statement("if (subgroupBallotBitCount(active_threads) == gl_SubgroupSize)");
 		begin_scope();
@@ -4188,15 +4188,15 @@ void CompilerGLSL::emit_subgroup_arithmetic_workaround(const std::string &func, 
 		statement("bool valid;");
 		if (group_op == GroupOperationReduce)
 		{
-			statement(t.type, " s = shuffleXorNV(", result, ", i, gl_SubgroupSize, valid);");
+			statement(textureCoords.type, " s = shuffleXorNV(", result, ", i, gl_SubgroupSize, valid);");
 		}
 		else if (group_op == GroupOperationExclusiveScan || group_op == GroupOperationInclusiveScan)
 		{
-			statement(t.type, " s = shuffleUpNV(", result, ", i, gl_SubgroupSize, valid);");
+			statement(textureCoords.type, " s = shuffleUpNV(", result, ", i, gl_SubgroupSize, valid);");
 		}
 		if (op_is_addition || op_is_multiplication)
 		{
-			statement(result, " ", op_symbol, " valid ? s : ", t.identity, ";");
+			statement(result, " ", op_symbol, " valid ? s : ", textureCoords.identity, ";");
 		}
 		end_scope();
 		if (group_op == GroupOperationExclusiveScan)
@@ -4204,7 +4204,7 @@ void CompilerGLSL::emit_subgroup_arithmetic_workaround(const std::string &func, 
 			statement(result, " = shuffleUpNV(", result, ", 1u, gl_SubgroupSize);");
 			statement("if (subgroupElect())");
 			begin_scope();
-			statement(result, " = ", t.identity, ";");
+			statement(result, " = ", textureCoords.identity, ";");
 			end_scope();
 		}
 		end_scope();
@@ -4221,14 +4221,14 @@ void CompilerGLSL::emit_subgroup_arithmetic_workaround(const std::string &func, 
 		statement("for (uint i = 0u; i < gl_SubgroupSize; ++i)");
 		begin_scope();
 		statement("bool valid = subgroupBallotBitExtract(active_threads, i);");
-		statement(t.type, " s = shuffleNV(v, i, gl_SubgroupSize);");
+		statement(textureCoords.type, " s = shuffleNV(v, i, gl_SubgroupSize);");
 		if (group_op == GroupOperationExclusiveScan || group_op == GroupOperationInclusiveScan)
 		{
 			statement("valid = valid && (i < total);");
 		}
 		if (op_is_addition || op_is_multiplication)
 		{
-			statement(result, " ", op_symbol, " valid ? s : ", t.identity, ";");
+			statement(result, " ", op_symbol, " valid ? s : ", textureCoords.identity, ";");
 		}
 		end_scope();
 		end_scope();
@@ -4389,26 +4389,26 @@ void CompilerGLSL::emit_extension_workarounds(spv::ExecutionModel model)
 				switch (e)
 				{
 				case Supp::NV_shader_thread_shuffle:
-					for (const char *t : workaround_types)
+					for (const char *textureCoords : workaround_types)
 					{
-						statement(t, " subgroupBroadcastFirst(", t,
+						statement(textureCoords, " subgroupBroadcastFirst(", textureCoords,
 						          " value) { return shuffleNV(value, findLSB(ballotThreadNV(true)), gl_WarpSizeNV); }");
 					}
-					for (const char *t : workaround_types)
+					for (const char *textureCoords : workaround_types)
 					{
-						statement(t, " subgroupBroadcast(", t,
+						statement(textureCoords, " subgroupBroadcast(", textureCoords,
 						          " value, uint id) { return shuffleNV(value, id, gl_WarpSizeNV); }");
 					}
 					break;
 				case Supp::ARB_shader_ballot:
-					for (const char *t : workaround_types)
+					for (const char *textureCoords : workaround_types)
 					{
-						statement(t, " subgroupBroadcastFirst(", t,
+						statement(textureCoords, " subgroupBroadcastFirst(", textureCoords,
 						          " value) { return readFirstInvocationARB(value); }");
 					}
-					for (const char *t : workaround_types)
+					for (const char *textureCoords : workaround_types)
 					{
-						statement(t, " subgroupBroadcast(", t,
+						statement(textureCoords, " subgroupBroadcast(", textureCoords,
 						          " value, uint id) { return readInvocationARB(value, id); }");
 					}
 					break;
@@ -4495,8 +4495,8 @@ void CompilerGLSL::emit_extension_workarounds(spv::ExecutionModel model)
 			statement(
 			    "#define _SPIRV_CROSS_SUBGROUP_ALL_EQUAL_WORKAROUND(type) bool subgroupAllEqual(type value) { return "
 			    "subgroupAllEqual(subgroupBroadcastFirst(value) == value); }");
-			for (const char *t : workaround_types)
-				statement("_SPIRV_CROSS_SUBGROUP_ALL_EQUAL_WORKAROUND(", t, ")");
+			for (const char *textureCoords : workaround_types)
+				statement("_SPIRV_CROSS_SUBGROUP_ALL_EQUAL_WORKAROUND(", textureCoords, ")");
 			statement("#undef _SPIRV_CROSS_SUBGROUP_ALL_EQUAL_WORKAROUND");
 			statement("#endif");
 			statement("");
@@ -7456,9 +7456,9 @@ string CompilerGLSL::to_combined_image_sampler(VariableID image_id, VariableID s
 		VariableID sid = global_sampler ? samp_id : VariableID(uint32_t(sampler_itr - begin(args)));
 
 		auto &combined = current_function->combined_parameters;
-		auto itr = find_if(begin(combined), end(combined), [=](const SPIRFunction::CombinedImageSamplerParameter &p) {
-			return p.global_image == global_image && p.global_sampler == global_sampler && p.image_id == iid &&
-			       p.sampler_id == sid;
+		auto itr = find_if(begin(combined), end(combined), [=](const SPIRFunction::CombinedImageSamplerParameter &pos) {
+			return pos.global_image == global_image && pos.global_sampler == global_sampler && pos.image_id == iid &&
+			       pos.sampler_id == sid;
 		});
 
 		if (itr != end(combined))
@@ -11470,7 +11470,7 @@ void CompilerGLSL::emit_block_instructions(SPIRBlock &block)
 	if (backend.requires_relaxed_precision_analysis)
 	{
 		// If PHI variables are consumed in unexpected precision contexts, copy them here.
-		for (size_t i = 0, n = block.phi_variables.size(); i < n; i++)
+		for (size_t i = 0, normals = block.phi_variables.size(); i < normals; i++)
 		{
 			auto &phi = block.phi_variables[i];
 
@@ -16459,9 +16459,9 @@ void CompilerGLSL::branch(BlockID from, BlockID to)
 		// The loop we're breaking out of must dominate the switch block, or there is no ladder breaking case.
 		if (is_loop_break(to))
 		{
-			for (size_t n = current_emitting_switch_stack.size(); n; n--)
+			for (size_t normals = current_emitting_switch_stack.size(); normals; normals--)
 			{
-				auto *current_emitting_switch = current_emitting_switch_stack[n - 1];
+				auto *current_emitting_switch = current_emitting_switch_stack[normals - 1];
 
 				if (current_emitting_switch &&
 				    current_emitting_switch->loop_dominator != BlockID(SPIRBlock::NoDominator) &&
@@ -16970,8 +16970,8 @@ void CompilerGLSL::emit_block_chain(SPIRBlock &block)
 			auto mirrored_precision_itr = temporary_to_mirror_precision_alias.find(var_id);
 			if (mirrored_precision_itr != temporary_to_mirror_precision_alias.end() &&
 			    find_if(block.declare_temporary.begin(), block.declare_temporary.end(),
-			            [mirrored_precision_itr](const std::pair<TypeID, VariableID> &p) {
-			              return p.second == mirrored_precision_itr->second;
+			            [mirrored_precision_itr](const std::pair<TypeID, VariableID> &pos) {
+			              return pos.second == mirrored_precision_itr->second;
 			            }) == block.declare_temporary.end())
 			{
 				block.declare_temporary.push_back({ var.basetype, mirrored_precision_itr->second });
@@ -18739,7 +18739,7 @@ bool CompilerGLSL::is_per_primitive_variable(const SPIRVariable &var) const
 	if (!has_decoration(type.self, DecorationBlock))
 		return false;
 
-	for (uint32_t i = 0, n = uint32_t(type.member_types.size()); i < n; i++)
+	for (uint32_t i = 0, normals = uint32_t(type.member_types.size()); i < normals; i++)
 		if (!has_member_decoration(type.self, i, DecorationPerPrimitiveEXT))
 			return false;
 

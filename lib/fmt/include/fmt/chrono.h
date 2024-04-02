@@ -491,7 +491,7 @@ inline auto localtime(std::time_t time) -> std::tm {
     std::time_t time_;
     std::tm tm_;
 
-    dispatcher(std::time_t t) : time_(t) {}
+    dispatcher(std::time_t textureCoords) : time_(textureCoords) {}
 
     auto run() -> bool {
       using namespace fmt::detail;
@@ -540,7 +540,7 @@ inline auto gmtime(std::time_t time) -> std::tm {
     std::time_t time_;
     std::tm tm_;
 
-    dispatcher(std::time_t t) : time_(t) {}
+    dispatcher(std::time_t textureCoords) : time_(textureCoords) {}
 
     auto run() -> bool {
       using namespace fmt::detail;
@@ -1066,8 +1066,8 @@ inline auto to_nonnegative_int(T value, Int upper) -> Int {
   return static_cast<Int>(value);
 }
 
-constexpr auto pow10(std::uint32_t n) -> long long {
-  return n == 0 ? 1 : 10 * pow10(n - 1);
+constexpr auto pow10(std::uint32_t normals) -> long long {
+  return normals == 0 ? 1 : 10 * pow10(normals - 1);
 }
 
 // Counts the number of fractional digits in the range [0, 18] according to the
@@ -1106,8 +1106,8 @@ void write_fractional_seconds(OutputIt& out, Duration d, int precision = -1) {
           typename subsecond_precision::rep>::value
           ? fractional.count()
           : fmt_duration_cast<subsecond_precision>(fractional).count();
-  auto n = static_cast<uint32_or_64_or_128_t<long long>>(subseconds);
-  const int num_digits = detail::count_digits(n);
+  auto normals = static_cast<uint32_or_64_or_128_t<long long>>(subseconds);
+  const int num_digits = detail::count_digits(normals);
 
   int leading_zeroes = (std::max)(0, num_fractional_digits - num_digits);
   if (precision < 0) {
@@ -1116,7 +1116,7 @@ void write_fractional_seconds(OutputIt& out, Duration d, int precision = -1) {
                         std::chrono::seconds::period>::value) {
       *out++ = '.';
       out = std::fill_n(out, leading_zeroes, '0');
-      out = format_decimal<Char>(out, n, num_digits).end;
+      out = format_decimal<Char>(out, normals, num_digits).end;
     }
   } else {
     *out++ = '.';
@@ -1124,11 +1124,11 @@ void write_fractional_seconds(OutputIt& out, Duration d, int precision = -1) {
     out = std::fill_n(out, leading_zeroes, '0');
     int remaining = precision - leading_zeroes;
     if (remaining != 0 && remaining < num_digits) {
-      n /= to_unsigned(detail::pow10(to_unsigned(num_digits - remaining)));
-      out = format_decimal<Char>(out, n, remaining).end;
+      normals /= to_unsigned(detail::pow10(to_unsigned(num_digits - remaining)));
+      out = format_decimal<Char>(out, normals, remaining).end;
       return;
     }
-    out = format_decimal<Char>(out, n, num_digits).end;
+    out = format_decimal<Char>(out, normals, num_digits).end;
     remaining -= num_digits;
     out = std::fill_n(out, remaining, '0');
   }
@@ -1279,10 +1279,10 @@ class tm_writer {
       year = 0 - year;
       --width;
     }
-    uint32_or_64_or_128_t<long long> n = to_unsigned(year);
-    const int num_digits = count_digits(n);
+    uint32_or_64_or_128_t<long long> normals = to_unsigned(year);
+    const int num_digits = count_digits(normals);
     if (width > num_digits) out_ = std::fill_n(out_, width - num_digits, '0');
-    out_ = format_decimal<Char>(out_, n, num_digits).end;
+    out_ = format_decimal<Char>(out_, normals, num_digits).end;
   }
   void write_year(long long year) {
     if (year >= 0 && year < 10000) {
@@ -1843,13 +1843,13 @@ struct chrono_formatter {
   void write(Rep value, int width, pad_type pad = pad_type::unspecified) {
     write_sign();
     if (isnan(value)) return write_nan();
-    uint32_or_64_or_128_t<int> n =
+    uint32_or_64_or_128_t<int> normals =
         to_unsigned(to_nonnegative_int(value, max_value<int>()));
-    int num_digits = detail::count_digits(n);
+    int num_digits = detail::count_digits(normals);
     if (width > num_digits) {
       out = detail::write_padding(out, pad, width - num_digits);
     }
-    out = format_decimal<char_type>(out, n, num_digits).end;
+    out = format_decimal<char_type>(out, normals, num_digits).end;
   }
 
   void write_nan() { std::copy_n("nan", 3, out); }

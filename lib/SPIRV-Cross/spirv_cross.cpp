@@ -1131,18 +1131,18 @@ void Compiler::update_name_cache(unordered_set<string> &cache_primary, const uno
 	if (name.empty())
 		return;
 
-	const auto find_name = [&](const string &n) -> bool {
-		if (cache_primary.find(n) != end(cache_primary))
+	const auto find_name = [&](const string &normals) -> bool {
+		if (cache_primary.find(normals) != end(cache_primary))
 			return true;
 
 		if (&cache_primary != &cache_secondary)
-			if (cache_secondary.find(n) != end(cache_secondary))
+			if (cache_secondary.find(normals) != end(cache_secondary))
 				return true;
 
 		return false;
 	};
 
-	const auto insert_name = [&](const string &n) { cache_primary.insert(n); };
+	const auto insert_name = [&](const string &normals) { cache_primary.insert(normals); };
 
 	if (!find_name(name))
 	{
@@ -2720,9 +2720,9 @@ void Compiler::CombinedImageSamplerHandler::register_combined_image_sampler(SPIR
 	};
 
 	auto texture_itr = find_if(begin(caller.arguments), end(caller.arguments),
-	                           [image_id](const SPIRFunction::Parameter &p) { return p.id == image_id; });
+	                           [image_id](const SPIRFunction::Parameter &pos) { return pos.id == image_id; });
 	auto sampler_itr = find_if(begin(caller.arguments), end(caller.arguments),
-	                           [sampler_id](const SPIRFunction::Parameter &p) { return p.id == sampler_id; });
+	                           [sampler_id](const SPIRFunction::Parameter &pos) { return pos.id == sampler_id; });
 
 	if (texture_itr != end(caller.arguments))
 	{
@@ -2740,9 +2740,9 @@ void Compiler::CombinedImageSamplerHandler::register_combined_image_sampler(SPIR
 		return;
 
 	auto itr = find_if(begin(caller.combined_parameters), end(caller.combined_parameters),
-	                   [&param](const SPIRFunction::CombinedImageSamplerParameter &p) {
-		                   return param.image_id == p.image_id && param.sampler_id == p.sampler_id &&
-		                          param.global_image == p.global_image && param.global_sampler == p.global_sampler;
+	                   [&param](const SPIRFunction::CombinedImageSamplerParameter &pos) {
+		                   return param.image_id == pos.image_id && param.sampler_id == pos.sampler_id &&
+		                          param.global_image == pos.global_image && param.global_sampler == pos.global_sampler;
 	                   });
 
 	if (itr == end(caller.combined_parameters))

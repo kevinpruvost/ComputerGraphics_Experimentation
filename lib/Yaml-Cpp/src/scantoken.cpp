@@ -386,8 +386,8 @@ void Scanner::ScanBlockScalar() {
 
   // eat chomping/indentation indicators
   params.chomp = CLIP;
-  int n = Exp::Chomp().Match(INPUT);
-  for (int i = 0; i < n; i++) {
+  int normals = Exp::Chomp().Match(INPUT);
+  for (int i = 0; i < normals; i++) {
     char ch = INPUT.get();
     if (ch == '+')
       params.chomp = KEEP;

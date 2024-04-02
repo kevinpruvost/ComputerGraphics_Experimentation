@@ -883,7 +883,7 @@ struct stbvox_input_description
    // on the E/N/W/S sides of the block.
    // Encode with STBVOX_MAKE_SIDE_TEXROT(rot_e, rot_n, rot_w, rot_s)
 
-   unsigned char *rotate;
+   unsigned char *Rotate;
    // Indexed by 3D coordinate. Allows independent rotation of several
    // parts of the voxel, where by rotation I mean swapping textures
    // and colors between E/N/S/W faces.
@@ -1152,7 +1152,7 @@ enum
 #define STBVOX_BLOCKTYPE_HOLE    255
 #endif
 
-#define STBVOX_MAKE_GEOMETRY(geom, rotate, vheight) ((geom) + (rotate)*16 + (vheight)*64)
+#define STBVOX_MAKE_GEOMETRY(geom, Rotate, vheight) ((geom) + (Rotate)*16 + (vheight)*64)
 #define STBVOX_MAKE_VHEIGHT(v_sw, v_se, v_nw, v_ne) ((v_sw) + (v_se)*4 + (v_nw)*16 + (v_ne)*64)
 #define STBVOX_MAKE_MATROT(block, overlay, color)  ((block) + (overlay)*4 + (color)*64)
 #define STBVOX_MAKE_TEX2_REPLACE(tex2, tex2_replace_face) ((tex2) + ((tex2_replace_face) & 3)*64)
@@ -1160,11 +1160,11 @@ enum
 #define STBVOX_MAKE_TEXLERP_SIMPLE(baselerp,vert,face)   ((vert)*32 + (face)*4 + (baselerp))
 #define STBVOX_MAKE_TEXLERP1(vert,e2,n2,w2,s2,u4,d2) STBVOX_MAKE_TEXLERP(s2, w2, d2, vert)
 #define STBVOX_MAKE_TEXLERP2(vert,e2,n2,w2,s2,u4,d2) ((u2)*16 + (n2)*4 + (s2))
-#define STBVOX_MAKE_FACE_MASK(e,n,w,s,u,d)  ((e)+(n)*2+(w)*4+(s)*8+(u)*16+(d)*32)
-#define STBVOX_MAKE_SIDE_TEXROT(e,n,w,s) ((e)+(n)*4+(w)*16+(s)*64)
+#define STBVOX_MAKE_FACE_MASK(e,normals,w,s,u,d)  ((e)+(normals)*2+(w)*4+(s)*8+(u)*16+(d)*32)
+#define STBVOX_MAKE_SIDE_TEXROT(e,normals,w,s) ((e)+(normals)*4+(w)*16+(s)*64)
 #define STBVOX_MAKE_COLOR(color,t1,t2) ((color)+(t1)*64+(t2)*128)
-#define STBVOX_MAKE_TEXLERP_VERT3(e,n,w,s,u)   ((e)+(n)*8+(w)*64+(s)*512+(u)*4096)
-#define STBVOX_MAKE_TEXLERP_FACE3(e,n,w,s,u,d) ((e)+(n)*8+(w)*64+(s)*512+(u)*4096+(d)*16384)
+#define STBVOX_MAKE_TEXLERP_VERT3(e,normals,w,s,u)   ((e)+(normals)*8+(w)*64+(s)*512+(u)*4096)
+#define STBVOX_MAKE_TEXLERP_FACE3(e,normals,w,s,u,d) ((e)+(normals)*8+(w)*64+(s)*512+(u)*4096+(d)*16384)
 #define STBVOX_MAKE_PACKED_COMPACT(rot, vheight, texlerp, def) ((rot)+4*(vheight)+16*(use)+32*(texlerp))
 
 #define STBVOX_MAKE_LIGHTING_EXT(lighting, rot)  (((lighting)&~3)+(rot))

@@ -1,6 +1,6 @@
 #pragma once
 
-#include <glm/glm.hpp>
+#include <common/Math_Base.h>
 
 /// <summary>
 /// We will only use Triangle faces

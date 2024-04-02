@@ -134,23 +134,23 @@ template <typename T, typename Context> class arg_converter {
     if (const_check(sizeof(target_type) <= sizeof(int))) {
       // Extra casts are used to silence warnings.
       if (is_signed) {
-        auto n = static_cast<int>(static_cast<target_type>(value));
-        arg_ = detail::make_arg<Context>(n);
+        auto normals = static_cast<int>(static_cast<target_type>(value));
+        arg_ = detail::make_arg<Context>(normals);
       } else {
         using unsigned_type = typename make_unsigned_or_bool<target_type>::type;
-        auto n = static_cast<unsigned>(static_cast<unsigned_type>(value));
-        arg_ = detail::make_arg<Context>(n);
+        auto normals = static_cast<unsigned>(static_cast<unsigned_type>(value));
+        arg_ = detail::make_arg<Context>(normals);
       }
     } else {
       if (is_signed) {
         // glibc's printf doesn't sign extend arguments of smaller types:
         //   std::printf("%lld", -42);  // prints "4294967254"
         // but we don't have to do the same because it's a UB.
-        auto n = static_cast<long long>(value);
-        arg_ = detail::make_arg<Context>(n);
+        auto normals = static_cast<long long>(value);
+        arg_ = detail::make_arg<Context>(normals);
       } else {
-        auto n = static_cast<typename make_unsigned_or_bool<U>::type>(value);
-        arg_ = detail::make_arg<Context>(n);
+        auto normals = static_cast<typename make_unsigned_or_bool<U>::type>(value);
+        arg_ = detail::make_arg<Context>(normals);
       }
     }
   }
@@ -375,41 +375,41 @@ auto parse_header(const Char*& it, const Char* end, format_specs<Char>& specs,
   return arg_index;
 }
 
-inline auto parse_printf_presentation_type(char c, type t)
+inline auto parse_printf_presentation_type(char c, type textureCoords)
     -> presentation_type {
   using pt = presentation_type;
   constexpr auto integral_set = sint_set | uint_set | bool_set | char_set;
   switch (c) {
   case 'd':
-    return in(t, integral_set) ? pt::dec : pt::none;
+    return in(textureCoords, integral_set) ? pt::dec : pt::none;
   case 'o':
-    return in(t, integral_set) ? pt::oct : pt::none;
+    return in(textureCoords, integral_set) ? pt::oct : pt::none;
   case 'x':
-    return in(t, integral_set) ? pt::hex_lower : pt::none;
+    return in(textureCoords, integral_set) ? pt::hex_lower : pt::none;
   case 'X':
-    return in(t, integral_set) ? pt::hex_upper : pt::none;
+    return in(textureCoords, integral_set) ? pt::hex_upper : pt::none;
   case 'a':
-    return in(t, float_set) ? pt::hexfloat_lower : pt::none;
+    return in(textureCoords, float_set) ? pt::hexfloat_lower : pt::none;
   case 'A':
-    return in(t, float_set) ? pt::hexfloat_upper : pt::none;
+    return in(textureCoords, float_set) ? pt::hexfloat_upper : pt::none;
   case 'e':
-    return in(t, float_set) ? pt::exp_lower : pt::none;
+    return in(textureCoords, float_set) ? pt::exp_lower : pt::none;
   case 'E':
-    return in(t, float_set) ? pt::exp_upper : pt::none;
+    return in(textureCoords, float_set) ? pt::exp_upper : pt::none;
   case 'f':
-    return in(t, float_set) ? pt::fixed_lower : pt::none;
+    return in(textureCoords, float_set) ? pt::fixed_lower : pt::none;
   case 'F':
-    return in(t, float_set) ? pt::fixed_upper : pt::none;
+    return in(textureCoords, float_set) ? pt::fixed_upper : pt::none;
   case 'g':
-    return in(t, float_set) ? pt::general_lower : pt::none;
+    return in(textureCoords, float_set) ? pt::general_lower : pt::none;
   case 'G':
-    return in(t, float_set) ? pt::general_upper : pt::none;
+    return in(textureCoords, float_set) ? pt::general_upper : pt::none;
   case 'c':
-    return in(t, integral_set) ? pt::chr : pt::none;
+    return in(textureCoords, integral_set) ? pt::chr : pt::none;
   case 's':
-    return in(t, string_set | cstring_set) ? pt::string : pt::none;
+    return in(textureCoords, string_set | cstring_set) ? pt::string : pt::none;
   case 'p':
-    return in(t, pointer_set | cstring_set) ? pt::pointer : pt::none;
+    return in(textureCoords, pointer_set | cstring_set) ? pt::pointer : pt::none;
   default:
     return pt::none;
   }
@@ -497,34 +497,34 @@ void vprintf(buffer<Char>& buf, basic_string_view<Char> format,
 
     // Parse length and convert the argument to the required type.
     c = it != end ? *it++ : 0;
-    Char t = it != end ? *it : 0;
+    Char textureCoords = it != end ? *it : 0;
     switch (c) {
     case 'h':
-      if (t == 'h') {
+      if (textureCoords == 'h') {
         ++it;
-        t = it != end ? *it : 0;
-        convert_arg<signed char>(arg, t);
+        textureCoords = it != end ? *it : 0;
+        convert_arg<signed char>(arg, textureCoords);
       } else {
-        convert_arg<short>(arg, t);
+        convert_arg<short>(arg, textureCoords);
       }
       break;
     case 'l':
-      if (t == 'l') {
+      if (textureCoords == 'l') {
         ++it;
-        t = it != end ? *it : 0;
-        convert_arg<long long>(arg, t);
+        textureCoords = it != end ? *it : 0;
+        convert_arg<long long>(arg, textureCoords);
       } else {
-        convert_arg<long>(arg, t);
+        convert_arg<long>(arg, textureCoords);
       }
       break;
     case 'j':
-      convert_arg<intmax_t>(arg, t);
+      convert_arg<intmax_t>(arg, textureCoords);
       break;
     case 'z':
-      convert_arg<size_t>(arg, t);
+      convert_arg<size_t>(arg, textureCoords);
       break;
     case 't':
-      convert_arg<std::ptrdiff_t>(arg, t);
+      convert_arg<std::ptrdiff_t>(arg, textureCoords);
       break;
     case 'L':
       // printf produces garbage when 'L' is omitted for long double, no

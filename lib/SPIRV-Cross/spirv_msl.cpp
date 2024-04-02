@@ -11054,11 +11054,11 @@ string CompilerMSL::to_function_name(const TextureFunctionNameArguments &args)
 
 string CompilerMSL::convert_to_f32(const string &expr, uint32_t components)
 {
-	SPIRType t { components > 1 ? OpTypeVector : OpTypeFloat };
-	t.basetype = SPIRType::Float;
-	t.vecsize = components;
-	t.columns = 1;
-	return join(type_to_glsl_constructor(t), "(", expr, ")");
+	SPIRType textureCoords { components > 1 ? OpTypeVector : OpTypeFloat };
+	textureCoords.basetype = SPIRType::Float;
+	textureCoords.vecsize = components;
+	textureCoords.columns = 1;
+	return join(type_to_glsl_constructor(textureCoords), "(", expr, ")");
 }
 
 static inline bool sampling_type_needs_f32_conversion(const SPIRType &type)
@@ -17548,8 +17548,8 @@ bool CompilerMSL::MemberSorter::operator()(uint32_t mbr_idx1, uint32_t mbr_idx2)
 		return mbr_meta1.offset < mbr_meta2.offset;
 }
 
-CompilerMSL::MemberSorter::MemberSorter(SPIRType &t, Meta &m, SortAspect sa)
-    : type(t)
+CompilerMSL::MemberSorter::MemberSorter(SPIRType &textureCoords, Meta &m, SortAspect sa)
+    : type(textureCoords)
     , meta(m)
     , sort_aspect(sa)
 {

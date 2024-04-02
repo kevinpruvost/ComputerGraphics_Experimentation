@@ -19,11 +19,11 @@ const std::string ScanVerbatimTag(Stream& INPUT) {
       return tag;
     }
 
-    int n = Exp::URI().Match(INPUT);
-    if (n <= 0)
+    int normals = Exp::URI().Match(INPUT);
+    if (normals <= 0)
       break;
 
-    tag += INPUT.get(n);
+    tag += INPUT.get(normals);
   }
 
   throw ParserException(INPUT.mark(), ErrorMsg::END_OF_VERBATIM_TAG);
@@ -41,22 +41,22 @@ const std::string ScanTagHandle(Stream& INPUT, bool& canBeHandle) {
       break;
     }
 
-    int n = 0;
+    int normals = 0;
     if (canBeHandle) {
-      n = Exp::Word().Match(INPUT);
-      if (n <= 0) {
+      normals = Exp::Word().Match(INPUT);
+      if (normals <= 0) {
         canBeHandle = false;
         firstNonWordChar = INPUT.mark();
       }
     }
 
     if (!canBeHandle)
-      n = Exp::Tag().Match(INPUT);
+      normals = Exp::Tag().Match(INPUT);
 
-    if (n <= 0)
+    if (normals <= 0)
       break;
 
-    tag += INPUT.get(n);
+    tag += INPUT.get(normals);
   }
 
   return tag;
@@ -66,11 +66,11 @@ const std::string ScanTagSuffix(Stream& INPUT) {
   std::string tag;
 
   while (INPUT) {
-    int n = Exp::Tag().Match(INPUT);
-    if (n <= 0)
+    int normals = Exp::Tag().Match(INPUT);
+    if (normals <= 0)
       break;
 
-    tag += INPUT.get(n);
+    tag += INPUT.get(normals);
   }
 
   if (tag.empty())

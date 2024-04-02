@@ -21,6 +21,10 @@ void glfw_onError(int error, const char* description)
 }
 #endif
 
+#include <stack>
+static std::stack<std::array<int, 4>> keyEvents;
+static std::unordered_set<InputSystem::Key> keysWhileDown;
+
 GLFWWindow::GLFWWindow()
     : Window(Window::WindowAPI::GLFW)
 {
@@ -28,12 +32,21 @@ GLFWWindow::GLFWWindow()
 
 GLFWWindow::~GLFWWindow()
 {
+    keyEvents = std::stack<std::array<int, 4>>();
     Destroy();
 }
 
 // Export the factory function to create an instance of the class
 EXPORT Window * createWindowInstance() {
     return new GLFWWindow();
+}
+
+void key_callback(GLFWwindow* window, int key, int scancode, int action, int mods)
+{
+    if (key == GLFW_KEY_ESCAPE && action == GLFW_PRESS)
+        glfwSetWindowShouldClose(window, true);
+
+    keyEvents.push({ key, scancode, action, mods });
 }
 
 ErrorCode GLFWWindow::_Init()
@@ -83,6 +96,8 @@ ErrorCode GLFWWindow::_Init()
         glViewport(0, 0, width, height);
     });
 
+    glfwSetKeyCallback(__mainW, key_callback);
+
     Logger::DebugPrint(
         "GLFW initialized with parameters :\n"
         "- Window Name: %s\n"
@@ -100,18 +115,49 @@ ErrorCode GLFWWindow::_Init()
 
 ErrorCode GLFWWindow::Loop()
 {
-    if (_appLoopCallback == nullptr) {
+    if (_appLoopCallback == nullptr)
         throw RuntimeException("App loop callback is not set");
-    }
-    if (_sceneLoopCallback == nullptr) {
+    if (_sceneLoopCallback == nullptr)
         throw RuntimeException("Scene loop callback is not set");
-    }
 
     while (!glfwWindowShouldClose(__mainW)) {
         // Processing input
-        if (glfwGetKey(__mainW, GLFW_KEY_ESCAPE) == GLFW_PRESS)
+        while (!keyEvents.empty())
         {
-            glfwSetWindowShouldClose(__mainW, true);
+            // Key, scancode, action, mods
+            std::array<int, 4> keyEvent = keyEvents.top();
+            InputSystem::Key key = __TranslateKey(keyEvent[0]);
+            InputSystem::KeyModifier mods = __TranslateKeyModifier(keyEvent[3]);
+            switch (keyEvent[2])
+            {
+                case GLFW_PRESS: {
+                    Logger::DebugPrint("Key pressed: %d", key);
+                    if (_callbackKeyDown) _callbackKeyDown(key, mods);
+                    keysWhileDown.insert(key);
+                    break;
+                }
+                case GLFW_RELEASE: {
+                    Logger::DebugPrint("Key released: %d", key);
+                    if (_callbackKeyUp) _callbackKeyUp(key, mods);
+                    keysWhileDown.erase(key);
+                    break;
+                }
+                case GLFW_REPEAT: {
+                    Logger::DebugPrint("Key repeated: %d", key);
+                    if (_callbackKeyRepeat) _callbackKeyRepeat(key, mods);
+                    break;
+                }
+            }
+            keyEvents.pop();
+        }
+        int shiftState = glfwGetKey(__mainW, GLFW_KEY_LEFT_SHIFT) | glfwGetKey(__mainW, GLFW_KEY_RIGHT_SHIFT);
+        int ctrlState = glfwGetKey(__mainW, GLFW_KEY_LEFT_CONTROL) | glfwGetKey(__mainW, GLFW_KEY_RIGHT_CONTROL);
+        int altState = glfwGetKey(__mainW, GLFW_KEY_LEFT_ALT) | glfwGetKey(__mainW, GLFW_KEY_RIGHT_ALT);
+        InputSystem::KeyModifier mods = __TranslateKeyModifier(shiftState | ctrlState | altState);
+        for (auto key : keysWhileDown)
+        {
+            if (_callbackWhileKeyDown)
+                _callbackWhileKeyDown(key, mods);
         }
 
         // Display

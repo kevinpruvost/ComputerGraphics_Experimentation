@@ -60,24 +60,28 @@ public:
         Count
     };
 
+    void SetWhileKeyDownCallback   (const CallbackContainer<void, Key, KeyModifier>& callback);
     void SetOnKeyDownCallback      (const CallbackContainer<void, Key, KeyModifier> & callback);
     void SetOnKeyUpCallback        (const CallbackContainer<void, Key, KeyModifier> & callback);
     void SetOnKeyRepeatCallback    (const CallbackContainer<void, Key, KeyModifier> & callback);
 
     // Mouse inputs
-    void SetOnMouseMoveCallback    (const CallbackContainer<void, int, int> & callback);
-    void SetOnMouseWheelCallback   (const CallbackContainer<void, int> & callback);
-    void SetOnMouseDownCallback    (const CallbackContainer<void, int, int> & callback);
-    void SetOnMouseUpCallback      (const CallbackContainer<void, int, int> & callback);
-    void SetOnMouseDblClickCallback(const CallbackContainer<void, int, int> & callback);
+    void SetOnMouseMoveCallback     (const CallbackContainer<void, int, int> & callback);
+    void SetOnMouseWheelCallback    (const CallbackContainer<void, int> & callback);
+    void SetOnMouseDownCallback     (const CallbackContainer<void, int, int> & callback);
+    void SetWhileMouseDownCallback  (const CallbackContainer<void, int, int>& callback);
+    void SetOnMouseUpCallback       (const CallbackContainer<void, int, int> & callback);
+    void SetOnMouseDblClickCallback (const CallbackContainer<void, int, int> & callback);
 
 protected:
     Callback<void, Key, KeyModifier> _callbackKeyDown;
+    Callback<void, Key, KeyModifier> _callbackWhileKeyDown;
     Callback<void, Key, KeyModifier> _callbackKeyUp;
     Callback<void, Key, KeyModifier> _callbackKeyRepeat;
     Callback<void, int, int> _callbackMouseMove;
     Callback<void, int>      _callbackMouseWheel;
     Callback<void, int, int> _callbackMouseDown;
+    Callback<void, int, int> _callbackMouseWhileDown;
     Callback<void, int, int> _callbackMouseUp;
     Callback<void, int, int> _callbackMouseDblClick;
 };

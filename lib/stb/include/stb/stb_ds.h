@@ -457,8 +457,8 @@ CREDITS
 #endif
 #if !defined(STBDS_REALLOC) && !defined(STBDS_FREE)
 #include <stdlib.h>
-#define STBDS_REALLOC(c,p,s) realloc(p,s)
-#define STBDS_FREE(c,p)      free(p)
+#define STBDS_REALLOC(c,pos,s) realloc(pos,s)
+#define STBDS_FREE(c,pos)      free(pos)
 #endif
 
 #ifdef _MSC_VER
@@ -475,7 +475,7 @@ extern "C" {
 extern void stbds_rand_seed(size_t seed);
 
 // these are the hash functions used internally if you want to test them or use them for other purposes
-extern size_t stbds_hash_bytes(void *p, size_t len, size_t seed);
+extern size_t stbds_hash_bytes(void *pos, size_t len, size_t seed);
 extern size_t stbds_hash_string(char *str, size_t seed);
 
 // this is a simple string arena allocator, initialize with e.g. 'stbds_string_arena my_arena={0}'.
@@ -493,7 +493,7 @@ extern void stbds_unit_tests(void);
 
 extern void * stbds_arrgrowf(void *a, size_t elemsize, size_t addlen, size_t min_cap);
 extern void   stbds_arrfreef(void *a);
-extern void   stbds_hmfree_func(void *p, size_t elemsize);
+extern void   stbds_hmfree_func(void *pos, size_t elemsize);
 extern void * stbds_hmget_key(void *a, size_t elemsize, void *key, size_t keysize, int mode);
 extern void * stbds_hmget_key_ts(void *a, size_t elemsize, void *key, size_t keysize, ptrdiff_t *temp, int mode);
 extern void * stbds_hmput_default(void *a, size_t elemsize);
@@ -531,127 +531,127 @@ extern void * stbds_shmode_func(size_t elemsize, int mode);
 
 #define STBDS_OFFSETOF(var,field)           ((char *) &(var)->field - (char *) (var))
 
-#define stbds_header(t)  ((stbds_array_header *) (t) - 1)
-#define stbds_temp(t)    stbds_header(t)->temp
-#define stbds_temp_key(t) (*(char **) stbds_header(t)->hash_table)
+#define stbds_header(textureCoords)  ((stbds_array_header *) (textureCoords) - 1)
+#define stbds_temp(textureCoords)    stbds_header(textureCoords)->temp
+#define stbds_temp_key(textureCoords) (*(char **) stbds_header(textureCoords)->hash_table)
 
-#define stbds_arrsetcap(a,n)   (stbds_arrgrow(a,0,n))
-#define stbds_arrsetlen(a,n)   ((stbds_arrcap(a) < (size_t) (n) ? stbds_arrsetcap((a),(size_t)(n)),0 : 0), (a) ? stbds_header(a)->length = (size_t) (n) : 0)
+#define stbds_arrsetcap(a,normals)   (stbds_arrgrow(a,0,normals))
+#define stbds_arrsetlen(a,normals)   ((stbds_arrcap(a) < (size_t) (normals) ? stbds_arrsetcap((a),(size_t)(normals)),0 : 0), (a) ? stbds_header(a)->length = (size_t) (normals) : 0)
 #define stbds_arrcap(a)        ((a) ? stbds_header(a)->capacity : 0)
 #define stbds_arrlen(a)        ((a) ? (ptrdiff_t) stbds_header(a)->length : 0)
 #define stbds_arrlenu(a)       ((a) ?             stbds_header(a)->length : 0)
 #define stbds_arrput(a,v)      (stbds_arrmaybegrow(a,1), (a)[stbds_header(a)->length++] = (v))
 #define stbds_arrpush          stbds_arrput  // synonym
 #define stbds_arrpop(a)        (stbds_header(a)->length--, (a)[stbds_header(a)->length])
-#define stbds_arraddn(a,n)     ((void)(stbds_arraddnindex(a, n)))    // deprecated, use one of the following instead:
-#define stbds_arraddnptr(a,n)  (stbds_arrmaybegrow(a,n), (n) ? (stbds_header(a)->length += (n), &(a)[stbds_header(a)->length-(n)]) : (a))
-#define stbds_arraddnindex(a,n)(stbds_arrmaybegrow(a,n), (n) ? (stbds_header(a)->length += (n), stbds_header(a)->length-(n)) : stbds_arrlen(a))
+#define stbds_arraddn(a,normals)     ((void)(stbds_arraddnindex(a, normals)))    // deprecated, use one of the following instead:
+#define stbds_arraddnptr(a,normals)  (stbds_arrmaybegrow(a,normals), (normals) ? (stbds_header(a)->length += (normals), &(a)[stbds_header(a)->length-(normals)]) : (a))
+#define stbds_arraddnindex(a,normals)(stbds_arrmaybegrow(a,normals), (normals) ? (stbds_header(a)->length += (normals), stbds_header(a)->length-(normals)) : stbds_arrlen(a))
 #define stbds_arraddnoff       stbds_arraddnindex
 #define stbds_arrlast(a)       ((a)[stbds_header(a)->length-1])
 #define stbds_arrfree(a)       ((void) ((a) ? STBDS_FREE(NULL,stbds_header(a)) : (void)0), (a)=NULL)
 #define stbds_arrdel(a,i)      stbds_arrdeln(a,i,1)
-#define stbds_arrdeln(a,i,n)   (memmove(&(a)[i], &(a)[(i)+(n)], sizeof *(a) * (stbds_header(a)->length-(n)-(i))), stbds_header(a)->length -= (n))
+#define stbds_arrdeln(a,i,normals)   (memmove(&(a)[i], &(a)[(i)+(normals)], sizeof *(a) * (stbds_header(a)->length-(normals)-(i))), stbds_header(a)->length -= (normals))
 #define stbds_arrdelswap(a,i)  ((a)[i] = stbds_arrlast(a), stbds_header(a)->length -= 1)
-#define stbds_arrinsn(a,i,n)   (stbds_arraddn((a),(n)), memmove(&(a)[(i)+(n)], &(a)[i], sizeof *(a) * (stbds_header(a)->length-(n)-(i))))
+#define stbds_arrinsn(a,i,normals)   (stbds_arraddn((a),(normals)), memmove(&(a)[(i)+(normals)], &(a)[i], sizeof *(a) * (stbds_header(a)->length-(normals)-(i))))
 #define stbds_arrins(a,i,v)    (stbds_arrinsn((a),(i),1), (a)[i]=(v))
 
-#define stbds_arrmaybegrow(a,n)  ((!(a) || stbds_header(a)->length + (n) > stbds_header(a)->capacity) \
-                                  ? (stbds_arrgrow(a,n,0),0) : 0)
+#define stbds_arrmaybegrow(a,normals)  ((!(a) || stbds_header(a)->length + (normals) > stbds_header(a)->capacity) \
+                                  ? (stbds_arrgrow(a,normals,0),0) : 0)
 
 #define stbds_arrgrow(a,b,c)   ((a) = stbds_arrgrowf_wrapper((a), sizeof *(a), (b), (c)))
 
-#define stbds_hmput(t, k, v) \
-    ((t) = stbds_hmput_key_wrapper((t), sizeof *(t), (void*) STBDS_ADDRESSOF((t)->key, (k)), sizeof (t)->key, 0),   \
-     (t)[stbds_temp((t)-1)].key = (k),    \
-     (t)[stbds_temp((t)-1)].value = (v))
+#define stbds_hmput(textureCoords, k, v) \
+    ((textureCoords) = stbds_hmput_key_wrapper((textureCoords), sizeof *(textureCoords), (void*) STBDS_ADDRESSOF((textureCoords)->key, (k)), sizeof (textureCoords)->key, 0),   \
+     (textureCoords)[stbds_temp((textureCoords)-1)].key = (k),    \
+     (textureCoords)[stbds_temp((textureCoords)-1)].value = (v))
 
-#define stbds_hmputs(t, s) \
-    ((t) = stbds_hmput_key_wrapper((t), sizeof *(t), &(s).key, sizeof (s).key, STBDS_HM_BINARY), \
-     (t)[stbds_temp((t)-1)] = (s))
+#define stbds_hmputs(textureCoords, s) \
+    ((textureCoords) = stbds_hmput_key_wrapper((textureCoords), sizeof *(textureCoords), &(s).key, sizeof (s).key, STBDS_HM_BINARY), \
+     (textureCoords)[stbds_temp((textureCoords)-1)] = (s))
 
-#define stbds_hmgeti(t,k) \
-    ((t) = stbds_hmget_key_wrapper((t), sizeof *(t), (void*) STBDS_ADDRESSOF((t)->key, (k)), sizeof (t)->key, STBDS_HM_BINARY), \
-      stbds_temp((t)-1))
+#define stbds_hmgeti(textureCoords,k) \
+    ((textureCoords) = stbds_hmget_key_wrapper((textureCoords), sizeof *(textureCoords), (void*) STBDS_ADDRESSOF((textureCoords)->key, (k)), sizeof (textureCoords)->key, STBDS_HM_BINARY), \
+      stbds_temp((textureCoords)-1))
 
-#define stbds_hmgeti_ts(t,k,temp) \
-    ((t) = stbds_hmget_key_ts_wrapper((t), sizeof *(t), (void*) STBDS_ADDRESSOF((t)->key, (k)), sizeof (t)->key, &(temp), STBDS_HM_BINARY), \
+#define stbds_hmgeti_ts(textureCoords,k,temp) \
+    ((textureCoords) = stbds_hmget_key_ts_wrapper((textureCoords), sizeof *(textureCoords), (void*) STBDS_ADDRESSOF((textureCoords)->key, (k)), sizeof (textureCoords)->key, &(temp), STBDS_HM_BINARY), \
       (temp))
 
-#define stbds_hmgetp(t, k) \
-    ((void) stbds_hmgeti(t,k), &(t)[stbds_temp((t)-1)])
+#define stbds_hmgetp(textureCoords, k) \
+    ((void) stbds_hmgeti(textureCoords,k), &(textureCoords)[stbds_temp((textureCoords)-1)])
 
-#define stbds_hmgetp_ts(t, k, temp) \
-    ((void) stbds_hmgeti_ts(t,k,temp), &(t)[temp])
+#define stbds_hmgetp_ts(textureCoords, k, temp) \
+    ((void) stbds_hmgeti_ts(textureCoords,k,temp), &(textureCoords)[temp])
 
-#define stbds_hmdel(t,k) \
-    (((t) = stbds_hmdel_key_wrapper((t),sizeof *(t), (void*) STBDS_ADDRESSOF((t)->key, (k)), sizeof (t)->key, STBDS_OFFSETOF((t),key), STBDS_HM_BINARY)),(t)?stbds_temp((t)-1):0)
+#define stbds_hmdel(textureCoords,k) \
+    (((textureCoords) = stbds_hmdel_key_wrapper((textureCoords),sizeof *(textureCoords), (void*) STBDS_ADDRESSOF((textureCoords)->key, (k)), sizeof (textureCoords)->key, STBDS_OFFSETOF((textureCoords),key), STBDS_HM_BINARY)),(textureCoords)?stbds_temp((textureCoords)-1):0)
 
-#define stbds_hmdefault(t, v) \
-    ((t) = stbds_hmput_default_wrapper((t), sizeof *(t)), (t)[-1].value = (v))
+#define stbds_hmdefault(textureCoords, v) \
+    ((textureCoords) = stbds_hmput_default_wrapper((textureCoords), sizeof *(textureCoords)), (textureCoords)[-1].value = (v))
 
-#define stbds_hmdefaults(t, s) \
-    ((t) = stbds_hmput_default_wrapper((t), sizeof *(t)), (t)[-1] = (s))
+#define stbds_hmdefaults(textureCoords, s) \
+    ((textureCoords) = stbds_hmput_default_wrapper((textureCoords), sizeof *(textureCoords)), (textureCoords)[-1] = (s))
 
-#define stbds_hmfree(p)        \
-    ((void) ((p) != NULL ? stbds_hmfree_func((p)-1,sizeof*(p)),0 : 0),(p)=NULL)
+#define stbds_hmfree(pos)        \
+    ((void) ((pos) != NULL ? stbds_hmfree_func((pos)-1,sizeof*(pos)),0 : 0),(pos)=NULL)
 
-#define stbds_hmgets(t, k)    (*stbds_hmgetp(t,k))
-#define stbds_hmget(t, k)     (stbds_hmgetp(t,k)->value)
-#define stbds_hmget_ts(t, k, temp)  (stbds_hmgetp_ts(t,k,temp)->value)
-#define stbds_hmlen(t)        ((t) ? (ptrdiff_t) stbds_header((t)-1)->length-1 : 0)
-#define stbds_hmlenu(t)       ((t) ?             stbds_header((t)-1)->length-1 : 0)
-#define stbds_hmgetp_null(t,k)  (stbds_hmgeti(t,k) == -1 ? NULL : &(t)[stbds_temp((t)-1)])
+#define stbds_hmgets(textureCoords, k)    (*stbds_hmgetp(textureCoords,k))
+#define stbds_hmget(textureCoords, k)     (stbds_hmgetp(textureCoords,k)->value)
+#define stbds_hmget_ts(textureCoords, k, temp)  (stbds_hmgetp_ts(textureCoords,k,temp)->value)
+#define stbds_hmlen(textureCoords)        ((textureCoords) ? (ptrdiff_t) stbds_header((textureCoords)-1)->length-1 : 0)
+#define stbds_hmlenu(textureCoords)       ((textureCoords) ?             stbds_header((textureCoords)-1)->length-1 : 0)
+#define stbds_hmgetp_null(textureCoords,k)  (stbds_hmgeti(textureCoords,k) == -1 ? NULL : &(textureCoords)[stbds_temp((textureCoords)-1)])
 
-#define stbds_shput(t, k, v) \
-    ((t) = stbds_hmput_key_wrapper((t), sizeof *(t), (void*) (k), sizeof (t)->key, STBDS_HM_STRING),   \
-     (t)[stbds_temp((t)-1)].value = (v))
+#define stbds_shput(textureCoords, k, v) \
+    ((textureCoords) = stbds_hmput_key_wrapper((textureCoords), sizeof *(textureCoords), (void*) (k), sizeof (textureCoords)->key, STBDS_HM_STRING),   \
+     (textureCoords)[stbds_temp((textureCoords)-1)].value = (v))
 
-#define stbds_shputi(t, k, v) \
-    ((t) = stbds_hmput_key_wrapper((t), sizeof *(t), (void*) (k), sizeof (t)->key, STBDS_HM_STRING),   \
-     (t)[stbds_temp((t)-1)].value = (v), stbds_temp((t)-1))
+#define stbds_shputi(textureCoords, k, v) \
+    ((textureCoords) = stbds_hmput_key_wrapper((textureCoords), sizeof *(textureCoords), (void*) (k), sizeof (textureCoords)->key, STBDS_HM_STRING),   \
+     (textureCoords)[stbds_temp((textureCoords)-1)].value = (v), stbds_temp((textureCoords)-1))
 
-#define stbds_shputs(t, s) \
-    ((t) = stbds_hmput_key_wrapper((t), sizeof *(t), (void*) (s).key, sizeof (s).key, STBDS_HM_STRING), \
-     (t)[stbds_temp((t)-1)] = (s), \
-     (t)[stbds_temp((t)-1)].key = stbds_temp_key((t)-1)) // above line overwrites whole structure, so must rewrite key here if it was allocated internally
+#define stbds_shputs(textureCoords, s) \
+    ((textureCoords) = stbds_hmput_key_wrapper((textureCoords), sizeof *(textureCoords), (void*) (s).key, sizeof (s).key, STBDS_HM_STRING), \
+     (textureCoords)[stbds_temp((textureCoords)-1)] = (s), \
+     (textureCoords)[stbds_temp((textureCoords)-1)].key = stbds_temp_key((textureCoords)-1)) // above line overwrites whole structure, so must rewrite key here if it was allocated internally
 
-#define stbds_pshput(t, p) \
-    ((t) = stbds_hmput_key_wrapper((t), sizeof *(t), (void*) (p)->key, sizeof (p)->key, STBDS_HM_PTR_TO_STRING), \
-     (t)[stbds_temp((t)-1)] = (p))
+#define stbds_pshput(textureCoords, pos) \
+    ((textureCoords) = stbds_hmput_key_wrapper((textureCoords), sizeof *(textureCoords), (void*) (pos)->key, sizeof (pos)->key, STBDS_HM_PTR_TO_STRING), \
+     (textureCoords)[stbds_temp((textureCoords)-1)] = (pos))
 
-#define stbds_shgeti(t,k) \
-     ((t) = stbds_hmget_key_wrapper((t), sizeof *(t), (void*) (k), sizeof (t)->key, STBDS_HM_STRING), \
-      stbds_temp((t)-1))
+#define stbds_shgeti(textureCoords,k) \
+     ((textureCoords) = stbds_hmget_key_wrapper((textureCoords), sizeof *(textureCoords), (void*) (k), sizeof (textureCoords)->key, STBDS_HM_STRING), \
+      stbds_temp((textureCoords)-1))
 
-#define stbds_pshgeti(t,k) \
-     ((t) = stbds_hmget_key_wrapper((t), sizeof *(t), (void*) (k), sizeof (*(t))->key, STBDS_HM_PTR_TO_STRING), \
-      stbds_temp((t)-1))
+#define stbds_pshgeti(textureCoords,k) \
+     ((textureCoords) = stbds_hmget_key_wrapper((textureCoords), sizeof *(textureCoords), (void*) (k), sizeof (*(textureCoords))->key, STBDS_HM_PTR_TO_STRING), \
+      stbds_temp((textureCoords)-1))
 
-#define stbds_shgetp(t, k) \
-    ((void) stbds_shgeti(t,k), &(t)[stbds_temp((t)-1)])
+#define stbds_shgetp(textureCoords, k) \
+    ((void) stbds_shgeti(textureCoords,k), &(textureCoords)[stbds_temp((textureCoords)-1)])
 
-#define stbds_pshget(t, k) \
-    ((void) stbds_pshgeti(t,k), (t)[stbds_temp((t)-1)])
+#define stbds_pshget(textureCoords, k) \
+    ((void) stbds_pshgeti(textureCoords,k), (textureCoords)[stbds_temp((textureCoords)-1)])
 
-#define stbds_shdel(t,k) \
-    (((t) = stbds_hmdel_key_wrapper((t),sizeof *(t), (void*) (k), sizeof (t)->key, STBDS_OFFSETOF((t),key), STBDS_HM_STRING)),(t)?stbds_temp((t)-1):0)
-#define stbds_pshdel(t,k) \
-    (((t) = stbds_hmdel_key_wrapper((t),sizeof *(t), (void*) (k), sizeof (*(t))->key, STBDS_OFFSETOF(*(t),key), STBDS_HM_PTR_TO_STRING)),(t)?stbds_temp((t)-1):0)
+#define stbds_shdel(textureCoords,k) \
+    (((textureCoords) = stbds_hmdel_key_wrapper((textureCoords),sizeof *(textureCoords), (void*) (k), sizeof (textureCoords)->key, STBDS_OFFSETOF((textureCoords),key), STBDS_HM_STRING)),(textureCoords)?stbds_temp((textureCoords)-1):0)
+#define stbds_pshdel(textureCoords,k) \
+    (((textureCoords) = stbds_hmdel_key_wrapper((textureCoords),sizeof *(textureCoords), (void*) (k), sizeof (*(textureCoords))->key, STBDS_OFFSETOF(*(textureCoords),key), STBDS_HM_PTR_TO_STRING)),(textureCoords)?stbds_temp((textureCoords)-1):0)
 
-#define stbds_sh_new_arena(t)  \
-    ((t) = stbds_shmode_func_wrapper(t, sizeof *(t), STBDS_SH_ARENA))
-#define stbds_sh_new_strdup(t) \
-    ((t) = stbds_shmode_func_wrapper(t, sizeof *(t), STBDS_SH_STRDUP))
+#define stbds_sh_new_arena(textureCoords)  \
+    ((textureCoords) = stbds_shmode_func_wrapper(textureCoords, sizeof *(textureCoords), STBDS_SH_ARENA))
+#define stbds_sh_new_strdup(textureCoords) \
+    ((textureCoords) = stbds_shmode_func_wrapper(textureCoords, sizeof *(textureCoords), STBDS_SH_STRDUP))
 
-#define stbds_shdefault(t, v)  stbds_hmdefault(t,v)
-#define stbds_shdefaults(t, s) stbds_hmdefaults(t,s)
+#define stbds_shdefault(textureCoords, v)  stbds_hmdefault(textureCoords,v)
+#define stbds_shdefaults(textureCoords, s) stbds_hmdefaults(textureCoords,s)
 
 #define stbds_shfree       stbds_hmfree
 #define stbds_shlenu       stbds_hmlenu
 
-#define stbds_shgets(t, k) (*stbds_shgetp(t,k))
-#define stbds_shget(t, k)  (stbds_shgetp(t,k)->value)
-#define stbds_shgetp_null(t,k)  (stbds_shgeti(t,k) == -1 ? NULL : &(t)[stbds_temp((t)-1)])
+#define stbds_shgets(textureCoords, k) (*stbds_shgetp(textureCoords,k))
+#define stbds_shget(textureCoords, k)  (stbds_shgetp(textureCoords,k)->value)
+#define stbds_shgetp_null(textureCoords,k)  (stbds_shgeti(textureCoords,k) == -1 ? NULL : &(textureCoords)[stbds_temp((textureCoords)-1)])
 #define stbds_shlen        stbds_hmlen
 
 typedef struct
