@@ -1,6 +1,7 @@
 #pragma once
 
 #include <common/Math_Base.h>
+#include <common/DLL.h>
 
 /// <summary>
 /// We will only use Triangle faces
@@ -9,11 +10,11 @@ template <size_t N>
 class Face
 {
 public:
-    Face()
+    COMMONFRAMEWORK_API Face()
         : v{ 0 }
     {}
 
-    Face(unsigned int vertices[N])
+    COMMONFRAMEWORK_API Face(unsigned int vertices[N])
         : v{ vertices }
     {}
 

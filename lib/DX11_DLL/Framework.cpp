@@ -4,6 +4,11 @@
 
 #include "Application.h"
 
+Framework::~Framework()
+{
+    Destroy();
+}
+
 bool Framework::Init()
 {
     Config::Load(CONFIG_FILE_NAME);

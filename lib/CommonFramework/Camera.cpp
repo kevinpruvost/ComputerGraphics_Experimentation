@@ -57,7 +57,8 @@ float Camera::GetPitch() const
 }
 
 void Camera::Translate(const glm::vec3& translation) {
-    __position += translation;
+    glm::vec3 realTranslation = translation.x * __right + translation.y * __up + translation.z * __forward;
+    __position += realTranslation;
     updateViewMatrix();
 }
 

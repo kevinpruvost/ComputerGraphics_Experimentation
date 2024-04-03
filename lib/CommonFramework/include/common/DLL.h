@@ -5,6 +5,11 @@
 #include <filesystem>
 
 #ifdef _WIN32
+#ifdef COMMONFRAMEWORK_EXPORTS
+#define COMMONFRAMEWORK_API __declspec(dllexport)
+#else
+#define COMMONFRAMEWORK_API __declspec(dllimport)
+#endif
     #define EXPORT __declspec(dllexport)
     #define IMPORT __declspec(dllimport)
 #else
@@ -12,11 +17,11 @@
     #define IMPORT
 #endif
 
-class DLL
+class COMMONFRAMEWORK_API DLL
 {
 public:
-    explicit DLL(const std::filesystem::path& filePath);
-    ~DLL();
+     explicit DLL(const std::filesystem::path& filePath);
+     ~DLL();
 
     template<typename T>
     inline T getFunction(const char* functionName) const

@@ -13,13 +13,13 @@ public:
         Vulkan
     };
 
-    FrameworkLoader(const FrameworkType type = FrameworkType::Vulkan);
-    ~FrameworkLoader();
+    COMMONFRAMEWORK_API FrameworkLoader(const FrameworkType type = FrameworkType::Vulkan);
+    COMMONFRAMEWORK_API ~FrameworkLoader();
 
-    void LoadFramework(const FrameworkType type);
-    BaseFramework * GetFramework() const;
+    COMMONFRAMEWORK_API void LoadFramework(const FrameworkType type);
+    COMMONFRAMEWORK_API BaseFramework * GetFramework() const;
 public:
-    static DLL * EngineDll;
+    COMMONFRAMEWORK_API static DLL * EngineDll;
 
 private:
     FrameworkType __frameworkType;

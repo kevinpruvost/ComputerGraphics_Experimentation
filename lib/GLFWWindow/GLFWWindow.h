@@ -28,6 +28,10 @@ public:
     virtual ErrorCode SetWindowResizable(bool enabled) override;
     virtual ErrorCode SetWindowFocused(bool focused) override;
 
+    int GetWindowWidth() const override;
+    int GetWindowHeight() const override;
+    std::array<int, 2> GetWindowSize() const override;
+
 protected:
     virtual ErrorCode _Init() override;
 

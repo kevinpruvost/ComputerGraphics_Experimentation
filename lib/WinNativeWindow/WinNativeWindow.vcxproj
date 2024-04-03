@@ -143,15 +143,15 @@
     <ClCompile Include="WinNativeWindow.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\CommonFramework\CommonFramework.vcxproj">
-      <Project>{fbd29d65-c553-4e00-b234-48eec3a495f3}</Project>
-    </ProjectReference>
-  </ItemGroup>
-  <ItemGroup>
     <ClInclude Include="WinNativeWindow.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Config_WinNativeWindow.yaml" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\CommonFramework\CommonFramework.vcxproj">
+      <Project>{fbd29d65-c553-4e00-b234-48eec3a495f3}</Project>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

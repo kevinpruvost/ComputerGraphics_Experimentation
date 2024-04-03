@@ -1,6 +1,7 @@
 #pragma once
 
 #include <common/Shader.h>
+#include <common/DLL.h>
 
 #include <memory>
 
@@ -11,7 +12,7 @@ public:
 
     virtual void SetPipeline(const std::vector<Shader *> & shaders) = 0;
     virtual ErrorCode Use() = 0;
-    static ShaderPipeline* CreateShaderPipeline(const std::vector<Shader*>& shaders);
+    COMMONFRAMEWORK_API static ShaderPipeline* CreateShaderPipeline(const std::vector<Shader*>& shaders);
 
     virtual void SetUniformMatrix4(const std::string& name, const glm::mat4& matrix) = 0;
     virtual void SetUniformVec3(const std::string& name, const glm::vec3& vec) = 0;

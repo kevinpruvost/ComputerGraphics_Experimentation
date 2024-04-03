@@ -9,7 +9,7 @@
 class InputSystem
 {
 public:
-    InputSystem();
+    COMMONFRAMEWORK_API InputSystem();
     ~InputSystem() = default;
     // Key inputs
     enum class Key
@@ -60,18 +60,18 @@ public:
         Count
     };
 
-    void SetWhileKeyDownCallback   (const CallbackContainer<void, Key, KeyModifier>& callback);
-    void SetOnKeyDownCallback      (const CallbackContainer<void, Key, KeyModifier> & callback);
-    void SetOnKeyUpCallback        (const CallbackContainer<void, Key, KeyModifier> & callback);
-    void SetOnKeyRepeatCallback    (const CallbackContainer<void, Key, KeyModifier> & callback);
+    COMMONFRAMEWORK_API void SetWhileKeyDownCallback   (const CallbackContainer<void, Key, KeyModifier>& callback);
+    COMMONFRAMEWORK_API void SetOnKeyDownCallback      (const CallbackContainer<void, Key, KeyModifier> & callback);
+    COMMONFRAMEWORK_API void SetOnKeyUpCallback        (const CallbackContainer<void, Key, KeyModifier> & callback);
+    COMMONFRAMEWORK_API void SetOnKeyRepeatCallback    (const CallbackContainer<void, Key, KeyModifier> & callback);
 
     // Mouse inputs
-    void SetOnMouseMoveCallback     (const CallbackContainer<void, int, int> & callback);
-    void SetOnMouseWheelCallback    (const CallbackContainer<void, int> & callback);
-    void SetOnMouseDownCallback     (const CallbackContainer<void, int, int> & callback);
-    void SetWhileMouseDownCallback  (const CallbackContainer<void, int, int>& callback);
-    void SetOnMouseUpCallback       (const CallbackContainer<void, int, int> & callback);
-    void SetOnMouseDblClickCallback (const CallbackContainer<void, int, int> & callback);
+    COMMONFRAMEWORK_API void SetOnMouseMoveCallback     (const CallbackContainer<void, int, int> & callback);
+    COMMONFRAMEWORK_API void SetOnMouseWheelCallback    (const CallbackContainer<void, int> & callback);
+    COMMONFRAMEWORK_API void SetOnMouseDownCallback     (const CallbackContainer<void, int, int> & callback);
+    COMMONFRAMEWORK_API void SetWhileMouseDownCallback  (const CallbackContainer<void, int, int>& callback);
+    COMMONFRAMEWORK_API void SetOnMouseUpCallback       (const CallbackContainer<void, int, int> & callback);
+    COMMONFRAMEWORK_API void SetOnMouseDblClickCallback (const CallbackContainer<void, int, int> & callback);
 
 protected:
     Callback<void, Key, KeyModifier> _callbackKeyDown;

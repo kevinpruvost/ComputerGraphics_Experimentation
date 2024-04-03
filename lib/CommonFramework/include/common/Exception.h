@@ -2,6 +2,7 @@
 
 #include <common/Error.h>
 #include <common/Format.h>
+#include <common/DLL.h>
 
 #include <exception>
 
@@ -20,7 +21,7 @@ public:
 
     }
     using std::exception::exception;
-    ~Exception();
+    COMMONFRAMEWORK_API ~Exception();
 };
 
 class NotImplementedException : public Exception

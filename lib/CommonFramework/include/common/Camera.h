@@ -1,6 +1,7 @@
 #pragma once
 
 #include <common/Math_Base.h>
+#include <common/DLL.h>
 
 class Camera {
 public:
@@ -9,27 +10,27 @@ public:
         Orthographic
     };
 
-    Camera(int screenWidth, int screenHeight, float fov = 45.0f, float nearClip = 0.1f, float farClip = 1000.0f,
+    EXPORT Camera(int screenWidth, int screenHeight, float fov = 45.0f, float nearClip = 0.1f, float farClip = 1000.0f,
         CameraProjection projection = CameraProjection::Perspective);
 
     // Setters
-    void SetPosition(const glm::vec3& __position);
-    void SetFOV(float fov);
-    void SetNearClip(float nearClip);
-    void SetFarClip(float farClip);
+    EXPORT void SetPosition(const glm::vec3& __position);
+    EXPORT void SetFOV(float fov);
+    EXPORT void SetNearClip(float nearClip);
+    EXPORT void SetFarClip(float farClip);
 
     // Getters
-    glm::mat4 GetViewMatrix() const;
-    glm::mat4 GetProjectionMatrix() const;
-    glm::vec3 GetPosition() const;
-    float GetYaw() const;
-    float GetPitch() const;
+    EXPORT glm::mat4 GetViewMatrix() const;
+    EXPORT glm::mat4 GetProjectionMatrix() const;
+    EXPORT glm::vec3 GetPosition() const;
+    EXPORT float GetYaw() const;
+    EXPORT float GetPitch() const;
 
     // Move the camera
-    void Translate(const glm::vec3& translation);
-    void RotateYaw(float angle);
-    void RotatePitch(float angle);
-    void LookAt(const glm::vec3& target);
+    EXPORT void Translate(const glm::vec3& translation);
+    EXPORT void RotateYaw(float angle);
+    EXPORT void RotatePitch(float angle);
+    EXPORT void LookAt(const glm::vec3& target);
 
 private:
     int __screenWidth, __screenHeight;

@@ -1,7 +1,7 @@
 #include <common/Logger.h>
 #include <common/Format.h>
 
-std::unique_ptr<Logger> Logger::m_instance = nullptr;
+COMMONFRAMEWORK_API std::unique_ptr<Logger> Logger::m_instance = nullptr;
 
 Logger::Logger(const std::filesystem::path& path)
 {

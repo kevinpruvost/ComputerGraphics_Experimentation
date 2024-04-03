@@ -20,5 +20,5 @@ public:
     virtual ~Shader() = default;
 
     virtual void SetShaderSource(const std::string& shaderSource, const ShaderType type) = 0;
-    static Shader * CreateShader(const std::string & shaderSource, const ShaderType type);
+    COMMONFRAMEWORK_API static Shader * CreateShader(const std::string & shaderSource, const ShaderType type);
 };

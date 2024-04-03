@@ -2,6 +2,7 @@
 
 #include <array>
 #include <vector>
+#include <common/DLL.h>
 
 template<typename val_type, size_t size>
 class Vector : public std::array<val_type, size>

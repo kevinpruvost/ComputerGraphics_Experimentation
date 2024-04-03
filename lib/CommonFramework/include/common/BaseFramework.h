@@ -6,10 +6,10 @@
 #include <common/ApplicationCommonBase.h>
 #include <common/DLL.h>
 
-class BaseFramework {
+class COMMONFRAMEWORK_API BaseFramework {
 public:
     BaseFramework();
-    virtual ~BaseFramework() = default;
+    virtual ~BaseFramework();
 
     // Initialization function
     virtual bool Init() = 0;

@@ -4,6 +4,10 @@
 
 #include "Application.h"
 
+Framework::~Framework()
+{
+    Destroy();
+}
 
 bool Framework::Init()
 {

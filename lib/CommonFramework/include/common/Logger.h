@@ -1,6 +1,7 @@
 #pragma once
 
 #include <common/Format.h>
+#include <common/DLL.h>
 #include <mutex>
 #include <memory>
 #include <filesystem>
@@ -14,7 +15,7 @@ std::string inline format(const std::string& fmt, Args... args) {
     return std::string(buf);
 }
 
-class Logger
+class COMMONFRAMEWORK_API Logger
 {
 public:
     static void Initialize(const std::filesystem::path & path);

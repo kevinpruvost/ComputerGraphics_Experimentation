@@ -17,16 +17,10 @@ class Scene
 public:
 	Scene(Window * window)
 		: w{ window }
-		, camera{800, 600}
+		, camera{ window->GetWindowWidth(), window->GetWindowHeight() }
 	{
-		auto shaderFrag = Shader::CreateShader(
-			"resources/shader_test.frag",
-			Shader::ShaderType::Fragment
-		);
-		auto shaderVert = Shader::CreateShader(
-			"resources/shader_test.vert",
-			Shader::ShaderType::Vertex
-		);
+		auto shaderFrag = Shader::CreateShader("resources/shader_test.frag", Shader::ShaderType::Fragment);
+		auto shaderVert = Shader::CreateShader("resources/shader_test.vert", Shader::ShaderType::Vertex);
 
 		m_shader = ShaderPipeline::CreateShaderPipeline({shaderVert, shaderFrag});
 		m_model = Model::CreateModel("resources\\Assignment1\\eight.uniform.obj");
@@ -78,6 +72,7 @@ public:
 
 		delete shaderFrag;
 		delete shaderVert;
+
 	}
 
 	void Update()

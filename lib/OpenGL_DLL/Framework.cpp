@@ -6,6 +6,11 @@
 
 #include "Application.h"
 
+Framework::~Framework()
+{
+    Destroy();
+}
+
 bool Framework::Init()
 {
     _app = new Application();

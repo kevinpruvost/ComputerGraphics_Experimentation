@@ -278,3 +278,24 @@ ErrorCode GLFWWindow::SetWindowFocused(bool focused)
     glfwSetWindowAttrib(__mainW, GLFW_FOCUSED, focused);
     return ErrorCode::Success;
 }
+
+int GLFWWindow::GetWindowWidth() const
+{
+    int width;
+    glfwGetWindowSize(__mainW, &width, nullptr);
+    return width;
+}
+
+int GLFWWindow::GetWindowHeight() const
+{
+    int height;
+    glfwGetWindowSize(__mainW, nullptr, &height);
+    return height;
+}
+
+std::array<int, 2> GLFWWindow::GetWindowSize() const
+{
+    std::array<int, 2> size;
+    glfwGetWindowSize(__mainW, &size[0], &size[1]);
+    return size;
+}

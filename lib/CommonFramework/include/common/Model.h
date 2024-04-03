@@ -10,7 +10,7 @@ class Model : public Drawable3D
 public:
     virtual ~Model() = default;
 
-    static Model * CreateModel();
+    COMMONFRAMEWORK_API static Model * CreateModel();
     static inline Model* CreateModel(const std::filesystem::path& path)
     {
         Model * mesh = CreateModel();
@@ -18,14 +18,14 @@ public:
         return mesh;
     }
 
-    void CreateFromFile(const std::filesystem::path & path);
+    COMMONFRAMEWORK_API void CreateFromFile(const std::filesystem::path & path);
 
     virtual void SetVertices(const VertexArray& vertices) = 0;
-    VertexArray GetVertices() const;
+    COMMONFRAMEWORK_API VertexArray GetVertices() const;
     virtual void SetIndices(const TriangleArray& indices) = 0;
 
-    void AddMesh(Mesh * mesh);
-    void AddMaterial(Material * material);
+    COMMONFRAMEWORK_API void AddMesh(Mesh * mesh);
+    COMMONFRAMEWORK_API void AddMaterial(Material * material);
 
 protected:
     Model() = default;

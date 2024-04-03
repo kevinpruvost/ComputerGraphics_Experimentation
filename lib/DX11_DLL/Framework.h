@@ -4,6 +4,7 @@
 class Framework : public BaseFramework
 {
 public:
+    ~Framework();
     bool Init() override;
     void Destroy() override;
     int Launch() override;
