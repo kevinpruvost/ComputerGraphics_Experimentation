@@ -10,7 +10,6 @@ InputSystem::InputSystem()
     , _callbackMouseDown(nullptr)
     , _callbackMouseWhileDown(nullptr)
     , _callbackMouseUp(nullptr)
-    , _callbackMouseDblClick(nullptr)
 {
 }
 
@@ -34,32 +33,27 @@ void InputSystem::SetOnKeyRepeatCallback(const CallbackContainer<void, Key, KeyM
     _callbackKeyRepeat = callback;
 }
 
-void InputSystem::SetOnMouseMoveCallback(const CallbackContainer<void, int, int>& callback)
+void InputSystem::SetOnMouseMoveCallback(const CallbackContainer<void, double, double>& callback)
 {
     _callbackMouseMove = callback;
 }
 
-void InputSystem::SetOnMouseWheelCallback(const CallbackContainer<void, int>& callback)
+void InputSystem::SetOnMouseWheelCallback(const CallbackContainer<void, double, double>& callback)
 {
     _callbackMouseWheel = callback;
 }
 
-void InputSystem::SetOnMouseDownCallback(const CallbackContainer<void, int, int>& callback)
+void InputSystem::SetOnMouseDownCallback(const CallbackContainer<void, InputSystem::MouseButton, InputSystem::KeyModifier>& callback)
 {
     _callbackMouseDown = callback;
 }
 
-void InputSystem::SetWhileMouseDownCallback(const CallbackContainer<void, int, int>& callback)
+void InputSystem::SetWhileMouseDownCallback(const CallbackContainer<void, InputSystem::MouseButton, InputSystem::KeyModifier>& callback)
 {
     _callbackMouseWhileDown = callback;
 }
 
-void InputSystem::SetOnMouseUpCallback(const CallbackContainer<void, int, int>& callback)
+void InputSystem::SetOnMouseUpCallback(const CallbackContainer<void, InputSystem::MouseButton, InputSystem::KeyModifier>& callback)
 {
     _callbackMouseUp = callback;
-}
-
-void InputSystem::SetOnMouseDblClickCallback(const CallbackContainer<void, int, int>& callback)
-{
-    _callbackMouseDblClick = callback;
 }

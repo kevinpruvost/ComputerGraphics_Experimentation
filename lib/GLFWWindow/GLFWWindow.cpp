@@ -22,8 +22,20 @@ void glfw_onError(int error, const char* description)
 #endif
 
 #include <stack>
+// Key events
+// Key, scancode, action, mods
 static std::stack<std::array<int, 4>> keyEvents;
+// Keys that are currently down
 static std::unordered_set<InputSystem::Key> keysWhileDown;
+
+// Mouse events
+// Move
+static std::stack<std::array<double, 2>> mouseMoveEvents;
+// Scroll
+static std::stack<std::array<double, 2>> mouseScrollEvents;
+// Button
+static std::stack<std::array<int, 3>> mouseButtonEvents;
+static std::unordered_set<InputSystem::MouseButton> buttonsWhileDown;
 
 GLFWWindow::GLFWWindow()
     : Window(Window::WindowAPI::GLFW)
@@ -33,6 +45,8 @@ GLFWWindow::GLFWWindow()
 GLFWWindow::~GLFWWindow()
 {
     keyEvents = std::stack<std::array<int, 4>>();
+    keysWhileDown = std::unordered_set<InputSystem::Key>();
+    mouseMoveEvents = std::stack<std::array<double, 2>>();
     Destroy();
 }
 
@@ -41,12 +55,30 @@ EXPORT Window * createWindowInstance() {
     return new GLFWWindow();
 }
 
-void key_callback(GLFWwindow* window, int key, int scancode, int action, int mods)
+static void key_callback(GLFWwindow* window, int key, int scancode, int action, int mods)
 {
     if (key == GLFW_KEY_ESCAPE && action == GLFW_PRESS)
         glfwSetWindowShouldClose(window, true);
 
     keyEvents.push({ key, scancode, action, mods });
+}
+
+static void mouse_move_callback(GLFWwindow* window, double xpos, double ypos)
+{
+    static double lastX = xpos, lastY = ypos;
+    mouseMoveEvents.push({ xpos - lastX, lastY - ypos });
+    lastX = xpos;
+    lastY = ypos;
+}
+
+static void mouse_scroll_callback(GLFWwindow* window, double xoffset, double yoffset)
+{
+    mouseScrollEvents.push({ xoffset, yoffset });
+}
+
+static void mouse_button_callback(GLFWwindow* window, int button, int action, int mods)
+{
+    mouseButtonEvents.push({ button, action, mods });
 }
 
 ErrorCode GLFWWindow::_Init()
@@ -97,6 +129,9 @@ ErrorCode GLFWWindow::_Init()
     });
 
     glfwSetKeyCallback(__mainW, key_callback);
+    glfwSetCursorPosCallback(__mainW, mouse_move_callback);
+    glfwSetScrollCallback(__mainW, mouse_scroll_callback);
+    glfwSetMouseButtonCallback(__mainW, mouse_button_callback);
 
     Logger::DebugPrint(
         "GLFW initialized with parameters :\n"
@@ -113,6 +148,91 @@ ErrorCode GLFWWindow::_Init()
     return ErrorCode::Success;
 }
 
+
+bool GLFWWindow::ProcessInput()
+{
+    // Key events
+    while (!keyEvents.empty())
+    {
+        // Key, scancode, action, mods
+        std::array<int, 4> keyEvent = keyEvents.top();
+        InputSystem::Key key = __TranslateKey(keyEvent[0]);
+        InputSystem::KeyModifier mods = __TranslateKeyModifier(keyEvent[3]);
+        switch (keyEvent[2])
+        {
+            case GLFW_PRESS: {
+                Logger::DebugPrint("Key pressed: %d", key);
+                if (_callbackKeyDown) _callbackKeyDown(key, mods);
+                keysWhileDown.insert(key);
+                break;
+            }
+            case GLFW_RELEASE: {
+                Logger::DebugPrint("Key released: %d", key);
+                if (_callbackKeyUp) _callbackKeyUp(key, mods);
+                keysWhileDown.erase(key);
+                break;
+            }
+            case GLFW_REPEAT: {
+                Logger::DebugPrint("Key repeated: %d", key);
+                if (_callbackKeyRepeat) _callbackKeyRepeat(key, mods);
+                break;
+            }
+        }
+        keyEvents.pop();
+    }
+    int shiftState = glfwGetKey(__mainW, GLFW_KEY_LEFT_SHIFT) | glfwGetKey(__mainW, GLFW_KEY_RIGHT_SHIFT);
+    int ctrlState = glfwGetKey(__mainW, GLFW_KEY_LEFT_CONTROL) | glfwGetKey(__mainW, GLFW_KEY_RIGHT_CONTROL);
+    int altState = glfwGetKey(__mainW, GLFW_KEY_LEFT_ALT) | glfwGetKey(__mainW, GLFW_KEY_RIGHT_ALT);
+    InputSystem::KeyModifier mods = __TranslateKeyModifier(shiftState, ctrlState, altState);
+    for (auto key : keysWhileDown)
+    {
+        if (_callbackWhileKeyDown)
+            _callbackWhileKeyDown(key, mods);
+    }
+
+    // Mouse move events
+    while (!mouseMoveEvents.empty())
+    {
+        std::array<double, 2> mouseEvent = mouseMoveEvents.top();
+        if (_callbackMouseMove) _callbackMouseMove(mouseEvent[0], mouseEvent[1]);
+        mouseMoveEvents.pop();
+    }
+    // Mouse scroll events
+    while (!mouseScrollEvents.empty())
+    {
+        std::array<double, 2> mouseEvent = mouseScrollEvents.top();
+        if (_callbackMouseWheel) _callbackMouseWheel(mouseEvent[0], mouseEvent[1]);
+        mouseScrollEvents.pop();
+    }
+    // Mouse button events
+    while (!mouseButtonEvents.empty())
+    {
+        std::array<int, 3> mouseEvent = mouseButtonEvents.top();
+        InputSystem::MouseButton button = (InputSystem::MouseButton)mouseEvent[0];
+        InputSystem::KeyModifier mods = __TranslateKeyModifier(mouseEvent[2]);
+        switch (mouseEvent[1])
+        {
+            case GLFW_PRESS: {
+                Logger::DebugPrint("Mouse button pressed: %d", button);
+                if (_callbackMouseDown) _callbackMouseDown(button, mods);
+                break;
+            }
+            case GLFW_RELEASE: {
+                Logger::DebugPrint("Mouse button released: %d", button);
+                if (_callbackMouseUp) _callbackMouseUp(button, mods);
+                break;
+            }
+            
+        }
+        mouseButtonEvents.pop();
+    }
+    for (auto button : buttonsWhileDown)
+    {
+        if (_callbackMouseWhileDown) _callbackMouseWhileDown(button, mods);
+    }
+    return true;
+}
+
 ErrorCode GLFWWindow::Loop()
 {
     if (_appLoopCallback == nullptr)
@@ -122,43 +242,7 @@ ErrorCode GLFWWindow::Loop()
 
     while (!glfwWindowShouldClose(__mainW)) {
         // Processing input
-        while (!keyEvents.empty())
-        {
-            // Key, scancode, action, mods
-            std::array<int, 4> keyEvent = keyEvents.top();
-            InputSystem::Key key = __TranslateKey(keyEvent[0]);
-            InputSystem::KeyModifier mods = __TranslateKeyModifier(keyEvent[3]);
-            switch (keyEvent[2])
-            {
-                case GLFW_PRESS: {
-                    Logger::DebugPrint("Key pressed: %d", key);
-                    if (_callbackKeyDown) _callbackKeyDown(key, mods);
-                    keysWhileDown.insert(key);
-                    break;
-                }
-                case GLFW_RELEASE: {
-                    Logger::DebugPrint("Key released: %d", key);
-                    if (_callbackKeyUp) _callbackKeyUp(key, mods);
-                    keysWhileDown.erase(key);
-                    break;
-                }
-                case GLFW_REPEAT: {
-                    Logger::DebugPrint("Key repeated: %d", key);
-                    if (_callbackKeyRepeat) _callbackKeyRepeat(key, mods);
-                    break;
-                }
-            }
-            keyEvents.pop();
-        }
-        int shiftState = glfwGetKey(__mainW, GLFW_KEY_LEFT_SHIFT) | glfwGetKey(__mainW, GLFW_KEY_RIGHT_SHIFT);
-        int ctrlState = glfwGetKey(__mainW, GLFW_KEY_LEFT_CONTROL) | glfwGetKey(__mainW, GLFW_KEY_RIGHT_CONTROL);
-        int altState = glfwGetKey(__mainW, GLFW_KEY_LEFT_ALT) | glfwGetKey(__mainW, GLFW_KEY_RIGHT_ALT);
-        InputSystem::KeyModifier mods = __TranslateKeyModifier(shiftState | ctrlState | altState);
-        for (auto key : keysWhileDown)
-        {
-            if (_callbackWhileKeyDown)
-                _callbackWhileKeyDown(key, mods);
-        }
+        if (!ProcessInput()) break;
 
         // Display
         glClearColor(0.2f, 0.3f, 0.3f, 1.0f);

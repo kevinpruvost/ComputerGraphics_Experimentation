@@ -37,7 +37,10 @@ protected:
 
 private:
     InputSystem::Key __TranslateKey(int key);
-    InputSystem::KeyModifier __TranslateKeyModifier(int keymod);
+    InputSystem::KeyModifier __TranslateKeyModifier(int shiftState, int ctrlState, int altState);
+    InputSystem::KeyModifier __TranslateKeyModifier(int state);
+    InputSystem::MouseButton __TranslateMouseButton(int button);
+    bool ProcessInput();
 
 private:
     GLFWwindow * __mainW;

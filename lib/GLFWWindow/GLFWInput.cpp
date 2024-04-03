@@ -109,14 +109,41 @@ InputSystem::Key GLFWWindow::__TranslateKey(int key)
     }
 }
 
-InputSystem::KeyModifier GLFWWindow::__TranslateKeyModifier(int keymod)
+InputSystem::KeyModifier GLFWWindow::__TranslateKeyModifier(int shiftState, int ctrlState, int altState)
 {
     InputSystem::KeyModifier mods = InputSystem::KeyModifier::None;
-    if (keymod & GLFW_MOD_SHIFT)
+    if (shiftState != 0)
         mods = (InputSystem::KeyModifier)((int)mods | (int)InputSystem::KeyModifier::Shift);
-    if (keymod & GLFW_MOD_CONTROL)
+    if (ctrlState != 0)
         mods = (InputSystem::KeyModifier)((int)mods | (int)InputSystem::KeyModifier::Ctrl);
-    if (keymod & GLFW_MOD_ALT)
+    if (altState != 0)
         mods = (InputSystem::KeyModifier)((int)mods | (int)InputSystem::KeyModifier::Alt);
     return mods;
+}
+
+InputSystem::KeyModifier GLFWWindow::__TranslateKeyModifier(int state)
+{
+     InputSystem::KeyModifier mods = InputSystem::KeyModifier::None;
+     if (state & GLFW_MOD_SHIFT)
+        mods = (InputSystem::KeyModifier)((int)mods | (int)InputSystem::KeyModifier::Shift);
+     if (state & GLFW_MOD_CONTROL)
+        mods = (InputSystem::KeyModifier)((int)mods | (int)InputSystem::KeyModifier::Ctrl);
+     if (state & GLFW_MOD_ALT)
+        mods = (InputSystem::KeyModifier)((int)mods | (int)InputSystem::KeyModifier::Alt);
+     return mods;
+}
+
+InputSystem::MouseButton GLFWWindow::__TranslateMouseButton(int button)
+{
+    switch (button)
+    {
+    case GLFW_MOUSE_BUTTON_LEFT:
+        return InputSystem::MouseButton::Left;
+    case GLFW_MOUSE_BUTTON_RIGHT:
+        return InputSystem::MouseButton::Right;
+    case GLFW_MOUSE_BUTTON_MIDDLE:
+        return InputSystem::MouseButton::Middle;
+    default:
+        throw RuntimeException("Mouse Button unrecognized: {0}", button);
+    }
 }

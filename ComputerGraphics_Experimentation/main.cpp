@@ -35,9 +35,14 @@ public:
 
 		w->SetWhileKeyDownCallback([&](InputSystem::Key key, InputSystem::KeyModifier key_mod) {
 			float speed = 0.01f;
-			float movementSpeed = 0.0001f;
+			float movementSpeed = 0.001f;
 			Logger::DebugPrint("Yaw: %f", camera.GetYaw());
 			Logger::DebugPrint("Position: %f %f %f", camera.GetPosition().x, camera.GetPosition().y, camera.GetPosition().z);
+			if (key_mod == InputSystem::KeyModifier::Shift)
+			{
+				movementSpeed *= 10.0f;
+				speed *= 10.0f;
+			}
 			switch (key)
 			{
 			case InputSystem::Key::Left:
@@ -51,6 +56,12 @@ public:
                 break;
 			case InputSystem::Key::Down:
 				camera.RotatePitch(-speed);
+                break;
+			case InputSystem::Key::Space:
+				camera.Translate(glm::vec3(0, movementSpeed, 0));
+                break;
+			case InputSystem::Key::LCtrl:
+				camera.Translate(glm::vec3(0, -movementSpeed, 0));
                 break;
 			case InputSystem::Key::KeyboardW:
 				camera.Translate(glm::vec3(0, 0, movementSpeed));
@@ -68,11 +79,17 @@ public:
 				break;
 			}
 		});
+		w->SetOnMouseMoveCallback([&](double x, double y) {
+            float sensitivity = 0.1f;
+            float xoffset = x * sensitivity;
+            float yoffset = y * sensitivity;
+            camera.RotateYaw(xoffset);
+            camera.RotatePitch(yoffset);
+        });
 		camera.SetPosition(glm::vec3(-3.0f, 0.0f, -3.0f));
 
 		delete shaderFrag;
 		delete shaderVert;
-
 	}
 
 	void Update()
@@ -101,7 +118,7 @@ public:
 	Window* w;
 };
 
-Scene * s;
+UPtr<Scene> s;
 
 void scene()
 {
@@ -114,25 +131,26 @@ int main()
 	{
 		Logger::Initialize("test.txt");
 
-		Window * w = Window::CreateWindowFromAPI(Window::WindowAPI::GLFW);
+		UPtr<Window> w = Window::CreateWindowFromAPI(Window::WindowAPI::GLFW);
 		Config & windowConfig = *Config::Load("Config_GLFWWindow.yaml");
 		w->Init(windowConfig);
 		w->SetSceneLoopCallback(scene);
 
 		FrameworkLoader::FrameworkType engineType = FrameworkLoader::FrameworkType::OpenGL;
 		FrameworkLoader loader(engineType);
-		BaseFramework* fw = loader.GetFramework();
+		UPtr<BaseFramework> fw = loader.GetFramework();
 		fw->Init();
-		fw->SetWindow(w);
+		fw->SetWindow(w.get());
 
-		s = new Scene(w);
+		s = new Scene(w.get());
 
 		fw->Launch();
 		fw->GetLogger()->Log("Framework launched with %d\n", engineType);
 
-		delete s;
-		delete fw;
-		delete w;
+		// Order of destruction has to be this way because of dependence
+		s.reset();
+		fw.reset();
+		w.reset();
 	}
 	catch (const std::exception& e)
 	{

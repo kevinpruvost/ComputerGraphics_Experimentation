@@ -29,6 +29,7 @@ ErrorCode Application::Initialize()
 ErrorCode Application::Loop()
 {
     _w->SetApplicationLoopCallback([&]() {
+
     });
     _w->Loop();
     return ErrorCode::Success;

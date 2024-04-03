@@ -6,10 +6,10 @@
 #include <common/DLL.h>
 #include <common/Callback.h>
 
-class InputSystem
+class COMMONFRAMEWORK_API InputSystem
 {
 public:
-    COMMONFRAMEWORK_API InputSystem();
+    InputSystem();
     ~InputSystem() = default;
     // Key inputs
     enum class Key
@@ -51,6 +51,14 @@ public:
         Count
     };
 
+    enum class MouseButton
+    {
+        Left = 0,
+        Right = 1,
+        Middle = 2,
+        Count
+    };
+
     enum class KeyModifier
     {
         None     = 0x00,
@@ -60,28 +68,28 @@ public:
         Count
     };
 
-    COMMONFRAMEWORK_API void SetWhileKeyDownCallback   (const CallbackContainer<void, Key, KeyModifier>& callback);
-    COMMONFRAMEWORK_API void SetOnKeyDownCallback      (const CallbackContainer<void, Key, KeyModifier> & callback);
-    COMMONFRAMEWORK_API void SetOnKeyUpCallback        (const CallbackContainer<void, Key, KeyModifier> & callback);
-    COMMONFRAMEWORK_API void SetOnKeyRepeatCallback    (const CallbackContainer<void, Key, KeyModifier> & callback);
+    void SetWhileKeyDownCallback   (const CallbackContainer<void, Key, KeyModifier>& callback);
+    void SetOnKeyDownCallback      (const CallbackContainer<void, Key, KeyModifier> & callback);
+    void SetOnKeyUpCallback        (const CallbackContainer<void, Key, KeyModifier> & callback);
+    void SetOnKeyRepeatCallback    (const CallbackContainer<void, Key, KeyModifier> & callback);
 
     // Mouse inputs
-    COMMONFRAMEWORK_API void SetOnMouseMoveCallback     (const CallbackContainer<void, int, int> & callback);
-    COMMONFRAMEWORK_API void SetOnMouseWheelCallback    (const CallbackContainer<void, int> & callback);
-    COMMONFRAMEWORK_API void SetOnMouseDownCallback     (const CallbackContainer<void, int, int> & callback);
-    COMMONFRAMEWORK_API void SetWhileMouseDownCallback  (const CallbackContainer<void, int, int>& callback);
-    COMMONFRAMEWORK_API void SetOnMouseUpCallback       (const CallbackContainer<void, int, int> & callback);
-    COMMONFRAMEWORK_API void SetOnMouseDblClickCallback (const CallbackContainer<void, int, int> & callback);
+    void SetOnMouseMoveCallback     (const CallbackContainer<void, double, double> & callback);
+    void SetOnMouseWheelCallback    (const CallbackContainer<void, double, double> & callback);
+    void SetOnMouseDownCallback     (const CallbackContainer<void, MouseButton, KeyModifier> & callback);
+    void SetWhileMouseDownCallback  (const CallbackContainer<void, MouseButton, KeyModifier>& callback);
+    void SetOnMouseUpCallback       (const CallbackContainer<void, MouseButton, KeyModifier> & callback);
 
 protected:
     Callback<void, Key, KeyModifier> _callbackKeyDown;
     Callback<void, Key, KeyModifier> _callbackWhileKeyDown;
     Callback<void, Key, KeyModifier> _callbackKeyUp;
     Callback<void, Key, KeyModifier> _callbackKeyRepeat;
-    Callback<void, int, int> _callbackMouseMove;
-    Callback<void, int>      _callbackMouseWheel;
-    Callback<void, int, int> _callbackMouseDown;
-    Callback<void, int, int> _callbackMouseWhileDown;
-    Callback<void, int, int> _callbackMouseUp;
-    Callback<void, int, int> _callbackMouseDblClick;
+    Callback<void, double, double>   _callbackMouseMove;
+    Callback<void, double, double>   _callbackMouseWheel;
+    Callback<void, MouseButton, KeyModifier> _callbackMouseDown;
+    Callback<void, MouseButton, KeyModifier> _callbackMouseWhileDown;
+    Callback<void, MouseButton, KeyModifier> _callbackMouseUp;
 };
+
+inline bool operator==(InputSystem::KeyModifier lhs, InputSystem::KeyModifier rhs) { return (static_cast<int>(lhs) & static_cast<int>(rhs)) != 0; }
