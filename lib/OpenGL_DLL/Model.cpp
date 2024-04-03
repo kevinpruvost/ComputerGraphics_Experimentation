@@ -61,3 +61,23 @@ void Model_OGL::Draw()
 	}
 	glBindVertexArray(0);
 }
+
+void Model_OGL::_SetDrawMode(DrawMode drawMode)
+{
+	switch (drawMode)
+	{
+		case DrawMode::LINES:
+            glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
+            break;
+		case DrawMode::POINTS:
+			glPointSize(5.0f);
+			glPolygonMode(GL_FRONT_AND_BACK, GL_POINT);
+            break;
+		case DrawMode::TRIANGLES:
+            glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
+            break;
+		default:
+			throw RuntimeException("Draw Mode not implemented");
+			break;
+	}
+}

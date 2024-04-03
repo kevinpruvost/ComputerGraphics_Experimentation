@@ -63,9 +63,14 @@ static void key_callback(GLFWwindow* window, int key, int scancode, int action, 
     keyEvents.push({ key, scancode, action, mods });
 }
 
+static double lastX = -1.0f, lastY = -1.0f;
 static void mouse_move_callback(GLFWwindow* window, double xpos, double ypos)
 {
-    static double lastX = xpos, lastY = ypos;
+    if (lastX == -1.0f)
+    {
+        lastX = xpos;
+        lastY = ypos;
+    }
     mouseMoveEvents.push({ xpos - lastX, lastY - ypos });
     lastX = xpos;
     lastY = ypos;
@@ -79,6 +84,19 @@ static void mouse_scroll_callback(GLFWwindow* window, double xoffset, double yof
 static void mouse_button_callback(GLFWwindow* window, int button, int action, int mods)
 {
     mouseButtonEvents.push({ button, action, mods });
+}
+
+static void windowFocusCallback(GLFWwindow* window, int focused)
+{
+    if (focused)
+    {
+        lastX = -1.0f;
+        Logger::DebugPrint("Window focused");
+    }
+    else
+    {
+        Logger::DebugPrint("Window unfocused");
+    }
 }
 
 ErrorCode GLFWWindow::_Init()
@@ -132,6 +150,8 @@ ErrorCode GLFWWindow::_Init()
     glfwSetCursorPosCallback(__mainW, mouse_move_callback);
     glfwSetScrollCallback(__mainW, mouse_scroll_callback);
     glfwSetMouseButtonCallback(__mainW, mouse_button_callback);
+    glfwSetWindowFocusCallback(__mainW, windowFocusCallback);
+
 
     Logger::DebugPrint(
         "GLFW initialized with parameters :\n"

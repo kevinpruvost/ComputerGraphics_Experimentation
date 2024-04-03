@@ -11,17 +11,8 @@ void Model::ParseObj(const std::filesystem::path& path)
     std::vector<glm::vec3> normals;
     std::vector<glm::vec2> textures;
 
-    struct FullVertex
-    {
-        int v[3];
-        bool operator==(const FullVertex& other) const { return v[0] == other.v[0] && v[1] == other.v[1] && v[2] == other.v[2]; }
-        struct Hash {
-            std::size_t operator()(const FullVertex& vertex) const { return std::hash<int>()(vertex.v[0]) ^ std::hash<int>()(vertex.v[1]) ^ std::hash<int>()(vertex.v[2]); }
-        };
-    };
-    std::unordered_map<FullVertex, int, FullVertex::Hash> fullVertices;
-    unsigned int fullVertexIndex = 0;
-    TriangleArray facesToProcess;
+    // Assembling the vertices
+    VertexArray verticesProcessed;
 
     std::string line;
     while (std::getline(file, line)) {
@@ -59,13 +50,15 @@ void Model::ParseObj(const std::filesystem::path& path)
             for (auto & token: tokens) {
                 std::istringstream tokenStream(token);
 
-                FullVertex vertex = { -1, -1, -1 };
+                Vertex vertex;
 
                 // v/t/n
                 if (tokenStream >> vIndex >> delimiter >> tIndex >> delimiter >> nIndex)
                 {
                     --vIndex; --nIndex; --tIndex;
-                    vertex = { vIndex, nIndex, tIndex };
+                    vertex.pos = vertices[vIndex];
+                    vertex.normals = vertices[nIndex];
+                    vertex.textureCoords = textures[tIndex];
                     goto addFullVertex;
                 }
                 tokenStream.clear();
@@ -74,7 +67,8 @@ void Model::ParseObj(const std::filesystem::path& path)
                 if (tokenStream >> vIndex >> delimiter >> tIndex)
                 {
                     --vIndex; --tIndex;
-                    vertex = { vIndex, -1, tIndex };
+                    vertex.pos = vertices[vIndex];
+                    vertex.textureCoords = vertices[tIndex];
                     goto addFullVertex;
                 }
                 tokenStream.clear();
@@ -83,7 +77,8 @@ void Model::ParseObj(const std::filesystem::path& path)
                 if (tokenStream >> vIndex >> delimiter >> delimiter >> nIndex)
                 {
                     --vIndex; --nIndex;
-                    vertex = { vIndex, nIndex, -1 };
+                    vertex.pos = vertices[vIndex];
+                    vertex.normals = vertices[nIndex];
                     goto addFullVertex;
                 }
                 tokenStream.clear();
@@ -92,20 +87,12 @@ void Model::ParseObj(const std::filesystem::path& path)
                 if (tokenStream >> vIndex)
                 {
                     --vIndex;
-                    vertex = { vIndex, -1, -1 };
+                    vertex.pos = vertices[vIndex];
                     goto addFullVertex;
                 }
                 addFullVertex:
-                auto elem = fullVertices.find(vertex);
-                if (elem == fullVertices.end()) {
-                    fullVertices[vertex] = fullVertexIndex;
-                    face.v[i++] = fullVertexIndex++;
-                }
-                else {
-                    face.v[i++] = elem->second;
-                }
+                verticesProcessed.push_back(vertex);
             }
-            facesToProcess.push_back(face);
         } else if (prefix == "s") {
             // Ignore smooth group
         } else if (prefix == "mtllib") {
@@ -120,28 +107,5 @@ void Model::ParseObj(const std::filesystem::path& path)
             throw RuntimeException("Unsupported prefix: {0}", prefix);
         }
     }
-
-    // Assembling the vertices
-    VertexArray verticesProcessed(fullVertices.size());
-    for (const auto & vertex : fullVertices)
-    {
-        auto vIndex = vertex.first.v[0];
-        auto nIndex = vertex.first.v[1];
-        auto tIndex = vertex.first.v[2];
-        if (vIndex >= vertices.size())
-            throw RuntimeException("Invalid vertex index");
-        if (nIndex != -1 && nIndex >= normals.size())
-            throw RuntimeException("Invalid normal index");
-        if (tIndex != -1 && tIndex >= textures.size())
-            throw RuntimeException("Invalid texture coord index");
-        verticesProcessed[vertex.second] = {
-            vertices[vIndex],
-            nIndex != -1 ? normals[nIndex] : glm::vec3(0.0f),
-            tIndex != -1 ? textures[tIndex] : glm::vec3(0.0f)
-        };
-    }
     SetVertices(verticesProcessed);
-
-    // Assembling the faces
-    SetIndices(facesToProcess);
 }

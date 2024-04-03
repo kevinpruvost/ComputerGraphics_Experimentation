@@ -2,10 +2,10 @@ config_name: GLFWWindow
 version: 0.1a
 window_settings:
     name: GLFWWindow
-    width: 1280
-    height: 720
+    width: 1920
+    height: 1080
     resizable: true
-    fullscreen: false
+    fullscreen: true
     vsync: true
     focused: true
     refreshRate: 60

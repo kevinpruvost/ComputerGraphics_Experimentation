@@ -50,3 +50,9 @@ void Model::AddMaterial(Material* material)
 {
     _materials.push_back(std::shared_ptr<Material>(material));
 }
+
+void Model::SetDrawMode(DrawMode drawMode)
+{
+    _SetDrawMode(drawMode);
+    _drawMode = drawMode;
+}

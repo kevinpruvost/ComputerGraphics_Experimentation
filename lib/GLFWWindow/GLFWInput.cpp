@@ -4,16 +4,27 @@ InputSystem::Key GLFWWindow::__TranslateKey(int key)
 {
     switch (key)
     {
-    case GLFW_KEY_0: return InputSystem::Key::Numpad0;
-    case GLFW_KEY_1: return InputSystem::Key::Numpad1;
-    case GLFW_KEY_2: return InputSystem::Key::Numpad2;
-    case GLFW_KEY_3: return InputSystem::Key::Numpad3;
-    case GLFW_KEY_4: return InputSystem::Key::Numpad4;
-    case GLFW_KEY_5: return InputSystem::Key::Numpad5;
-    case GLFW_KEY_6: return InputSystem::Key::Numpad6;
-    case GLFW_KEY_7: return InputSystem::Key::Numpad7;
-    case GLFW_KEY_8: return InputSystem::Key::Numpad8;
-    case GLFW_KEY_9: return InputSystem::Key::Numpad9;
+    case GLFW_KEY_0: return InputSystem::Key::Num0;
+    case GLFW_KEY_1: return InputSystem::Key::Num1;
+    case GLFW_KEY_2: return InputSystem::Key::Num2;
+    case GLFW_KEY_3: return InputSystem::Key::Num3;
+    case GLFW_KEY_4: return InputSystem::Key::Num4;
+    case GLFW_KEY_5: return InputSystem::Key::Num5;
+    case GLFW_KEY_6: return InputSystem::Key::Num6;
+    case GLFW_KEY_7: return InputSystem::Key::Num7;
+    case GLFW_KEY_8: return InputSystem::Key::Num8;
+    case GLFW_KEY_9: return InputSystem::Key::Num9;
+
+    case GLFW_KEY_KP_0: return InputSystem::Key::Numpad0;
+    case GLFW_KEY_KP_1: return InputSystem::Key::Numpad1;
+    case GLFW_KEY_KP_2: return InputSystem::Key::Numpad2;
+    case GLFW_KEY_KP_3: return InputSystem::Key::Numpad3;
+    case GLFW_KEY_KP_4: return InputSystem::Key::Numpad4;
+    case GLFW_KEY_KP_5: return InputSystem::Key::Numpad5;
+    case GLFW_KEY_KP_6: return InputSystem::Key::Numpad6;
+    case GLFW_KEY_KP_7: return InputSystem::Key::Numpad7;
+    case GLFW_KEY_KP_8: return InputSystem::Key::Numpad8;
+    case GLFW_KEY_KP_9: return InputSystem::Key::Numpad9;
 
     case GLFW_KEY_F1: return InputSystem::Key::F1;
     case GLFW_KEY_F2: return InputSystem::Key::F2;

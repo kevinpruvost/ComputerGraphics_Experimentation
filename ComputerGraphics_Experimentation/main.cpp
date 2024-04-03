@@ -15,6 +15,8 @@
 class Scene
 {
 public:
+	int displayMode = 1;
+
 	Scene(Window * window)
 		: w{ window }
 		, camera{ window->GetWindowWidth(), window->GetWindowHeight() }
@@ -32,6 +34,21 @@ public:
 			vertex.normals = glm::vec3(1.0f, 0.0f, 0.0f);
 		}
 		m_model->SetVertices(vertices);
+
+		w->SetOnKeyDownCallback([&](InputSystem::Key key, InputSystem::KeyModifier key_mod) {
+			switch (key)
+			{
+			case InputSystem::Key::Numpad1:
+				displayMode ^= 0b1;
+				break;
+			case InputSystem::Key::Numpad2:
+				displayMode ^= 0b10;
+				break;
+			case InputSystem::Key::Numpad3:
+				displayMode ^= 0b100;
+				break;
+			}
+		});
 
 		w->SetWhileKeyDownCallback([&](InputSystem::Key key, InputSystem::KeyModifier key_mod) {
 			float speed = 0.01f;
@@ -102,9 +119,23 @@ public:
 
 		m_shader->Use();
 		m_shader->SetUniformMatrix4("model", model);
-		m_shader->SetUniformMatrix4("view", view);
+		m_shader->SetUniformMatrix4("view", view); 
 		m_shader->SetUniformMatrix4("projection", projection);
-		m_model->Draw();
+		if (displayMode & 0b1)
+		{
+			m_model->SetDrawMode(Model::DrawMode::TRIANGLES);
+			m_model->Draw();
+		}
+		if (displayMode & 0b10)
+		{
+			m_model->SetDrawMode(Model::DrawMode::LINES);
+			m_model->Draw();
+		}
+        if (displayMode & 0b100)
+		{
+			m_model->SetDrawMode(Model::DrawMode::POINTS);
+			m_model->Draw();
+		}
 	}
 
 	~Scene()

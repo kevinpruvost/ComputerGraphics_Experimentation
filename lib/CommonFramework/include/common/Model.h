@@ -5,12 +5,12 @@
 #include <common/Material.h>
 #include <common/Face.h>
 
-class Model : public Drawable3D
+class COMMONFRAMEWORK_API Model : public Drawable3D
 {
 public:
     virtual ~Model() = default;
 
-    COMMONFRAMEWORK_API static Model * CreateModel();
+    static Model * CreateModel();
     static inline Model* CreateModel(const std::filesystem::path& path)
     {
         Model * mesh = CreateModel();
@@ -18,14 +18,28 @@ public:
         return mesh;
     }
 
-    COMMONFRAMEWORK_API void CreateFromFile(const std::filesystem::path & path);
+    void CreateFromFile(const std::filesystem::path & path);
 
     virtual void SetVertices(const VertexArray& vertices) = 0;
-    COMMONFRAMEWORK_API VertexArray GetVertices() const;
+    VertexArray GetVertices() const;
     virtual void SetIndices(const TriangleArray& indices) = 0;
 
-    COMMONFRAMEWORK_API void AddMesh(Mesh * mesh);
-    COMMONFRAMEWORK_API void AddMaterial(Material * material);
+    void AddMesh(Mesh * mesh);
+    void AddMaterial(Material * material);
+
+    enum class DrawMode
+    {
+        POINTS,
+        LINES,
+        TRIANGLES,
+        QUADS,
+        POLYGON
+    };
+    void SetDrawMode(DrawMode drawMode);
+    virtual void _SetDrawMode(DrawMode drawMode) = 0;
+
+protected:
+    DrawMode _drawMode;
 
 protected:
     Model() = default;
