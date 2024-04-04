@@ -39,6 +39,8 @@ static std::unordered_set<InputSystem::MouseButton> buttonsWhileDown;
 
 GLFWWindow::GLFWWindow()
     : Window(WindowAPI::GLFW)
+    , __mainW{ nullptr }
+    , __mainMode{ nullptr }
 {
 }
 
@@ -264,10 +266,6 @@ ErrorCode GLFWWindow::Loop()
         // Processing input
         if (!ProcessInput()) break;
 
-        // Display
-        glClearColor(0.2f, 0.3f, 0.3f, 1.0f);
-        glClear(GL_COLOR_BUFFER_BIT);
-
         _appLoopCallback();
         _sceneLoopCallback();
 
@@ -402,4 +400,9 @@ std::array<int, 2> GLFWWindow::GetWindowSize() const
     std::array<int, 2> size;
     glfwGetWindowSize(__mainW, &size[0], &size[1]);
     return size;
+}
+
+GLFWwindow* GLFWWindow::GetWindow()
+{
+    return __mainW;
 }

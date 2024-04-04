@@ -1,8 +1,9 @@
 #pragma once
 
 #include <common/Window.h>
+#include <common/DLL.h>
 
-class WinNativeWindow : public Window
+class CONTEXT_API WinNativeWindow : public Window
 {
 public:
     WinNativeWindow();
@@ -15,3 +16,7 @@ protected:
     virtual ErrorCode Destroy();
 };
 
+extern "C"
+{
+    CONTEXT_API Window* createWindowInstance();
+}

@@ -42,7 +42,7 @@ void DLL::loadDLL(const std::filesystem::path& filePath) {
 #ifdef _WIN32
     __dllHandle = LoadLibraryA(filePath.string().c_str());
     if (!__dllHandle) {
-        throw RuntimeException("Failed to load DLL: {}", filePath.string().c_str());
+        throw RuntimeException("Failed to load DLL: {}: Error code: {}", filePath.string().c_str(), (int)GetLastError());
     }
 #else
     dllHandle = dlopen(filePath.string().c_str(), RTLD_LAZY);

@@ -19,3 +19,8 @@ ErrorCode WinNativeWindow::Destroy()
 {
     return ErrorCode::Success;
 }
+
+// Export the factory function to create an instance of the class
+EXPORT Window* createWindowInstance() {
+    return new WinNativeWindow();
+}

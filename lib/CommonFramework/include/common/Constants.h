@@ -21,4 +21,9 @@ namespace Constants
         constexpr const wchar_t* vulkan_graphics = L"Vulkan_DLL.dll";
         constexpr const wchar_t* dx11_graphics   = L"DX11_DLL.dll";
     }
+
+    namespace OpenGL
+    {
+        constexpr const char * glsl_version = "#version 330";
+    }
 }

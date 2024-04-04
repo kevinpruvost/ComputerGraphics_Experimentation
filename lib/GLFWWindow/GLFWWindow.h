@@ -4,36 +4,38 @@
 #include <common/Window.h>
 #include <GLFW/glfw3.h>
 
-class GLFWWindow : public Window
+class CONTEXT_API GLFWWindow : public Window
 {
 public:
     GLFWWindow();
     ~GLFWWindow();
 
-    virtual ErrorCode Loop() override;
+    ErrorCode Loop() override;
 
     ErrorCode Destroy();
 
-    virtual ErrorCode CloseWindow() override;
-    virtual ErrorCode MinimizeWindow() override;
+    ErrorCode CloseWindow() override;
+    ErrorCode MinimizeWindow() override;
 
-    virtual ErrorCode SetWindowSize(int width, int height) override;
-    virtual ErrorCode SetWindowPosition(int x, int y) override;
-    virtual ErrorCode SetWindowTitle(const char* title) override;
-    virtual ErrorCode SetWindowIcon(const std::filesystem::path & iconPath) override;
-    virtual ErrorCode SetWindowVSync(VSyncModes mode) override;
-    virtual ErrorCode SetWindowFullscreen(bool enabled, int monitorIndex) override;
-    virtual ErrorCode SetWindowBorderless(bool enabled) override;
-    virtual ErrorCode SetWindowVideoMode(const VideoMode& videoMode, int monitorIndex = 0) override;
-    virtual ErrorCode SetWindowResizable(bool enabled) override;
-    virtual ErrorCode SetWindowFocused(bool focused) override;
+    ErrorCode SetWindowSize(int width, int height) override;
+    ErrorCode SetWindowPosition(int x, int y) override;
+    ErrorCode SetWindowTitle(const char* title) override;
+    ErrorCode SetWindowIcon(const std::filesystem::path & iconPath) override;
+    ErrorCode SetWindowVSync(VSyncModes mode) override;
+    ErrorCode SetWindowFullscreen(bool enabled, int monitorIndex) override;
+    ErrorCode SetWindowBorderless(bool enabled) override;
+    ErrorCode SetWindowVideoMode(const VideoMode& videoMode, int monitorIndex = 0) override;
+    ErrorCode SetWindowResizable(bool enabled) override;
+    ErrorCode SetWindowFocused(bool focused) override;
 
     int GetWindowWidth() const override;
     int GetWindowHeight() const override;
     std::array<int, 2> GetWindowSize() const override;
 
+    GLFWwindow* GetWindow();
+
 protected:
-    virtual ErrorCode _Init() override;
+    ErrorCode _Init() override;
 
 private:
     InputSystem::Key __TranslateKey(int key);
@@ -51,5 +53,5 @@ private:
 
 extern "C"
 {
-    EXPORT Window* createWindowInstance();
+    CONTEXT_API Window* createWindowInstance();
 }

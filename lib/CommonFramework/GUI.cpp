@@ -48,3 +48,31 @@ GUI* GUI::CreateGUIFromAPI(const WindowAPI windowApi, const EngineAPI frameworkA
     }
     return gui;
 }
+
+GUI::GUI()
+    : _window{ nullptr }
+    , _engine{ nullptr }
+{
+}
+
+void GUI::Init()
+{
+    // Setup Dear ImGui context
+    IMGUI_CHECKVERSION();
+    ImGui::CreateContext();
+    ImGuiIO& io = ImGui::GetIO(); (void)io;
+    io.ConfigFlags |= ImGuiConfigFlags_NavEnableKeyboard;     // Enable Keyboard Controls
+    io.ConfigFlags |= ImGuiConfigFlags_NavEnableGamepad;      // Enable Gamepad Controls
+
+    // Setup Dear ImGui style
+    ImGui::StyleColorsDark();
+    //ImGui::StyleColorsLight();
+
+    _Init();
+}
+
+void GUI::SetEngineAndWindowForInit(Window* window, BaseFramework* engine)
+{
+    _window = window;
+    _engine = engine;
+}

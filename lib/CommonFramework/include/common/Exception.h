@@ -11,7 +11,7 @@ class Exception : public std::exception
 public:
     template <typename... Args>
     Exception(const fmt::format_string<Args...> str, Args&& ... args)
-        : std::exception(Common::format(str, std::forward<Args...>(args...)).c_str())
+        : std::exception(fmt::vformat(str, fmt::make_format_args(args...)).c_str())
     {
 
     }

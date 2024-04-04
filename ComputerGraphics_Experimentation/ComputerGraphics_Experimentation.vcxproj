@@ -157,6 +157,9 @@ copy $(ProjectDir)Config.yaml $(TargetDir)Config.yaml</Command>
     <ProjectReference Include="..\lib\CommonFramework\CommonFramework.vcxproj">
       <Project>{fbd29d65-c553-4e00-b234-48eec3a495f3}</Project>
     </ProjectReference>
+    <ProjectReference Include="..\lib\imgui\imgui.vcxproj">
+      <Project>{38045129-b71d-40ed-b787-402d6dd5848a}</Project>
+    </ProjectReference>
   </ItemGroup>
   <ItemGroup>
     <None Include="Config.yaml" />

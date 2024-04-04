@@ -10,12 +10,13 @@
   </PropertyGroup>
   <ItemDefinitionGroup>
     <ClCompile>
-      <AdditionalIncludeDirectories>$(SolutionDir)lib\SPIRV-Cross\;$(SolutionDir)lib\SPIRV-Cross\include;$(SolutionDir)lib\fmt\include;$(SolutionDir)lib\stb\include;$(SolutionDir)\lib\glad\include;$(SolutionDir)\lib\Yaml-Cpp\include;$(SolutionDir)\lib\CommonFramework\include;$(ProjectCommonDir);$(LibFolderLocation)/glm;$(LibFolderLocation)/glfw-WIN64/include</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(SolutionDir)lib\imgui\backends;$(SolutionDir)lib\imgui;$(SolutionDir)lib\SPIRV-Cross\;$(SolutionDir)lib\SPIRV-Cross\include;$(SolutionDir)lib\fmt\include;$(SolutionDir)lib\stb\include;$(SolutionDir)\lib\glad\include;$(SolutionDir)\lib\Yaml-Cpp\include;$(SolutionDir)\lib\CommonFramework\include;$(ProjectCommonDir);$(LibFolderLocation)/glm;$(LibFolderLocation)/glfw-WIN64/include</AdditionalIncludeDirectories>
       <PreprocessorDefinitions>%(PreprocessorDefinitions)</PreprocessorDefinitions>
     </ClCompile>
     <Link>
-      <AdditionalDependencies>glfw3.lib;%(AdditionalDependencies)</AdditionalDependencies>
-      <AdditionalLibraryDirectories>$(LibFolderLocation)/glfw-WIN64\lib-vc2022;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalDependencies>%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalLibraryDirectories>%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <DelayLoadDLLs>%(DelayLoadDLLs)</DelayLoadDLLs>
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>

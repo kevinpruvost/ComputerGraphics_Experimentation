@@ -2,8 +2,12 @@
 <Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup>
     <ClInclude Include="GUI.h" />
+    <ClInclude Include="..\..\imgui\backends\imgui_impl_glfw.h" />
+    <ClInclude Include="..\..\imgui\backends\imgui_impl_opengl3.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="GUI.cpp" />
+    <ClCompile Include="..\..\imgui\backends\imgui_impl_glfw.cpp" />
+    <ClCompile Include="..\..\imgui\backends\imgui_impl_opengl3.cpp" />
   </ItemGroup>
 </Project>

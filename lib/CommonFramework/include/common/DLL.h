@@ -7,16 +7,23 @@
 #include <common/Memory.h>
 
 #ifdef _WIN32
-#ifdef COMMONFRAMEWORK_EXPORTS
-#define COMMONFRAMEWORK_API __declspec(dllexport)
+#define EXPORT __declspec(dllexport)
+#define IMPORT __declspec(dllimport)
 #else
-#define COMMONFRAMEWORK_API __declspec(dllimport)
+#define EXPORT __attribute__((visibility("default")))
+#define IMPORT
 #endif
-    #define EXPORT __declspec(dllexport)
-    #define IMPORT __declspec(dllimport)
+
+#ifdef COMMONFRAMEWORK_EXPORTS
+#define COMMONFRAMEWORK_API EXPORT
 #else
-    #define EXPORT __attribute__((visibility("default")))
-    #define IMPORT
+#define COMMONFRAMEWORK_API IMPORT
+#endif
+
+#ifdef CONTEXT_EXPORTS
+#define CONTEXT_API EXPORT
+#else
+#define CONTEXT_API IMPORT
 #endif
 
 class COMMONFRAMEWORK_API DLL
