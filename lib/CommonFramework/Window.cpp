@@ -3,7 +3,7 @@
 //#include "GLFWWindow.h"
 //#include "WinNativeWindow.h"
 
-DLL* Window::__dll = nullptr;
+UPtr<DLL> Window::__dll(nullptr);
 
 Window::~Window()
 {
@@ -25,8 +25,7 @@ Window* Window::CreateWindowFromAPI(const WindowAPI& api)
             throw NotImplementedException("Unknown window API");
     }
 
-    if (__dll) { delete __dll; }
-    __dll = new DLL(dllName);
+    __dll.reset(new DLL(dllName));
 
     typedef Window* (*CreateWindowFn)();
 

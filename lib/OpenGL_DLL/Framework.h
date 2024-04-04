@@ -1,5 +1,6 @@
 #pragma once
 #include <common/BaseFramework.h>
+#include <common/Memory.h>
 
 class Framework : public BaseFramework
 {
@@ -10,6 +11,7 @@ public:
     int Launch() override;
     Logger* GetLogger() override;
     Config* GetConfig() override;
+private:
 };
 
 extern "C"

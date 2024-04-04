@@ -11,14 +11,23 @@
 #include <common/Memory.h>
 #include <common/Math_Base.h>
 #include <common/Camera.h>
+#include <common/GUI.h>
 
 class Scene
 {
 public:
 	int displayMode = 1;
+	UPtr<ShaderPipeline> m_shader;
+	UPtr<Model> m_model;
+	Camera camera;
+	Window* w;
+	BaseFramework* fw;
 
-	Scene(Window * window)
+public:
+
+	Scene(Window * window, BaseFramework * framework)
 		: w{ window }
+		, fw{ framework }
 		, camera{ window->GetWindowWidth(), window->GetWindowHeight() }
 	{
 		auto shaderFrag = Shader::CreateShader("resources/shader_test.frag", Shader::ShaderType::Fragment);
@@ -53,13 +62,16 @@ public:
 		w->SetWhileKeyDownCallback([&](InputSystem::Key key, InputSystem::KeyModifier key_mod) {
 			float speed = 0.01f;
 			float movementSpeed = 0.001f;
+
 			Logger::DebugPrint("Yaw: %f", camera.GetYaw());
 			Logger::DebugPrint("Position: %f %f %f", camera.GetPosition().x, camera.GetPosition().y, camera.GetPosition().z);
+
 			if (key_mod == InputSystem::KeyModifier::Shift)
 			{
 				movementSpeed *= 10.0f;
 				speed *= 10.0f;
 			}
+
 			switch (key)
 			{
 			case InputSystem::Key::Left:
@@ -141,12 +153,6 @@ public:
 	~Scene()
 	{
 	}
-
-public:
-	UPtr<ShaderPipeline> m_shader;
-	UPtr<Model> m_model;
-	Camera camera;
-	Window* w;
 };
 
 UPtr<Scene> s;
@@ -162,24 +168,29 @@ int main()
 	{
 		Logger::Initialize("test.txt");
 
-		UPtr<Window> w = Window::CreateWindowFromAPI(Window::WindowAPI::GLFW);
-		Config & windowConfig = *Config::Load("Config_GLFWWindow.yaml");
-		w->Init(windowConfig);
+		Config& config = *Config::Load("Config.yaml");
+		WindowAPI windowApi = config.WindowSettings().api;
+		EngineAPI engineApi = config.EngineSettings().api;
+
+		UPtr<Window> w = Window::CreateWindowFromAPI(windowApi);
+		w->Init(config);
 		w->SetSceneLoopCallback(scene);
 
-		FrameworkLoader::FrameworkType engineType = FrameworkLoader::FrameworkType::OpenGL;
-		FrameworkLoader loader(engineType);
+		FrameworkLoader loader(engineApi);
 		UPtr<BaseFramework> fw = loader.GetFramework();
 		fw->Init();
 		fw->SetWindow(w.get());
 
-		s = new Scene(w.get());
+		//UPtr<GUI> gui = GUI::CreateGUIFromAPI(windowApi, engineApi);
+
+		s = new Scene(w.get(), fw.get());
 
 		fw->Launch();
-		fw->GetLogger()->Log("Framework launched with %d\n", engineType);
+		fw->GetLogger()->Log("Framework launched with %d\n", engineApi);
 
 		// Order of destruction has to be this way because of dependence
 		s.reset();
+		//gui.reset();
 		fw.reset();
 		w.reset();
 	}

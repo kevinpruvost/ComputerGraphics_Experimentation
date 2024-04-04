@@ -1,5 +1,7 @@
 # Computer Graphics Experimentation
 
+All of the code that is present here has been entirely written and implemented by myself alone.
+
 This repository is dedicated to the coursework for "Fundamentals of Computer Graphics" at Tsinghua University during the Spring semester of 2024.
 
 The projects undertaken in this course will cover various subjects, including:
@@ -35,3 +37,7 @@ The following external libraries have been brought into the project:
 - **[glm](https://github.com/g-truc/glm):** A header-only C++ mathematics library for graphics software based on the OpenGL Shading Language (GLSL) specifications.
 
 Feel free to explore these repositories for more information on each library.
+
+## Useful Links
+
+- **[Interactive ImGUI Online Manual](https://pthom.github.io/imgui_manual_online/manual/imgui_manual.html)**

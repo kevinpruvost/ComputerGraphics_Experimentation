@@ -1,25 +1,20 @@
 #pragma once
 
+#include <common/WindowSettings.h>
 #include <common/InputSystem.h>
 #include <array>
 
 /// <summary>
 /// Window class common to all 3 APIs, managed with GLFW for now
 /// </summary>
-class Window : public InputSystem
+class COMMONFRAMEWORK_API Window : public InputSystem
 {
 public:
-	enum class WindowAPI : int
-	{
-		GLFW = 0,
-		WindowsNative = 1
-	};
+	~Window();
 
-	COMMONFRAMEWORK_API ~Window();
-
-    COMMONFRAMEWORK_API static Window * CreateWindowFromAPI(const WindowAPI & api);
+    static Window * CreateWindowFromAPI(const WindowAPI & api);
 	
-	COMMONFRAMEWORK_API ErrorCode Init(const Config & config);
+	ErrorCode Init(const Config & config);
 	virtual ErrorCode _Init() = 0;
 
 	virtual ErrorCode Loop() = 0;
@@ -49,18 +44,18 @@ public:
 	virtual ErrorCode SetWindowResizable(bool enabled) = 0;
 	virtual ErrorCode SetWindowFocused(bool focused) = 0;
 
-	COMMONFRAMEWORK_API void SetSceneLoopCallback(CallbackContainer<void> callback);
-	COMMONFRAMEWORK_API void SetSceneLoopCallback(Callback<void> callback);
+	void SetSceneLoopCallback(CallbackContainer<void> callback);
+	void SetSceneLoopCallback(Callback<void> callback);
 
-	COMMONFRAMEWORK_API void SetApplicationLoopCallback(CallbackContainer<void> callback);
-	COMMONFRAMEWORK_API void SetApplicationLoopCallback(Callback<void> callback);
+	void SetApplicationLoopCallback(CallbackContainer<void> callback);
+	void SetApplicationLoopCallback(Callback<void> callback);
 
 	virtual int GetWindowWidth() const = 0;
 	virtual int GetWindowHeight() const = 0;
 	virtual std::array<int, 2> GetWindowSize() const = 0;
 
 protected:
-	COMMONFRAMEWORK_API Window(const WindowAPI & api);
+	Window(const WindowAPI & api);
 
 protected:
 	WindowSettings _settings;
@@ -69,6 +64,6 @@ protected:
 
 private:
 	const WindowAPI __api;
-	static DLL * __dll;
+	static UPtr<DLL> __dll;
 };
 

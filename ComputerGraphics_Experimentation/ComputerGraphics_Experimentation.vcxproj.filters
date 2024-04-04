@@ -19,6 +19,7 @@
     <None Include="resources\Shrek\Shrek.mtl">
       <Filter>Resource Files</Filter>
     </None>
+    <None Include="Config.yaml" />
   </ItemGroup>
   <ItemGroup>
     <Object Include="resources\Assignment1\eight.uniform.obj">

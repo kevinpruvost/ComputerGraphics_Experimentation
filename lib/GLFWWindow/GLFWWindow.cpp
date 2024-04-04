@@ -38,7 +38,7 @@ static std::stack<std::array<int, 3>> mouseButtonEvents;
 static std::unordered_set<InputSystem::MouseButton> buttonsWhileDown;
 
 GLFWWindow::GLFWWindow()
-    : Window(Window::WindowAPI::GLFW)
+    : Window(WindowAPI::GLFW)
 {
 }
 

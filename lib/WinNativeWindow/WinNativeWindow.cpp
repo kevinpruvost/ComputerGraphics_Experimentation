@@ -1,7 +1,7 @@
 #include "WinNativeWindow.h"
 
 WinNativeWindow::WinNativeWindow()
-    : Window(Window::WindowAPI::WindowsNative)
+    : Window(WindowAPI::WindowsNative)
 {
 }
 

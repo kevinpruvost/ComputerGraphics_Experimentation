@@ -3,6 +3,8 @@
 #include <iostream>
 #include <string>
 #include <filesystem>
+#include <common/Constants.h>
+#include <common/Memory.h>
 
 #ifdef _WIN32
 #ifdef COMMONFRAMEWORK_EXPORTS

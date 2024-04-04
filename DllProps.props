@@ -9,9 +9,7 @@
   <ItemDefinitionGroup>
     <ClCompile>
     </ClCompile>
-    <PostBuildEvent>
-      <Command>copy "$(ProjectDir)Config_$(ProjectName).yaml" "$(TargetDir)"</Command>
-    </PostBuildEvent>
+    <PostBuildEvent />
     <ClCompile>
       <PreprocessorDefinitions>CONFIG_FILE_NAME="Config_$(ProjectName).yaml";DEFAULT_LOG_FILE_NAME="Log_$(ProjectName).txt";%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <AdditionalIncludeDirectories>%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>

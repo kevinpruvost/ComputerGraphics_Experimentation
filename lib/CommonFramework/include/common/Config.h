@@ -6,17 +6,17 @@
 #include <common/EngineSettings.h>
 #include <common/DLL.h>
 
-class Config
+class COMMONFRAMEWORK_API Config
 {
 public:
-    COMMONFRAMEWORK_API static Config * Load(const std::filesystem::path& path);
-    COMMONFRAMEWORK_API static void Reset(const std::filesystem::path& path);
-    COMMONFRAMEWORK_API static void Destroy();
-    COMMONFRAMEWORK_API static Config* Get(const std::filesystem::path & path);
-    COMMONFRAMEWORK_API WindowSettings WindowSettings() const;
-    COMMONFRAMEWORK_API EngineSettings EngineSettings() const;
+    static Config * Load(const std::filesystem::path& path);
+    static void Reset(const std::filesystem::path& path);
+    static void Destroy();
+    static Config* Get(const std::filesystem::path & path);
+    WindowSettings WindowSettings() const;
+    EngineSettings EngineSettings() const;
 
-    COMMONFRAMEWORK_API ~Config();
+    ~Config();
 private:
     Config(const std::string& filename);
     void * m_node = nullptr;

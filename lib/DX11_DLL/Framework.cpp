@@ -11,7 +11,6 @@ Framework::~Framework()
 
 bool Framework::Init()
 {
-    Config::Load(CONFIG_FILE_NAME);
     Logger::Initialize(DEFAULT_LOG_FILE_NAME);
     return true;
 }

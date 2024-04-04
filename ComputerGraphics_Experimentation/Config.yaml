@@ -1,0 +1,15 @@
+config_name: DefaultConfig
+version: 0.1a
+window_settings:
+    api: GLFW # GLFW or WIN32
+    name: Homework1
+    width: 1920
+    height: 1080
+    resizable: true
+    fullscreen: true
+    vsync: true
+    focused: true
+    refreshRate: 60
+engine_settings:
+    api: OpenGL # OpenGL or Vulkan or DirectX11
+    name: OpenGLEngine

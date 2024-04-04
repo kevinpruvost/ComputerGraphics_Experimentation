@@ -3,9 +3,9 @@
 #include <iostream>
 #include <cstdlib>
 
-DLL* FrameworkLoader::EngineDll = nullptr;
+UPtr<DLL> FrameworkLoader::EngineDll(nullptr);
 
-FrameworkLoader::FrameworkLoader(const FrameworkType type)
+FrameworkLoader::FrameworkLoader(const EngineAPI type)
     : __framework(nullptr)
 {
     LoadFramework(type);
@@ -13,38 +13,33 @@ FrameworkLoader::FrameworkLoader(const FrameworkType type)
 
 FrameworkLoader::~FrameworkLoader()
 {
-    if (EngineDll) {
-        delete EngineDll;
-    }
 }
 
 typedef BaseFramework* (*CreateBaseFrameworkFn)();
 
-void FrameworkLoader::LoadFramework(const FrameworkType type)
+void FrameworkLoader::LoadFramework(const EngineAPI type)
 {
     const wchar_t * dllName = nullptr;
 
     if (EngineDll) {
-        delete EngineDll;
         __framework = nullptr;
-        EngineDll = nullptr;
     }
 
     switch (type)
     {
-    case FrameworkType::OpenGL:
+    case EngineAPI::OpenGL:
         dllName = L"OpenGL_DLL.dll";
         break;
-    case FrameworkType::DirectX11:
+    case EngineAPI::DirectX11:
         dllName = L"DX11_DLL.dll";
         break;
-    case FrameworkType::Vulkan:
+    case EngineAPI::Vulkan:
         dllName = L"Vulkan_DLL.dll";
         break;
     }
 
     // Load the DLL
-    EngineDll = new DLL(dllName);
+    EngineDll.reset(new DLL(dllName));
     CreateBaseFrameworkFn createFramework = EngineDll->getFunction<CreateBaseFrameworkFn>("createFrameworkInstance");
     if (createFramework != nullptr) {
         // Call function to create object

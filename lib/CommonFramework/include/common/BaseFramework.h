@@ -4,7 +4,6 @@
 #include <common/Config.h>
 #include <common/Exception.h>
 #include <common/ApplicationCommonBase.h>
-#include <common/DLL.h>
 
 class COMMONFRAMEWORK_API BaseFramework {
 public:

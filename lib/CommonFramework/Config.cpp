@@ -1,4 +1,5 @@
 #include <common/Config.h>
+#include <common/Error.h>
 #include <yaml-cpp/yaml.h>
 
 std::unordered_map<std::string, std::unique_ptr<Config>> Config::m_instances;
@@ -49,6 +50,13 @@ WindowSettings Config::WindowSettings() const
 {
     struct WindowSettings settings;
     auto windowNode = node_ptr(m_node)["window_settings"];
+    auto api = windowNode["api"].as<std::string>();
+    if (api == "GLFW")
+        settings.api = WindowAPI::GLFW;
+    else if (api == "WIN32")
+        settings.api = WindowAPI::WindowsNative;
+    else
+        throw NotImplementedException("Window API mentioned in YAML config file not recognized. (has to be GLFW/WIN32)");
     settings.name = windowNode["name"].as<std::string>();
     settings.width = windowNode["width"].as<int>();
     settings.height = windowNode["height"].as<int>();
@@ -64,6 +72,15 @@ EngineSettings Config::EngineSettings() const
 {
     struct EngineSettings settings;
     auto engineNode = node_ptr(m_node)["engine_settings"];
+    auto api = engineNode["api"].as<std::string>();
+    if (api == "OpenGL")
+        settings.api = EngineAPI::OpenGL;
+    else if (api == "Vulkan")
+        settings.api = EngineAPI::Vulkan;
+    else if (api == "DirectX11")
+        settings.api = EngineAPI::DirectX11;
+    else
+        throw NotImplementedException("Engine API mentioned in YAML config file not recognized. (has to be OpenGL/Vulkan/DirectX11)");
     settings.name = engineNode["name"].as<std::string>();
     return settings;
 }
