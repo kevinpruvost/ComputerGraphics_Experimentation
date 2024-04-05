@@ -36,6 +36,10 @@ The following external libraries have been brought into the project:
 
 - **[glm](https://github.com/g-truc/glm):** A header-only C++ mathematics library for graphics software based on the OpenGL Shading Language (GLSL) specifications.
 
+- **[SPIRV-Cross](https://github.com/KhronosGroup/SPIRV-Cross):** A tool to convert SPIR-V into other forms like GLSL, HLSL, and MSL.
+
+- **[Dear ImGui](https://github.com/ocornut/imgui):** A bloat-free graphical user interface library for C++ with minimal dependencies.
+
 Feel free to explore these repositories for more information on each library.
 
 ## Useful Links
