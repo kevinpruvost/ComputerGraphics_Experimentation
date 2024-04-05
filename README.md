@@ -10,7 +10,7 @@ The projects undertaken in this course will cover various subjects, including:
 - Ray Tracing
 - Human Skin Rendering
 
-These projects will be implemented using OpenGL, Vulkan, and DirectX11 at minimum, with the possibility of incorporating DirectX12 if time permits.
+These projects will be implemented using OpenGL, Vulkan, and DirectX12.
 
 ## Project Structure
 
@@ -18,7 +18,7 @@ The project is currently a work in progress (WIP) and is organized as follows:
 
 - **Context API DLLs:** This project compiles Dynamic Link Libraries (DLLs) related to context APIs, such as GLFW or Win32 native Windows API.
 
-- **Graphics API DLLs:** DLLs related to graphics APIs, including OpenGL, Vulkan, DirectX11, and potentially other APIs in the future.
+- **Graphics API DLLs:** DLLs related to graphics APIs, including OpenGL, Vulkan, DirectX12, and potentially other APIs in the future.
 
 - **GUI API DLLs:** This section contains the DLLs related to graphical user interface (GUI) APIs. These libraries facilitate the creation and management of graphical user interfaces within the application. Especially useful as ImGUI implementation differs considering the Context and Graphics API used.
 
@@ -54,8 +54,12 @@ Feel free to explore these repositories for more information on each library.
 
 - **[John Carmack notes](https://cppdepend.com/blog/john-carmack-cpp-programming-legend/)**
 
+- **[Google C++ Code Style](https://google.github.io/styleguide/cppguide.html#Exceptions)**
+
 ## Notes on Good Practices
 
-- Avoid `throw` and `exception`, they put too much overhead as they are managed by external instances and might actually be unsafe in contrary to managing errors with `return` codes.
+- Avoid `throw` and `exception`, they put too much overhead as they are managed by external instances and might actually be unsafe in contrary to managing errors with `return` codes. Other detail is that if the project is used for other codebases that are exception-free, then it will not be compatible.
 
 - Avoid templated code as it might be recompiled for nothing, thus taking size on `dll` and `exe` files but also making each DLL has its own version of the function (and different function adresses), might be very problematic.
+
+- Will avoid DirectX11 as it is seriously starting to get deprecated (Xbox doesn't accept DirectX11 anymore and Nvidia is in love with DirectX12, even over Vulkan).
