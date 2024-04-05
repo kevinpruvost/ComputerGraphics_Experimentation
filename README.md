@@ -16,9 +16,15 @@ These projects will be implemented using OpenGL, Vulkan, and DirectX11 at minimu
 
 The project is currently a work in progress (WIP) and is organized as follows:
 
-- **DLLs Related to Context APIs:** This project compiles DLLs related to context APIs, such as GLFW or Win32 native Windows API.
+- **Context API DLLs:** This project compiles Dynamic Link Libraries (DLLs) related to context APIs, such as GLFW or Win32 native Windows API.
 
-- **DLLs Related to Graphics APIs:** DLLs related to graphics APIs, including OpenGL, Vulkan, DirectX11, and potentially other APIs in the future.
+- **Graphics API DLLs:** DLLs related to graphics APIs, including OpenGL, Vulkan, DirectX11, and potentially other APIs in the future.
+
+- **GUI API DLLs:** This section contains the DLLs related to graphical user interface (GUI) APIs. These libraries facilitate the creation and management of graphical user interfaces within the application. Especially useful as ImGUI implementation differs considering the Context and Graphics API used.
+
+- **External Libraries DLLs:** For external libraries used in the project. These libraries are necessary dependencies for the project's functionality and may include components related to graphics rendering, image loading, YAML parsing, mathematics operations, and other functionalities required by the application.
+
+- **Main Application:** The Main Application section is the core of the project, encompassing the main executable or application files.
 
 Further documentation will be released in the near ending phase of the project.
 
