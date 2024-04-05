@@ -54,6 +54,9 @@ public:
 	virtual int GetWindowHeight() const = 0;
 	virtual std::array<int, 2> GetWindowSize() const = 0;
 
+	virtual void LockCursor() = 0;
+	virtual void UnlockCursor() = 0;
+
 protected:
 	Window(const WindowAPI & api);
 

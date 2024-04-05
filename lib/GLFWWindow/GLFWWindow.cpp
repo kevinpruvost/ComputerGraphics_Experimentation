@@ -402,6 +402,17 @@ std::array<int, 2> GLFWWindow::GetWindowSize() const
     return size;
 }
 
+void GLFWWindow::LockCursor()
+{
+    glfwSetInputMode(__mainW, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
+}
+
+void GLFWWindow::UnlockCursor()
+{
+    glfwSetInputMode(__mainW, GLFW_CURSOR, GLFW_CURSOR_NORMAL);
+    lastX = -1.0f;
+}
+
 GLFWwindow* GLFWWindow::GetWindow()
 {
     return __mainW;

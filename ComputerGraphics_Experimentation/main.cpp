@@ -36,6 +36,7 @@ public:
 		, gui{ g }
 		, camera{ window->GetWindowWidth(), window->GetWindowHeight() }
 	{
+		w->LockCursor();
 		auto shaderFrag = Shader::CreateShader("resources/shader_test.frag", Shader::ShaderType::Fragment);
 		auto shaderVert = Shader::CreateShader("resources/shader_test.vert", Shader::ShaderType::Vertex);
 
@@ -55,6 +56,8 @@ public:
 			{
 			case InputSystem::Key::KeyboardT:
 				cameraLock = !cameraLock;
+				if (!cameraLock) w->LockCursor();
+				else w->UnlockCursor();
 				break;
 			}
 		});
@@ -162,17 +165,20 @@ public:
 			ImGui::Begin("Hello TA!");
 
 			ImGui::Text("Press T to enable/disable the camera from following your cursor movement.");
-			ImGui::Checkbox("Camera Lock", &cameraLock);
+			if (ImGui::Checkbox("Camera Lock", &cameraLock))
+			{
+				if (!cameraLock) w->LockCursor();
+				else w->UnlockCursor();
+			}
 			ImGui::Checkbox("Draw Faces", &drawFaces);
 			ImGui::Checkbox("Draw Lines", &drawLines);
 			ImGui::Checkbox("Draw Points", &drawPoints);
 
-			//ImGui::SliderFloat("float", &f, 0.0f, 1.0f);            // Edit 1 float using a slider from 0.0f to 1.0f
 			ImGui::ColorEdit3("Vertex/Lines Color", glm::value_ptr(verticesColor));
 
 			ImGui::Text("Object Properties:");
-			ImGui::SliderFloat3("Position", glm::value_ptr(position), -5.0f, 5.0f);
-			ImGui::SliderFloat3("Rotation", glm::value_ptr(rotation), 0.0f, 1.0f);
+			ImGui::DragFloat3("Position", glm::value_ptr(position), 0.05f);
+			ImGui::DragFloat3("Rotation", glm::value_ptr(rotation), 0.005f);
 
 			if (ImGui::Button("Button"))                            // Buttons return true when clicked (most widgets return true when edited/activated)
 				counter++;

@@ -32,6 +32,9 @@ public:
     int GetWindowHeight() const override;
     std::array<int, 2> GetWindowSize() const override;
 
+    void LockCursor() override;
+    void UnlockCursor() override;
+
     GLFWwindow* GetWindow();
 
 protected:
