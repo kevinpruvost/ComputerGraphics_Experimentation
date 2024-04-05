@@ -51,3 +51,11 @@ Feel free to explore these repositories for more information on each library.
 ## Useful Links
 
 - **[Interactive ImGUI Online Manual](https://pthom.github.io/imgui_manual_online/manual/imgui_manual.html)**
+
+- **[John Carmack notes](https://cppdepend.com/blog/john-carmack-cpp-programming-legend/)**
+
+## Notes on Good Practices
+
+- Avoid `throw` and `exception`, they put too much overhead as they are managed by external instances and might actually be unsafe in contrary to managing errors with `return` codes.
+
+- Avoid templated code as it might be recompiled for nothing, thus taking size on `dll` and `exe` files but also making each DLL has its own version of the function (and different function adresses), might be very problematic.

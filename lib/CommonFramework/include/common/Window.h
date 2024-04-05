@@ -4,9 +4,9 @@
 #include <common/InputSystem.h>
 #include <array>
 
-/// <summary>
-/// Window class common to all 3 APIs, managed with GLFW for now
-/// </summary>
+/**
+ * @brief Window class common to all 3 APIs, managed with GLFW for now
+ */
 class COMMONFRAMEWORK_API Window : public InputSystem
 {
 public:
