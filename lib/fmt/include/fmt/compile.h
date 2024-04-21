@@ -8,14 +8,18 @@
 #ifndef FMT_COMPILE_H_
 #define FMT_COMPILE_H_
 
+#ifndef FMT_IMPORT_STD
+#  include <iterator>  // std::back_inserter
+#endif
+
 #include "format.h"
 
 FMT_BEGIN_NAMESPACE
 namespace detail {
 
-template <typename Char, typename InputIt>
-FMT_CONSTEXPR inline auto copy_str(InputIt begin, InputIt end,
-                                   counting_iterator it) -> counting_iterator {
+template <typename T, typename InputIt>
+FMT_CONSTEXPR inline auto copy(InputIt begin, InputIt end, counting_iterator it)
+    -> counting_iterator {
   return it + (end - begin);
 }
 
@@ -146,7 +150,7 @@ template <typename Char, typename T, int N> struct field {
     const T& arg = get_arg_checked<T, N>(args...);
     if constexpr (std::is_convertible_v<T, basic_string_view<Char>>) {
       auto s = basic_string_view<Char>(arg);
-      return copy_str<Char>(s.begin(), s.end(), out);
+      return copy<Char>(s.begin(), s.end(), out);
     }
     return write<Char>(out, arg);
   }
@@ -488,10 +492,10 @@ FMT_CONSTEXPR OutputIt format_to(OutputIt out, const S&, Args&&... args) {
 
 template <typename OutputIt, typename S, typename... Args,
           FMT_ENABLE_IF(detail::is_compiled_string<S>::value)>
-auto format_to_n(OutputIt out, size_t normals, const S& format_str, Args&&... args)
+auto format_to_n(OutputIt out, size_t n, const S& format_str, Args&&... args)
     -> format_to_n_result<OutputIt> {
   using traits = detail::fixed_buffer_traits;
-  auto buf = detail::iterator_buffer<OutputIt, char, traits>(out, normals);
+  auto buf = detail::iterator_buffer<OutputIt, char, traits>(out, n);
   fmt::format_to(std::back_inserter(buf), format_str,
                  std::forward<Args>(args)...);
   return {buf.out(), buf.count()};

@@ -50,6 +50,9 @@ public:
 	void SetApplicationLoopCallback(CallbackContainer<void> callback);
 	void SetApplicationLoopCallback(Callback<void> callback);
 
+	void SetFramebufferSizeCallback(CallbackContainer<void, int, int> callback);
+	void SetFramebufferSizeCallback(Callback<void, int, int> callback);
+
 	virtual int GetWindowWidth() const = 0;
 	virtual int GetWindowHeight() const = 0;
 	virtual std::array<int, 2> GetWindowSize() const = 0;
@@ -64,6 +67,8 @@ protected:
 	WindowSettings _settings;
 	Callback<void> _sceneLoopCallback;
 	Callback<void> _appLoopCallback;
+	// Framebuffer size callback
+	Callback<void, int, int> _framebufferSizeCallback;
 
 private:
 	const WindowAPI __api;

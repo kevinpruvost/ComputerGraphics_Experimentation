@@ -12,7 +12,7 @@ void glfw_onError(int error, const char* description)
     // print message in Windows popup dialog box
     wchar_t wdescription[1024];
     MultiByteToWideChar(CP_ACP, 0, description, -1, wdescription, 1024);
-    MessageBox(NULL, wdescription, L"GLFW error", MB_OK);
+    MessageBox(NULL, (LPCSTR)wdescription, (LPCSTR)L"GLFW error", MB_OK);
 }
 #else
 void glfw_onError(int error, const char* description)
@@ -36,6 +36,8 @@ static std::stack<std::array<double, 2>> mouseScrollEvents;
 // Button
 static std::stack<std::array<int, 3>> mouseButtonEvents;
 static std::unordered_set<InputSystem::MouseButton> buttonsWhileDown;
+// Framebuffer size
+static std::stack<std::array<int, 2>> framebufferSizeEvents;
 
 GLFWWindow::GLFWWindow()
     : Window(WindowAPI::GLFW)
@@ -101,6 +103,11 @@ static void windowFocusCallback(GLFWwindow* window, int focused)
     }
 }
 
+static void framebuffer_size_callback(GLFWwindow* window, int width, int height)
+{
+    framebufferSizeEvents.push({ width, height });
+}
+
 ErrorCode GLFWWindow::_Init()
 {
     glfwInit();
@@ -144,10 +151,7 @@ ErrorCode GLFWWindow::_Init()
     glfwMakeContextCurrent(__mainW);
 
     //glViewport(0, 0, _settings.width, _settings.height);
-    glfwSetFramebufferSizeCallback(__mainW, [](GLFWwindow* w, int width, int height) {
-        glViewport(0, 0, width, height);
-    });
-
+    glfwSetFramebufferSizeCallback(__mainW, framebuffer_size_callback);
     glfwSetKeyCallback(__mainW, key_callback);
     glfwSetCursorPosCallback(__mainW, mouse_move_callback);
     glfwSetScrollCallback(__mainW, mouse_scroll_callback);
@@ -251,6 +255,13 @@ bool GLFWWindow::ProcessInput()
     for (auto button : buttonsWhileDown)
     {
         if (_callbackMouseWhileDown) _callbackMouseWhileDown(button, mods);
+    }
+    // Framebuffer size events
+    while (!framebufferSizeEvents.empty())
+    {
+        std::array<int, 2> framebufferSize = framebufferSizeEvents.top();
+        if (_framebufferSizeCallback) _framebufferSizeCallback(framebufferSize[0], framebufferSize[1]);
+        framebufferSizeEvents.pop();
     }
     return true;
 }
