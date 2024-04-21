@@ -1,4 +1,4 @@
-# Computer Graphics Experimentation
+# Venom Engine
 
 All of the code that is present here has been entirely written and implemented by myself alone.
 
