@@ -17,8 +17,15 @@ public:
         mesh->CreateFromFile(path);
         return mesh;
     }
+    static inline Model* CreateSphereModel(float radius, int sectors, int stacks)
+    {
+        Model* mesh = CreateModel();
+        mesh->CreateSphere(radius, sectors, stacks);
+        return mesh;
+    }
 
     void CreateFromFile(const std::filesystem::path & path);
+    void CreateSphere(float radius, int sectors, int stacks);
 
     virtual void SetVertices(const VertexArray& vertices) = 0;
     VertexArray GetVertices() const;

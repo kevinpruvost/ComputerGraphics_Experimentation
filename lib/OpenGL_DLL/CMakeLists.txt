@@ -14,7 +14,7 @@ set_target_properties(OpenGL_DLL
     PROPERTIES FOLDER "GraphicsAPIs"
 )
 
-target_link_libraries(OpenGL_DLL CommonFramework glad)
+target_link_libraries(OpenGL_DLL CommonFramework glad stb freetype)
 
 target_include_directories(OpenGL_DLL PUBLIC "./")
 

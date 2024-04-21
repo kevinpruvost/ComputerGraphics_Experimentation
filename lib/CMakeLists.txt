@@ -54,6 +54,11 @@ set_target_properties(
 PROPERTIES FOLDER "ExternalLibraries")
 find_package(glm CONFIG REQUIRED)
 
+add_subdirectory("./freetype")
+set_target_properties(
+    freetype
+PROPERTIES FOLDER "ExternalLibraries")
+
 # Common Framework Library
 add_subdirectory("./CommonFramework")
 

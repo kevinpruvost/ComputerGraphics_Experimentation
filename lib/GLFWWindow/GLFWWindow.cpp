@@ -1,6 +1,7 @@
 #include "GLFWWindow.h"
 
 #include <common/Logger.h>
+#include <common/Time.h>
 
 #define STB_IMAGE_IMPLEMENTATION
 #include <stb/stb_image.h>
@@ -273,6 +274,7 @@ ErrorCode GLFWWindow::Loop()
     if (_sceneLoopCallback == nullptr)
         throw RuntimeException("Scene loop callback is not set");
 
+    Time::SetStartTime();
     while (!glfwWindowShouldClose(__mainW)) {
         // Processing input
         if (!ProcessInput()) break;
@@ -283,6 +285,7 @@ ErrorCode GLFWWindow::Loop()
         glfwSwapBuffers(__mainW);
 
         // Poll events
+        Time::SetNewLambda();
         glfwPollEvents();
     }
     return ErrorCode::Success;

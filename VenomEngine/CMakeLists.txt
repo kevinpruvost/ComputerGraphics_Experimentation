@@ -17,6 +17,12 @@ project ("VenomEngineExe")
 add_executable (VenomEngineExe
     "main.cpp"
     "Config.yaml"
+    "./resources/shader_test.frag"
+    "./resources/shader_test.vert"
+    "./resources/shader_hw2.frag"
+    "./resources/shader_hw2.vert"
+    "./resources/text.frag"
+    "./resources/text.vert"
 )
 
 target_link_libraries(VenomEngineExe CommonFramework imgui glm::glm)
