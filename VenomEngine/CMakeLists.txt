@@ -16,6 +16,8 @@ project ("VenomEngineExe")
 # Add source to this project's executable.
 add_executable (VenomEngineExe
     "main.cpp"
+    "Scene.cpp"
+    "Scene.h"
     "Config.yaml"
     "./resources/shader_test.frag"
     "./resources/shader_test.vert"

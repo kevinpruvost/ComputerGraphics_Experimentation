@@ -12,12 +12,12 @@ uniform int useVertColor;
 void main()
 {
     vec4 texColor = texture(textureSampler, TexCoords);
-    vec3 finalColor = useVertColor == 1 ? vertColor : texColor.rgb;
+    vec4 finalColor = useVertColor == 1 ? vec4(vertColor, 1.0) : texColor;
     
     vec3 norm = normalize(Normal);
     vec3 lightDir = normalize(vec3(1.0f, 1.0f, 1.0f)); // Example light direction
     
-    FragColor = texColor;
+    FragColor = finalColor;
 
 //    // Check if the surface is facing towards the light source
 //    if (dot(norm, lightDir) > 0.0) {
