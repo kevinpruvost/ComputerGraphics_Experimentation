@@ -34,20 +34,6 @@ public:
     void AddMesh(Mesh * mesh);
     void AddMaterial(Material * material);
 
-    enum class DrawMode
-    {
-        POINTS,
-        LINES,
-        TRIANGLES,
-        QUADS,
-        POLYGON
-    };
-    void SetDrawMode(DrawMode drawMode);
-    virtual void _SetDrawMode(DrawMode drawMode) = 0;
-
-protected:
-    DrawMode _drawMode;
-
 protected:
     Model() = default;
 

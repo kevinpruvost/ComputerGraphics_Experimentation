@@ -1,6 +1,8 @@
 #include <common/Camera.h>
 #include <common/Error.h>
 
+COMMONFRAMEWORK_API Camera* Camera::MainCamera = nullptr;
+
 Camera::Camera(int screenWidth, int screenHeight, float fov, float nearClip, float farClip, CameraProjection projection)
     : __screenWidth{ screenWidth }
     , __screenHeight{ screenHeight }
@@ -12,6 +14,11 @@ Camera::Camera(int screenWidth, int screenHeight, float fov, float nearClip, flo
     , __pitch{ 0.0f }
 {
     updateProjectionMatrix();
+}
+
+Camera::~Camera()
+{
+    if (MainCamera == this) MainCamera = nullptr;
 }
 
 void Camera::SetPosition(const glm::vec3& position) {
@@ -32,6 +39,11 @@ void Camera::SetNearClip(float nearClip) {
 void Camera::SetFarClip(float farClip) {
     __farClip = farClip;
     updateProjectionMatrix();
+}
+
+void Camera::SetAsMainCamera()
+{
+    MainCamera = this;
 }
 
 glm::mat4 Camera::GetViewMatrix() const {

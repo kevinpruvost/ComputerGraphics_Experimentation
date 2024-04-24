@@ -207,18 +207,18 @@ public:
 			obj->GetTexture()->BindTexture();
 			if (drawFaces)
 			{
-				m_shader->SetUniformInt("useVertColor", 0);
-				obj->Draw(Model::DrawMode::TRIANGLES);
+				m_shader->SetDrawMode(ShaderPipeline::DrawMode::TRIANGLES);
+				obj->Draw();
 			}
 			if (drawLines)
 			{
-				m_shader->SetUniformInt("useVertColor", 1);
-				obj->Draw(Model::DrawMode::LINES);
+				m_shader->SetDrawMode(ShaderPipeline::DrawMode::LINES);
+				obj->Draw();
 			}
 			if (drawPoints)
 			{
-				m_shader->SetUniformInt("useVertColor", 1);
-				obj->Draw(Model::DrawMode::POINTS);
+				m_shader->SetDrawMode(ShaderPipeline::DrawMode::POINTS);
+				obj->Draw();
 			}
 		}
 

@@ -5,9 +5,8 @@ Object::Object(Model* model, Texture* texture, const glm::vec3& position, const 
 {
 }
 
-void Object::Draw(Model::DrawMode drawMode) const
+void Object::Draw() const
 {
-    __model->SetDrawMode(drawMode);
     __model->Draw();
 }
 

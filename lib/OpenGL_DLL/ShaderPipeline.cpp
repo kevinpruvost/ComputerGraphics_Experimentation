@@ -70,6 +70,25 @@ void ShaderPipeline_OGL::SetUniformInt(const std::string& name, int value)
     glUniform1i(GetUniformLocation(name.c_str()), value);
 }
 
+void ShaderPipeline_OGL::SetDrawMode(DrawMode mode)
+{
+    switch (mode)
+    {
+    case DrawMode::POINTS:
+        glPolygonMode(GL_FRONT_AND_BACK, GL_POINT);
+        SetUniformInt("useVertColor", 1);
+        break;
+    case DrawMode::LINES:
+        glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
+        SetUniformInt("useVertColor", 1);
+        break;
+    case DrawMode::TRIANGLES:
+        glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
+        SetUniformInt("useVertColor", 0);
+        break;
+    }
+}
+
 // Export the factory function to create an instance of the class
 EXPORT ShaderPipeline* createShaderPipeline() {
     return new ShaderPipeline_OGL();

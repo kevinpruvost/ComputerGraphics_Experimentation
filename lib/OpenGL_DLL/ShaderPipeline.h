@@ -19,6 +19,7 @@ public:
     void SetUniformFloat(const std::string& name, float value) override;
     void SetUniformInt(const std::string& name, int value) override;
 
+    void SetDrawMode(DrawMode mode) override;
 
 private:
     GLuint m_program;

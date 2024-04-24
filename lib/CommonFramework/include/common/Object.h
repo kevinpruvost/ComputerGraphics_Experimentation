@@ -10,7 +10,7 @@ public:
     Object(Model* model, Texture* texture, const glm::vec3& position, const glm::vec3& rotation, const glm::vec3& scale);
     ~Object() = default;
 
-    void Draw(Model::DrawMode drawMode) const;
+    void Draw() const;
     void Rotate(const glm::vec3& rotation);
     void RotateAroundParent(const glm::vec3& rotation);
 
