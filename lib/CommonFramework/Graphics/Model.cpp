@@ -84,6 +84,18 @@ void Model::CreateSphere(float radius, int sectors, int stacks)
     SetVertices(verticesProcessed);
 }
 
+void Model::CreateSquare()
+{
+    // Assembling the square vertices
+    const VertexArray verticesProcessed = {
+        { glm::vec3(-0.5f, 0.5f, 0.0f), glm::vec3(0.0f, 0.0f, 1.0f), glm::vec2(0.0f, 1.0f) },
+        { glm::vec3(-0.5f, -0.5f, 0.0f), glm::vec3(0.0f, 0.0f, 1.0f), glm::vec2(0.0f, 0.0f) },
+        { glm::vec3(0.5f, -0.5f, 0.0f), glm::vec3(0.0f, 0.0f, 1.0f), glm::vec2(1.0f, 0.0f) },
+        { glm::vec3(0.5f, 0.5f, 0.0f), glm::vec3(0.0f, 0.0f, 1.0f), glm::vec2(1.0f, 1.0f) }
+    };
+    SetVertices(verticesProcessed);
+}
+
 VertexArray Model::GetVertices() const
 {
     return _vertices;

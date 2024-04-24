@@ -1,7 +1,7 @@
 #pragma once
 
 #include <common/Format.h>
-#include <common/DLL.h>
+#include <common/Export.h>
 #include <mutex>
 #include <memory>
 #include <filesystem>

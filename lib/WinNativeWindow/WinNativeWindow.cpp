@@ -5,19 +5,19 @@ WinNativeWindow::WinNativeWindow()
 {
 }
 
-ErrorCode WinNativeWindow::_Init()
+Venom::ErrorCode WinNativeWindow::_Init()
 {
-    return ErrorCode::Success;
+    return Venom::ErrorCode::Success;
 }
 
-ErrorCode WinNativeWindow::Loop()
+Venom::ErrorCode WinNativeWindow::Loop()
 {
-    return ErrorCode::Success;
+    return Venom::ErrorCode::Success;
 }
 
-ErrorCode WinNativeWindow::Destroy()
+Venom::ErrorCode WinNativeWindow::Destroy()
 {
-    return ErrorCode::Success;
+    return Venom::ErrorCode::Success;
 }
 
 // Export the factory function to create an instance of the class

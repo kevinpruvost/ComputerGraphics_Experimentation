@@ -1,5 +1,7 @@
 #include <common/FrameworkLoader.h>
 #include <common/Exception.h>
+#include <common/Rendering.h>
+#include <common/ObjectPool.h>
 #include <iostream>
 #include <cstdlib>
 
@@ -23,6 +25,7 @@ void FrameworkLoader::LoadFramework(const EngineAPI type)
 
     if (EngineDll) {
         __framework = nullptr;
+        ObjectPool::Clear();
     }
 
     switch (type)
@@ -53,6 +56,8 @@ void FrameworkLoader::LoadFramework(const EngineAPI type)
         // Function not found
         throw DLLException("Failed to find function in DLL: {}", (char *)dllName);
     }
+
+    RELOAD_DLL_SINGLETON(Rendering, EngineDll.get());
 
     __frameworkType = type;
 }

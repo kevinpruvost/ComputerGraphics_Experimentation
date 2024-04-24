@@ -46,6 +46,7 @@ void Shader_OGL::SetShaderSource(const std::string& shaderSource, const ShaderTy
         glGetShaderInfoLog(m_shaderId, 512, NULL, infoLog);
         std::cout << "ERROR::SHADER::VERTEX::COMPILATION_FAILED\n" << infoLog << std::endl;
     }
+    glDeleteShader(m_shaderId);
 }
 
 GLuint Shader_OGL::GetShaderId() const

@@ -15,6 +15,13 @@ Texture_OGL::Texture_OGL()
 {
 }
 
+Texture_OGL::~Texture_OGL()
+{
+    if (__textureID != 0) {
+        glDeleteTextures(1, &__textureID);
+    }
+}
+
 void Texture_OGL::CreateFromFile(const std::filesystem::path& path)
 {
     int width, height, nrChannels;

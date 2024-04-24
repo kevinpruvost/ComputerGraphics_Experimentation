@@ -4,11 +4,11 @@
 #include <common/Texture.h>
 #include <common/Model.h>
 
-class Object
+class Entity
 {
 public:
-    Object(Model* model, Texture* texture, const glm::vec3& position, const glm::vec3& rotation, const glm::vec3& scale);
-    ~Object() = default;
+    Entity(Model* model, Texture* texture, const glm::vec3& position, const glm::vec3& rotation, const glm::vec3& scale);
+    ~Entity() = default;
 
     void Draw() const;
     void Rotate(const glm::vec3& rotation);
@@ -16,7 +16,7 @@ public:
 
     void Translate(const glm::vec3& translation);
     void Scale(const glm::vec3& scale);
-    void SetParent(Object* parent);
+    void SetParent(Entity* parent);
 
     void SetName(const char * name);
     const char * GetName() const;
@@ -28,7 +28,7 @@ public:
     const Texture * GetTexture() const;
 
 private:
-    Object* __parent;
+    Entity* __parent;
     Model* __model;
     Texture* __texture;
     glm::vec3 __position;

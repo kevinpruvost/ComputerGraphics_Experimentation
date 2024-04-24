@@ -13,7 +13,7 @@
 #include <common/Camera.h>
 #include <common/GUI.h>
 #include <common/Texture.h>
-#include <common/Object.h>
+#include <common/Entity.h>
 #include <common/Time.h>
 #include <common/Text2D.h>
 #include "Scene.h"
@@ -62,7 +62,7 @@ int main()
 	catch (const std::exception& e)
 	{
 		std::cerr << e.what() << std::endl;
-		return (int)ErrorCode::Failure;
+		return (int)Venom::ErrorCode::Failure;
 	}
-    return (int)ErrorCode::Success;
+    return (int)Venom::ErrorCode::Success;
 }

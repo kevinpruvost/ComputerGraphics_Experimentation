@@ -109,7 +109,7 @@ static void framebuffer_size_callback(GLFWwindow* window, int width, int height)
     framebufferSizeEvents.push({ width, height });
 }
 
-ErrorCode GLFWWindow::_Init()
+Venom::ErrorCode GLFWWindow::_Init()
 {
     glfwInit();
 
@@ -143,7 +143,7 @@ ErrorCode GLFWWindow::_Init()
     {
         Logger::Log("Failed to create window");
         glfwTerminate();
-        return ErrorCode::Failure;
+        return Venom::ErrorCode::Failure;
     }
 
     __windows.push_back(w);
@@ -172,7 +172,7 @@ ErrorCode GLFWWindow::_Init()
         _settings.name.c_str(), _settings.width, _settings.height, _settings.fullscreen, _settings.resizable, _settings.focused, _settings.refreshRate
     );
 
-    return ErrorCode::Success;
+    return Venom::ErrorCode::Success;
 }
 
 
@@ -267,7 +267,7 @@ bool GLFWWindow::ProcessInput()
     return true;
 }
 
-ErrorCode GLFWWindow::Loop()
+Venom::ErrorCode GLFWWindow::Loop()
 {
     if (_appLoopCallback == nullptr)
         throw RuntimeException("App loop callback is not set");
@@ -288,10 +288,10 @@ ErrorCode GLFWWindow::Loop()
         Time::SetNewLambda();
         glfwPollEvents();
     }
-    return ErrorCode::Success;
+    return Venom::ErrorCode::Success;
 }
 
-ErrorCode GLFWWindow::Destroy()
+Venom::ErrorCode GLFWWindow::Destroy()
 {
     if (!__windows.empty()) {
         for (auto& w : __windows) {
@@ -299,40 +299,40 @@ ErrorCode GLFWWindow::Destroy()
         }
         glfwTerminate();
     }
-    return ErrorCode::Success;
+    return Venom::ErrorCode::Success;
 }
 
-ErrorCode GLFWWindow::CloseWindow()
+Venom::ErrorCode GLFWWindow::CloseWindow()
 {
     glfwSetWindowShouldClose(__mainW, true);
-    return ErrorCode::Success;
+    return Venom::ErrorCode::Success;
 }
 
-ErrorCode GLFWWindow::MinimizeWindow()
+Venom::ErrorCode GLFWWindow::MinimizeWindow()
 {
     glfwIconifyWindow(__mainW);
-    return ErrorCode::Success;
+    return Venom::ErrorCode::Success;
 }
 
-ErrorCode GLFWWindow::SetWindowSize(int width, int height)
+Venom::ErrorCode GLFWWindow::SetWindowSize(int width, int height)
 {
     glfwSetWindowSize(__mainW, width, height);
-    return ErrorCode::Success;
+    return Venom::ErrorCode::Success;
 }
 
-ErrorCode GLFWWindow::SetWindowPosition(int x, int y)
+Venom::ErrorCode GLFWWindow::SetWindowPosition(int x, int y)
 {
     glfwSetWindowPos(__mainW, x, y);
-    return ErrorCode::Success;
+    return Venom::ErrorCode::Success;
 }
 
-ErrorCode GLFWWindow::SetWindowTitle(const char* title)
+Venom::ErrorCode GLFWWindow::SetWindowTitle(const char* title)
 {
     glfwSetWindowTitle(__mainW, title);
-    return ErrorCode::Success;
+    return Venom::ErrorCode::Success;
 }
 
-ErrorCode GLFWWindow::SetWindowIcon(const std::filesystem::path & iconPath)
+Venom::ErrorCode GLFWWindow::SetWindowIcon(const std::filesystem::path & iconPath)
 {
     int width, height, channels;
     unsigned char* image_stb = stbi_load(iconPath.string().c_str(), &width, &height, &channels, 0);
@@ -345,16 +345,16 @@ ErrorCode GLFWWindow::SetWindowIcon(const std::filesystem::path & iconPath)
     image.pixels = image_stb;
     glfwSetWindowIcon(__mainW, 1, &image);
     stbi_image_free(image_stb);
-    return ErrorCode::Success;
+    return Venom::ErrorCode::Success;
 }
 
-ErrorCode GLFWWindow::SetWindowVSync(VSyncModes mode)
+Venom::ErrorCode GLFWWindow::SetWindowVSync(VSyncModes mode)
 {
     glfwSwapInterval((int)mode);
-    return ErrorCode::Success;
+    return Venom::ErrorCode::Success;
 }
 
-ErrorCode GLFWWindow::SetWindowFullscreen(bool enabled, int monitorIndex)
+Venom::ErrorCode GLFWWindow::SetWindowFullscreen(bool enabled, int monitorIndex)
 {
     int count = 0;
     GLFWmonitor ** monitors = glfwGetMonitors(&count);
@@ -364,35 +364,35 @@ ErrorCode GLFWWindow::SetWindowFullscreen(bool enabled, int monitorIndex)
     int x, y;
     glfwGetWindowPos(__mainW, &x, &y);
     glfwSetWindowMonitor(__mainW, enabled ? monitors[monitorIndex] : nullptr, x, y, __mainMode->width, __mainMode->height, __mainMode->refreshRate);
-    return ErrorCode::Success;
+    return Venom::ErrorCode::Success;
 }
 
-ErrorCode GLFWWindow::SetWindowBorderless(bool enabled)
+Venom::ErrorCode GLFWWindow::SetWindowBorderless(bool enabled)
 {
     glfwSetWindowMonitor(__mainW, glfwGetPrimaryMonitor(), 0, 0, __mainMode->width, __mainMode->height, __mainMode->refreshRate);
-    return ErrorCode::Success;
+    return Venom::ErrorCode::Success;
 }
 
-ErrorCode GLFWWindow::SetWindowVideoMode(const VideoMode& videoMode, int monitorIndex)
+Venom::ErrorCode GLFWWindow::SetWindowVideoMode(const VideoMode& videoMode, int monitorIndex)
 {
     __mainMode->width = videoMode.width;
     __mainMode->height = videoMode.height;
     __mainMode->refreshRate = videoMode.refreshRate;
     __mainMode->redBits = __mainMode->greenBits = __mainMode->blueBits = videoMode.bitsPerPixel / 3;
     glfwSetWindowMonitor(__mainW, glfwGetMonitors(nullptr)[monitorIndex], 0, 0, videoMode.width, videoMode.height, videoMode.refreshRate);
-    return ErrorCode::Success;
+    return Venom::ErrorCode::Success;
 }
 
-ErrorCode GLFWWindow::SetWindowResizable(bool enabled)
+Venom::ErrorCode GLFWWindow::SetWindowResizable(bool enabled)
 {
     glfwSetWindowAttrib(__mainW, GLFW_RESIZABLE, enabled);
-    return ErrorCode::Success;
+    return Venom::ErrorCode::Success;
 }
 
-ErrorCode GLFWWindow::SetWindowFocused(bool focused)
+Venom::ErrorCode GLFWWindow::SetWindowFocused(bool focused)
 {
     glfwSetWindowAttrib(__mainW, GLFW_FOCUSED, focused);
-    return ErrorCode::Success;
+    return Venom::ErrorCode::Success;
 }
 
 int GLFWWindow::GetWindowWidth() const

@@ -14,21 +14,21 @@ public:
 
     static Window * CreateWindowFromAPI(const WindowAPI & api);
 	
-	ErrorCode Init(const Config & config);
-	virtual ErrorCode _Init() = 0;
+	Venom::ErrorCode Init(const Config & config);
+	virtual Venom::ErrorCode _Init() = 0;
 
-	virtual ErrorCode Loop() = 0;
+	virtual Venom::ErrorCode Loop() = 0;
 
 	// Window management
-	virtual ErrorCode CloseWindow() = 0;
-	virtual ErrorCode MinimizeWindow() = 0;
+	virtual Venom::ErrorCode CloseWindow() = 0;
+	virtual Venom::ErrorCode MinimizeWindow() = 0;
 
-	virtual ErrorCode SetWindowSize(int width, int height) = 0;
-	virtual ErrorCode SetWindowPosition(int x, int y) = 0;
-	virtual ErrorCode SetWindowTitle(const char * title) = 0;
-	virtual ErrorCode SetWindowIcon(const std::filesystem::path & iconPath) = 0;
+	virtual Venom::ErrorCode SetWindowSize(int width, int height) = 0;
+	virtual Venom::ErrorCode SetWindowPosition(int x, int y) = 0;
+	virtual Venom::ErrorCode SetWindowTitle(const char * title) = 0;
+	virtual Venom::ErrorCode SetWindowIcon(const std::filesystem::path & iconPath) = 0;
 	enum class VSyncModes { SingleBuffer = 0, DoubleBuffer = 1, TripleBuffer = 2 };
-	virtual ErrorCode SetWindowVSync(VSyncModes mode) = 0;
+	virtual Venom::ErrorCode SetWindowVSync(VSyncModes mode) = 0;
 
 	struct VideoMode
 	{
@@ -37,12 +37,12 @@ public:
         int refreshRate;
 		int bitsPerPixel;
     };
-	virtual ErrorCode SetWindowFullscreen(bool enabled, int monitorIndex = 0) = 0;
-	virtual ErrorCode SetWindowBorderless(bool enabled) = 0;
-	virtual ErrorCode SetWindowVideoMode(const VideoMode & videoMode, int monitorIndex = 0) = 0;
+	virtual Venom::ErrorCode SetWindowFullscreen(bool enabled, int monitorIndex = 0) = 0;
+	virtual Venom::ErrorCode SetWindowBorderless(bool enabled) = 0;
+	virtual Venom::ErrorCode SetWindowVideoMode(const VideoMode & videoMode, int monitorIndex = 0) = 0;
 
-	virtual ErrorCode SetWindowResizable(bool enabled) = 0;
-	virtual ErrorCode SetWindowFocused(bool focused) = 0;
+	virtual Venom::ErrorCode SetWindowResizable(bool enabled) = 0;
+	virtual Venom::ErrorCode SetWindowFocused(bool focused) = 0;
 
 	void SetSceneLoopCallback(CallbackContainer<void> callback);
 	void SetSceneLoopCallback(Callback<void> callback);

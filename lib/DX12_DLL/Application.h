@@ -9,9 +9,9 @@ class Application : public ApplicationTools
 {
 public:
     Application(const Config& config);
-    ErrorCode Run();
-    ErrorCode Initialize();
-    ErrorCode Loop();
+    Venom::ErrorCode Run();
+    Venom::ErrorCode Initialize();
+    Venom::ErrorCode Loop();
     void Terminate();
 
     Application();

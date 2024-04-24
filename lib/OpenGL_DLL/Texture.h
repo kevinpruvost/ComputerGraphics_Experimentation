@@ -7,6 +7,7 @@ class Texture_OGL : public Texture
 {
 public:
     Texture_OGL();
+    ~Texture_OGL();
 
     void CreateFromFile(const std::filesystem::path& path) override;
     int GetTextureID() const override;

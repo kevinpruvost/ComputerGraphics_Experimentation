@@ -17,10 +17,17 @@ DLL::~DLL() {
     unloadDLL();
 }
 
-void* DLL::getFunction(const char* functionName) const
+void* DLL::getFunction(const char* functionName)
 {
     if (!__dllHandle) {
         throw DLLException("Failed to get function from DLL: DLL not loaded");
+    }
+
+    {
+        std::unordered_map<const char*, void*>::const_iterator ite = __functions.find(functionName);
+        if (ite != __functions.end()) {
+            return ite->second;
+        };
     }
 
 #ifdef _WIN32
@@ -28,14 +35,14 @@ void* DLL::getFunction(const char* functionName) const
     if (!funcPtr) {
         throw DLLException("Failed to get function pointer: {}", functionName);
     }
-    return funcPtr;
 #else
     void* funcPtr = dlsym(dllHandle, functionName);
     if (!funcPtr) {
         throw DLLException(dlerror());
     }
-    return funcPtr;
 #endif
+    __functions[functionName] = funcPtr;
+    return funcPtr;
 }
 
 void DLL::loadDLL(const std::filesystem::path& filePath) {

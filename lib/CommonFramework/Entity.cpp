@@ -1,21 +1,21 @@
 #include <common/Object.h>
 
-Object::Object(Model* model, Texture* texture, const glm::vec3& position, const glm::vec3& rotation, const glm::vec3& scale)
+Entity::Entity(Model* model, Texture* texture, const glm::vec3& position, const glm::vec3& rotation, const glm::vec3& scale)
     : __model(model), __texture(texture), __position(position), __rotation(rotation), __scale(scale), __parent(nullptr)
 {
 }
 
-void Object::Draw() const
+void Entity::Draw() const
 {
     __model->Draw();
 }
 
-void Object::Rotate(const glm::vec3& rotation)
+void Entity::Rotate(const glm::vec3& rotation)
 {
     __rotation += rotation;
 }
 
-void Object::RotateAroundParent(const glm::vec3& rotation)
+void Entity::RotateAroundParent(const glm::vec3& rotation)
 {
     if (!__parent) return;
 
@@ -40,32 +40,32 @@ void Object::RotateAroundParent(const glm::vec3& rotation)
     //__position = glm::vec3(rotatedPosition);
 }
 
-void Object::Translate(const glm::vec3& translation)
+void Entity::Translate(const glm::vec3& translation)
 {
     __position += translation;
 }
 
-void Object::Scale(const glm::vec3& scale)
+void Entity::Scale(const glm::vec3& scale)
 {
     __scale += scale;
 }
 
-void Object::SetParent(Object* parent)
+void Entity::SetParent(Entity* parent)
 {
     __parent = parent;
 }
 
-void Object::SetName(const char* name)
+void Entity::SetName(const char* name)
 {
     __name = name;
 }
 
-const char* Object::GetName() const
+const char* Entity::GetName() const
 {
     return __name;
 }
 
-glm::vec3 Object::GetWorldPosition() const
+glm::vec3 Entity::GetWorldPosition() const
 {
     if (!__parent) return __position;
 
@@ -78,17 +78,17 @@ glm::vec3 Object::GetWorldPosition() const
     return glm::vec3(worldPosition);
 }
 
-glm::vec3 Object::GetPosition() const
+glm::vec3 Entity::GetPosition() const
 {
     return __position;
 }
 
-glm::vec3 Object::GetRotation() const
+glm::vec3 Entity::GetRotation() const
 {
     return __rotation;
 }
 
-glm::mat4 Object::GetModelMatrix() const
+glm::mat4 Entity::GetModelMatrix() const
 {
     glm::mat4 model(1);
     model = glm::translate(model, __position);
@@ -106,7 +106,7 @@ glm::mat4 Object::GetModelMatrix() const
     return model;
 }
 
-const Texture* Object::GetTexture() const
+const Texture* Entity::GetTexture() const
 {
     return __texture;
 }

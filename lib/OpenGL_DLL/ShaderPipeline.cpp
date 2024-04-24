@@ -39,10 +39,10 @@ void ShaderPipeline_OGL::SetPipeline(const std::vector<Shader*>& shaders)
     }
 }
 
-ErrorCode ShaderPipeline_OGL::Use()
+Venom::ErrorCode ShaderPipeline_OGL::Use()
 {
     glUseProgram(m_program);
-    return ErrorCode::Success;
+    return Venom::ErrorCode::Success;
 }
 
 void ShaderPipeline_OGL::SetUniformMatrix4(const std::string& name, const glm::mat4& matrix)
@@ -70,19 +70,19 @@ void ShaderPipeline_OGL::SetUniformInt(const std::string& name, int value)
     glUniform1i(GetUniformLocation(name.c_str()), value);
 }
 
-void ShaderPipeline_OGL::SetDrawMode(DrawMode mode)
+void ShaderPipeline_OGL::SetDrawMode(Drawable3D::DrawMode mode)
 {
     switch (mode)
     {
-    case DrawMode::POINTS:
+    case Drawable3D::DrawMode::POINTS:
         glPolygonMode(GL_FRONT_AND_BACK, GL_POINT);
         SetUniformInt("useVertColor", 1);
         break;
-    case DrawMode::LINES:
+    case Drawable3D::DrawMode::WIREFRAME:
         glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
         SetUniformInt("useVertColor", 1);
         break;
-    case DrawMode::TRIANGLES:
+    case Drawable3D::DrawMode::SOLID:
         glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
         SetUniformInt("useVertColor", 0);
         break;

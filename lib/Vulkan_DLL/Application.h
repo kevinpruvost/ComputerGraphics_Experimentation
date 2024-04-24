@@ -6,7 +6,7 @@ class Application : public ApplicationTools
 {
 public:
     Application();
-    ErrorCode Run() override;
+    Venom::ErrorCode Run() override;
 
 private:
     void initWindow();

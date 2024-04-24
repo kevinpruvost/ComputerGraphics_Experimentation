@@ -11,7 +11,7 @@ class ApplicationCommonBase
 public:
     COMMONFRAMEWORK_API void SetWindow(Window * w);
     COMMONFRAMEWORK_API void SetConfig(const Config & config);
-    virtual ErrorCode Run() = 0;
+    virtual Venom::ErrorCode Run() = 0;
     COMMONFRAMEWORK_API ~ApplicationCommonBase();
 
 protected:

@@ -15,7 +15,7 @@
 #include <common/Camera.h>
 #include <common/GUI.h>
 #include <common/Texture.h>
-#include <common/Object.h>
+#include <common/Entity.h>
 #include <common/Time.h>
 #include <common/Text2D.h>
 

@@ -11,7 +11,7 @@ public:
     ShaderPipeline_OGL();
 
     void SetPipeline(const std::vector<Shader*> & shaders) override;
-    ErrorCode Use() override;
+    Venom::ErrorCode Use() override;
 
     void SetUniformMatrix4(const std::string& name, const glm::mat4& matrix) override;
     void SetUniformVec3(const std::string& name, const glm::vec3& vec) override;
@@ -19,7 +19,7 @@ public:
     void SetUniformFloat(const std::string& name, float value) override;
     void SetUniformInt(const std::string& name, int value) override;
 
-    void SetDrawMode(DrawMode mode) override;
+    void SetDrawMode(Drawable3D::DrawMode mode) override;
 
 private:
     GLuint m_program;

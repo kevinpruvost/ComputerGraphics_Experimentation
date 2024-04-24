@@ -12,22 +12,22 @@ Application::~Application()
 {
 }
 
-ErrorCode Application::Run()
+Venom::ErrorCode Application::Run()
 {
-    if (Initialize() != ErrorCode::Success ||
-        Loop() != ErrorCode::Success)
-        return ErrorCode::Failure;
+    if (Initialize() != Venom::ErrorCode::Success ||
+        Loop() != Venom::ErrorCode::Success)
+        return Venom::ErrorCode::Failure;
     Terminate();
-    return ErrorCode::Success;
+    return Venom::ErrorCode::Success;
 }
 
-ErrorCode Application::Initialize()
+Venom::ErrorCode Application::Initialize()
 {
     
-    return ErrorCode();
+    return Venom::ErrorCode();
 }
 
-ErrorCode Application::Loop()
+Venom::ErrorCode Application::Loop()
 {
     while (!glfwWindowShouldClose(__w))
     {
@@ -43,7 +43,7 @@ ErrorCode Application::Loop()
         glfwSwapBuffers(__w);
         glfwPollEvents();
     };
-    return ErrorCode::Success;
+    return Venom::ErrorCode::Success;
 }
 
 void Application::Terminate()

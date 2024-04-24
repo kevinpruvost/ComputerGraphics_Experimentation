@@ -15,6 +15,7 @@ ParticleSystem::ParticleSystem()
     , __particleTexture(nullptr)
     , __particleShaderPipeline(nullptr)
     , __emitterPosition(defaultFloat)
+    , __model(nullptr)
 {
 }
 
@@ -22,6 +23,7 @@ ParticleSystem::~ParticleSystem()
 {
 }
 
+void ParticleSystem::Draw() { RenderParticles(); }
 void ParticleSystem::Update(float deltaTime)
 {
     assert(__particleTexture != nullptr);
@@ -77,6 +79,8 @@ void ParticleSystem::AddParticle(const float deltaTime)
 void ParticleSystem::RenderParticles()
 {
     Camera * camera = __camera ? __camera : Camera::MainCamera;
+    if (__model == nullptr) __model = Model::CreateSquareModel();
+    Model * model = __model;
 
     __particleShaderPipeline->Use();
 
@@ -86,7 +90,11 @@ void ParticleSystem::RenderParticles()
     __particleShaderPipeline->SetUniformInt("textureSampler", 0);
     for (const auto& particle : __particles)
     {
-        
+        if (_drawMode & Drawable3D::DrawMode::SOLID)
+        {
+
+        }
+
     }
 }
 

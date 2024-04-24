@@ -65,7 +65,7 @@ void Window::SetSceneLoopCallback(Callback<void> callback)
     _sceneLoopCallback = callback;
 }
 
-ErrorCode Window::Init(const Config& config)
+Venom::ErrorCode Window::Init(const Config& config)
 {
     _settings = config.WindowSettings();
     return _Init();

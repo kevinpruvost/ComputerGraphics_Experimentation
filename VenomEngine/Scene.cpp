@@ -1,5 +1,7 @@
 #include "Scene.h"
 
+#include <common/Rendering.h>
+
 class MainScene : public Scene
 {
 public:
@@ -7,9 +9,9 @@ public:
 	UPtr<ShaderPipeline> m_shader, m_textShader;
 	UPtr<Model> m_sphereModel;
 	UPtr<Texture> m_textureEarth, m_textureJupiter, m_textureMars, m_textureMercury, m_textureMoon, m_textureNeptune, m_textureSaturn, m_textureSun, m_textureUranus, m_textureVenus;
-	UPtr<Object> m_earth, m_jupiter, m_mars, m_mercury, m_moon, m_neptune, m_saturn, m_sun, m_uranus, m_venus;
+	UPtr<Entity> m_earth, m_jupiter, m_mars, m_mercury, m_moon, m_neptune, m_saturn, m_sun, m_uranus, m_venus;
 	UPtr<Text2D> m_text2D;
-	std::vector<Object*> m_objects;
+	std::vector<Entity*> m_objects;
 	Camera camera;
 
 	bool cameraLock = false;
@@ -47,28 +49,28 @@ public:
 		m_textureVenus = Texture::CreateTexture("resources/Planets/venus.jpg");
 
 		// Create the sun (no parent)
-		m_sun = new Object(m_sphereModel.get(), m_textureSun.get(), { 0.0f, 0.0f, 0.0f }, glm::vec3{ 0.0f }, glm::vec3{ 2.0f });
+		m_sun = new Entity(m_sphereModel.get(), m_textureSun.get(), { 0.0f, 0.0f, 0.0f }, glm::vec3{ 0.0f }, glm::vec3{ 2.0f });
 		m_sun->SetName("Sun");
 
 		// Create the planets
-		m_earth = new Object(m_sphereModel.get(), m_textureEarth.get(), { 4.0f, 0.0f, -2.0f }, glm::vec3{ 0.0f }, glm::vec3{ 0.5f });
+		m_earth = new Entity(m_sphereModel.get(), m_textureEarth.get(), { 4.0f, 0.0f, -2.0f }, glm::vec3{ 0.0f }, glm::vec3{ 0.5f });
 		m_earth->SetName("Earth");
-		m_moon = new Object(m_sphereModel.get(), m_textureMoon.get(), { 4.5f, 0.0f, -2.5f }, glm::vec3{ 0.0f }, glm::vec3{ 0.1f });
+		m_moon = new Entity(m_sphereModel.get(), m_textureMoon.get(), { 4.5f, 0.0f, -2.5f }, glm::vec3{ 0.0f }, glm::vec3{ 0.1f });
 		m_moon->SetName("Moon");
 
-		m_mercury = new Object(m_sphereModel.get(), m_textureMercury.get(), { -6.0f, 0.0f, 1.5f }, glm::vec3{ 0.0f }, glm::vec3{ 0.2f });
+		m_mercury = new Entity(m_sphereModel.get(), m_textureMercury.get(), { -6.0f, 0.0f, 1.5f }, glm::vec3{ 0.0f }, glm::vec3{ 0.2f });
 		m_mercury->SetName("Mercury");
-		m_venus = new Object(m_sphereModel.get(), m_textureVenus.get(), { 7.5f, 0.0f, -2.5f }, glm::vec3{ 0.0f }, glm::vec3{ 0.3f });
+		m_venus = new Entity(m_sphereModel.get(), m_textureVenus.get(), { 7.5f, 0.0f, -2.5f }, glm::vec3{ 0.0f }, glm::vec3{ 0.3f });
 		m_venus->SetName("Venus");
-		m_mars = new Object(m_sphereModel.get(), m_textureMars.get(), { -9.5f, 0.0f, 1.0f }, glm::vec3{ 0.0f }, glm::vec3{ 0.4f });
+		m_mars = new Entity(m_sphereModel.get(), m_textureMars.get(), { -9.5f, 0.0f, 1.0f }, glm::vec3{ 0.0f }, glm::vec3{ 0.4f });
 		m_mars->SetName("Mars");
-		m_jupiter = new Object(m_sphereModel.get(), m_textureJupiter.get(), { 14.0f, 0.0f, -3.0f }, glm::vec3{ 0.0f }, glm::vec3{ 0.6f });
+		m_jupiter = new Entity(m_sphereModel.get(), m_textureJupiter.get(), { 14.0f, 0.0f, -3.0f }, glm::vec3{ 0.0f }, glm::vec3{ 0.6f });
 		m_jupiter->SetName("Jupiter");
-		m_saturn = new Object(m_sphereModel.get(), m_textureSaturn.get(), { -18.0f, 0.0f, 5.0f }, glm::vec3{ 0.0f }, glm::vec3{ 0.7f });
+		m_saturn = new Entity(m_sphereModel.get(), m_textureSaturn.get(), { -18.0f, 0.0f, 5.0f }, glm::vec3{ 0.0f }, glm::vec3{ 0.7f });
 		m_saturn->SetName("Saturn");
-		m_uranus = new Object(m_sphereModel.get(), m_textureUranus.get(), { 22.0f, 0.0f, -6.0f }, glm::vec3{ 0.0f }, glm::vec3{ 0.8f });
+		m_uranus = new Entity(m_sphereModel.get(), m_textureUranus.get(), { 22.0f, 0.0f, -6.0f }, glm::vec3{ 0.0f }, glm::vec3{ 0.8f });
 		m_uranus->SetName("Uranus");
-		m_neptune = new Object(m_sphereModel.get(), m_textureNeptune.get(), { -26.0f, 0.0f, 7.0f }, glm::vec3{ 0.0f }, glm::vec3{ 0.9f });
+		m_neptune = new Entity(m_sphereModel.get(), m_textureNeptune.get(), { -26.0f, 0.0f, 7.0f }, glm::vec3{ 0.0f }, glm::vec3{ 0.9f });
 		m_neptune->SetName("Neptune");
 
 		m_earth->SetParent(m_sun.get());
@@ -207,17 +209,17 @@ public:
 			obj->GetTexture()->BindTexture();
 			if (drawFaces)
 			{
-				m_shader->SetDrawMode(ShaderPipeline::DrawMode::TRIANGLES);
+				m_shader->SetDrawMode(Drawable3D::DrawMode::SOLID);
 				obj->Draw();
 			}
 			if (drawLines)
 			{
-				m_shader->SetDrawMode(ShaderPipeline::DrawMode::LINES);
+				m_shader->SetDrawMode(Drawable3D::DrawMode::WIREFRAME);
 				obj->Draw();
 			}
 			if (drawPoints)
 			{
-				m_shader->SetDrawMode(ShaderPipeline::DrawMode::POINTS);
+				m_shader->SetDrawMode(Drawable3D::DrawMode::POINTS);
 				obj->Draw();
 			}
 		}

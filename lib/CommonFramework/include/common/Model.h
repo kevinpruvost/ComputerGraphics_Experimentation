@@ -4,6 +4,7 @@
 #include <common/Mesh.h>
 #include <common/Material.h>
 #include <common/Face.h>
+#include <common/ObjectPool.h>
 
 class COMMONFRAMEWORK_API Model : public Drawable3D
 {
@@ -23,9 +24,16 @@ public:
         mesh->CreateSphere(radius, sectors, stacks);
         return mesh;
     }
+    static inline Model* CreateSquareModel()
+    {
+        Model* mesh = CreateModel();
+        mesh->CreateSquare();
+        return mesh;
+    }
 
     void CreateFromFile(const std::filesystem::path & path);
     void CreateSphere(float radius, int sectors, int stacks);
+    void CreateSquare();
 
     virtual void SetVertices(const VertexArray& vertices) = 0;
     VertexArray GetVertices() const;

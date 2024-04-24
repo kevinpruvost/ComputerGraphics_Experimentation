@@ -10,23 +10,23 @@ public:
     GLFWWindow();
     ~GLFWWindow();
 
-    ErrorCode Loop() override;
+    Venom::ErrorCode Loop() override;
 
-    ErrorCode Destroy();
+    Venom::ErrorCode Destroy();
 
-    ErrorCode CloseWindow() override;
-    ErrorCode MinimizeWindow() override;
+    Venom::ErrorCode CloseWindow() override;
+    Venom::ErrorCode MinimizeWindow() override;
 
-    ErrorCode SetWindowSize(int width, int height) override;
-    ErrorCode SetWindowPosition(int x, int y) override;
-    ErrorCode SetWindowTitle(const char* title) override;
-    ErrorCode SetWindowIcon(const std::filesystem::path & iconPath) override;
-    ErrorCode SetWindowVSync(VSyncModes mode) override;
-    ErrorCode SetWindowFullscreen(bool enabled, int monitorIndex) override;
-    ErrorCode SetWindowBorderless(bool enabled) override;
-    ErrorCode SetWindowVideoMode(const VideoMode& videoMode, int monitorIndex = 0) override;
-    ErrorCode SetWindowResizable(bool enabled) override;
-    ErrorCode SetWindowFocused(bool focused) override;
+    Venom::ErrorCode SetWindowSize(int width, int height) override;
+    Venom::ErrorCode SetWindowPosition(int x, int y) override;
+    Venom::ErrorCode SetWindowTitle(const char* title) override;
+    Venom::ErrorCode SetWindowIcon(const std::filesystem::path & iconPath) override;
+    Venom::ErrorCode SetWindowVSync(VSyncModes mode) override;
+    Venom::ErrorCode SetWindowFullscreen(bool enabled, int monitorIndex) override;
+    Venom::ErrorCode SetWindowBorderless(bool enabled) override;
+    Venom::ErrorCode SetWindowVideoMode(const VideoMode& videoMode, int monitorIndex = 0) override;
+    Venom::ErrorCode SetWindowResizable(bool enabled) override;
+    Venom::ErrorCode SetWindowFocused(bool focused) override;
 
     int GetWindowWidth() const override;
     int GetWindowHeight() const override;
@@ -38,7 +38,7 @@ public:
     GLFWwindow* GetWindow();
 
 protected:
-    ErrorCode _Init() override;
+    Venom::ErrorCode _Init() override;
 
 private:
     InputSystem::Key __TranslateKey(int key);

@@ -11,7 +11,7 @@ Application::Application()
 {
 }
 
-ErrorCode Application::Run()
+Venom::ErrorCode Application::Run()
 {
     initWindow();
     initVulkan();
@@ -20,7 +20,7 @@ ErrorCode Application::Run()
     });
     _w->Loop();
     cleanup();
-    return ErrorCode::Failure;
+    return Venom::ErrorCode::Failure;
 }
 
 void Application::initWindow()

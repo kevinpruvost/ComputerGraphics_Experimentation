@@ -6,11 +6,13 @@
 #include "ShaderPipeline.h"
 #include "Camera.h"
 
-class ParticleSystem
+class ParticleSystem : public Drawable3D
 {
 public:
     ParticleSystem();
     ~ParticleSystem();
+
+    void Draw() override;
 
     // Updates the particle system based on the time passed
     void Update(float deltaTime);
@@ -82,13 +84,16 @@ private:
     int __maxParticles;
 
     float __particleSize;
-    Texture* __particleTexture;
     glm::vec4 __particleColor;
     float __particleLifetime;
     glm::vec3 __particleInitialVelocity;
     glm::vec3 __particleAcceleration;
     float __emissionRate;
     float __timeSinceLastEmission;
+
+    Texture* __particleTexture;
+    Model* __model;
+
     Camera * __camera;
 
     bool __paused;

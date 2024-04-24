@@ -9,11 +9,11 @@ public:
     WinNativeWindow();
 
 protected:
-    virtual ErrorCode _Init();
+    virtual Venom::ErrorCode _Init();
 
-    virtual ErrorCode Loop();
+    virtual Venom::ErrorCode Loop();
 
-    virtual ErrorCode Destroy();
+    virtual Venom::ErrorCode Destroy();
 };
 
 extern "C"
