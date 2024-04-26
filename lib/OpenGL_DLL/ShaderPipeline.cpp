@@ -23,13 +23,13 @@ void ShaderPipeline_OGL::SetPipeline(const std::vector<Shader*>& shaders)
     glLinkProgram(m_program);
 
     // Check for errors
-    GLint success;
+    GLint success = GL_TRUE;
     glGetProgramiv(m_program, GL_LINK_STATUS, &success);
-    if (!success)
+    if (success == GL_FALSE)
     {
         GLchar infoLog[512];
         glGetProgramInfoLog(m_program, 512, NULL, infoLog);
-        Logger::Print("ERROR::SHADER::PROGRAM::LINKING_FAILED{0}", infoLog);
+        Logger::Print("ERROR::SHADER::PROGRAM::LINKING_FAILED%s", infoLog);
     }
 
     // Detach the shaders

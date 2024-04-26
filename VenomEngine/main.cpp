@@ -1,4 +1,4 @@
-#include <common/FrameworkLoader.h>
+#include <common/Engine/EngineLoader.h>
 #include <common/Logger.h>
 
 #include <stdexcept>
@@ -39,7 +39,7 @@ int main()
 		w->Init(config);
 		w->SetSceneLoopCallback(scene);
 
-		FrameworkLoader loader(engineApi);
+		EngineLoader loader(engineApi);
 		UPtr<BaseFramework> fw = loader.GetFramework();
 		fw->Init();
 		fw->SetWindow(w.get());

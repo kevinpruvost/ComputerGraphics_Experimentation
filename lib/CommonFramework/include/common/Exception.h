@@ -1,8 +1,8 @@
 #pragma once
 
 #include <common/Error.h>
+#include <common/Export.h>
 #include <common/Format.h>
-#include <common/DLL.h>
 
 #include <exception>
 

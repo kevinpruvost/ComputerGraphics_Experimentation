@@ -7,6 +7,7 @@
 #include <common/Constants.h>
 #include <common/Logger.h>
 #include <common/Memory.h>
+#include <common/Error.h>
 
 #ifdef _WIN32
 #define EXPORT __declspec(dllexport)
@@ -49,11 +50,14 @@ private:
     void * __dllHandle;
 };
 
-class FrameworkLoader;
+class EngineLoader;
 
 #define DLL_SINGLETON_LOADING_NAME(T) create##T##Instance
 #define RELOAD_DLL_SINGLETON(T, dll) T::ReloadInstance(dll, _STRINGIZE(DLL_SINGLETON_LOADING_NAME(T)))
+
 #define INITIALIZE_DLL_SINGLETON_INSTANCE(T) UPtr<T> DLL_Singleton<T>::_instance = nullptr
+
+#define REGISTER_DLL_SINGLETON(T)
 
 /**
  * @brief DO NOT FORGET TO INITALIZE INSTANCE WITH MACRO:
@@ -64,7 +68,7 @@ template<typename T>
 class COMMONFRAMEWORK_API DLL_Singleton
 {
 protected:
-    friend class FrameworkLoader;
+    friend class EngineLoader;
     static Venom::ErrorCode ReloadInstance(DLL * dll, const char * loadingName) {
         typedef T *(*FunctionLoader)();
         FunctionLoader functionPtr = dll->getFunction<FunctionLoader>(loadingName);
@@ -80,6 +84,7 @@ protected:
             return Venom::ErrorCode::Failure;
         }
         _instance.reset(instance);
+        return Venom::ErrorCode::Success;
     }
     static UPtr<T> _instance;
 };

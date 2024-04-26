@@ -1,4 +1,4 @@
-#include <common/Object.h>
+#include <common/Entity.h>
 
 Entity::Entity(Model* model, Texture* texture, const glm::vec3& position, const glm::vec3& rotation, const glm::vec3& scale)
     : __model(model), __texture(texture), __position(position), __rotation(rotation), __scale(scale), __parent(nullptr)

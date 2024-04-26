@@ -61,3 +61,10 @@ void Model_OGL::Draw()
 	}
 	glBindVertexArray(0);
 }
+
+Venom::ErrorCode Model_OGL::ReloadObjectFromEngine()
+{
+	if (_vertices.size() > 0)
+		SetVertices(_vertices);
+	return Venom::ErrorCode::Success;
+}

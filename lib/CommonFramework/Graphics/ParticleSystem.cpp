@@ -87,6 +87,7 @@ void ParticleSystem::RenderParticles()
     __particleTexture->BindTexture();
     __particleShaderPipeline->SetUniformMatrix4("view", camera->GetViewMatrix());
     __particleShaderPipeline->SetUniformMatrix4("projection", camera->GetProjectionMatrix());
+    __particleShaderPipeline->SetUniformVec3("cameraPos", camera->GetPosition());
     __particleShaderPipeline->SetUniformInt("textureSampler", 0);
     for (const auto& particle : __particles)
     {
@@ -128,3 +129,5 @@ void ParticleSystem::SetParticleInitialVelocity(const glm::vec3& velocity) { __p
 void ParticleSystem::SetParticleAcceleration(const glm::vec3& acceleration) { __particleAcceleration = acceleration; }
 void ParticleSystem::SetEmissionRate(float rate) { __emissionRate = rate; }
 void ParticleSystem::SetCamera(Camera* camera) { __camera = camera; }
+glm::vec3 ParticleSystem::GetEmitterPosition() const { return __emitterPosition; }
+ShaderPipeline* ParticleSystem::GetParticleShaderPipeline() const { return __particleShaderPipeline; }

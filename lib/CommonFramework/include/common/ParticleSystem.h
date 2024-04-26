@@ -60,6 +60,11 @@ public:
     // Set Camera
     void SetCamera(Camera * camera);
 
+    // Get Position
+    glm::vec3 GetEmitterPosition() const;
+
+    ShaderPipeline * GetParticleShaderPipeline() const;
+
 private:
     // Function to add a new particle to the system
     void AddParticle(const float deltaTime);

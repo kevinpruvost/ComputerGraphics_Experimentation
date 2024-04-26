@@ -12,6 +12,8 @@ public:
     void SetIndices(const TriangleArray& indices) override;
     void Draw() override;
 
+    Venom::ErrorCode ReloadObjectFromEngine() override;
+
 private:
     GLuint m_vao;
     GLuint m_vbo;

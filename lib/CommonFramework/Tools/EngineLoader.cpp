@@ -1,25 +1,27 @@
-#include <common/FrameworkLoader.h>
+#include <common/Engine/EngineLoader.h>
 #include <common/Exception.h>
 #include <common/Rendering.h>
 #include <common/ObjectPool.h>
 #include <iostream>
 #include <cstdlib>
 
-UPtr<DLL> FrameworkLoader::EngineDll(nullptr);
+#define LOAD_SINGLETON(Type) Type::ReloadInstance(EngineDll.get(), _STRINGIZE(DLL_SINGLETON_LOADING_NAME(Type)))
 
-FrameworkLoader::FrameworkLoader(const EngineAPI type)
+UPtr<DLL> EngineLoader::EngineDll(nullptr);
+
+EngineLoader::EngineLoader(const EngineAPI type)
     : __framework(nullptr)
 {
-    LoadFramework(type);
+    LoadEngine(type);
 }
 
-FrameworkLoader::~FrameworkLoader()
+EngineLoader::~EngineLoader()
 {
 }
 
 typedef BaseFramework* (*CreateBaseFrameworkFn)();
 
-void FrameworkLoader::LoadFramework(const EngineAPI type)
+void EngineLoader::LoadEngine(const EngineAPI type)
 {
     const wchar_t * dllName = nullptr;
 
@@ -56,13 +58,18 @@ void FrameworkLoader::LoadFramework(const EngineAPI type)
         // Function not found
         throw DLLException("Failed to find function in DLL: {}", (char *)dllName);
     }
-
-    RELOAD_DLL_SINGLETON(Rendering, EngineDll.get());
+    
+    LOAD_SINGLETON(Rendering);
 
     __frameworkType = type;
 }
 
-BaseFramework* FrameworkLoader::GetFramework() const
+BaseFramework* EngineLoader::GetFramework() const
 {
     return __framework;
+}
+
+DLL* EngineLoader::GetEngineDll()
+{
+    return EngineDll.get();
 }

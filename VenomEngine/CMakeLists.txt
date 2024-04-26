@@ -13,18 +13,15 @@ endif()
 
 project ("VenomEngineExe")
 
+file(GLOB SHADERS "./resources/*.frag" "./resources/*.vert")
+
 # Add source to this project's executable.
 add_executable (VenomEngineExe
     "main.cpp"
     "Scene.cpp"
     "Scene.h"
     "Config.yaml"
-    "./resources/shader_test.frag"
-    "./resources/shader_test.vert"
-    "./resources/shader_hw2.frag"
-    "./resources/shader_hw2.vert"
-    "./resources/text.frag"
-    "./resources/text.vert"
+    ${SHADERS}
 )
 
 target_link_libraries(VenomEngineExe CommonFramework imgui glm::glm)

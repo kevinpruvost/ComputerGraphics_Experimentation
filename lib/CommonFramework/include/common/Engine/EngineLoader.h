@@ -1,18 +1,21 @@
 #pragma once
+#include "EngineObject.h"
 #include <common/EngineSettings.h>
 #include <common/BaseFramework.h>
 #include <common/DLL.h>
 #include <windows.h>
 
-class COMMONFRAMEWORK_API FrameworkLoader
+class COMMONFRAMEWORK_API EngineLoader
 {
 public:
-    FrameworkLoader(const EngineAPI type = EngineAPI::Vulkan);
-    ~FrameworkLoader();
+    EngineLoader(const EngineAPI type = EngineAPI::Vulkan);
+    ~EngineLoader();
 
-    void LoadFramework(const EngineAPI type);
+    void LoadEngine(const EngineAPI type);
     BaseFramework * GetFramework() const;
 public:
+    static DLL * GetEngineDll();
+private:
     static UPtr<DLL> EngineDll;
 
 private:

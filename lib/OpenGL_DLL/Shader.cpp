@@ -2,6 +2,20 @@
 
 #include <common/Math_Base.h>
 
+Shader_OGL::Shader_OGL()
+    : m_shaderId(0)
+    , m_shaderSource()
+{
+}
+
+Shader_OGL::~Shader_OGL()
+{
+    if (m_shaderId != 0)
+    {
+        glDeleteShader(m_shaderId);
+    }
+}
+
 void Shader_OGL::SetShaderSource(const std::string& shaderSource, const ShaderType type)
 {
     m_shaderSource = shaderSource;
@@ -38,15 +52,14 @@ void Shader_OGL::SetShaderSource(const std::string& shaderSource, const ShaderTy
 
     glShaderSource(m_shaderId, 1, &shaderContent, NULL);
     glCompileShader(m_shaderId);
-    GLint success;
+    GLint success = GL_TRUE;
     GLchar infoLog[512];
     glGetShaderiv(m_shaderId, GL_COMPILE_STATUS, &success);
-    if (!success)
+    if (success == GL_FALSE)
     {
         glGetShaderInfoLog(m_shaderId, 512, NULL, infoLog);
         std::cout << "ERROR::SHADER::VERTEX::COMPILATION_FAILED\n" << infoLog << std::endl;
     }
-    glDeleteShader(m_shaderId);
 }
 
 GLuint Shader_OGL::GetShaderId() const

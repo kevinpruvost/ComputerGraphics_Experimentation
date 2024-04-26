@@ -7,7 +7,8 @@
 class Shader_OGL : public Shader
 {
 public:
-    Shader_OGL() = default;
+    Shader_OGL();
+    ~Shader_OGL();
 
     void SetShaderSource(const std::string& shaderSource, const ShaderType type) override;
 

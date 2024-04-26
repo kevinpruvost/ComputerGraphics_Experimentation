@@ -31,9 +31,9 @@ public:
         return mesh;
     }
 
-    void CreateFromFile(const std::filesystem::path & path);
-    void CreateSphere(float radius, int sectors, int stacks);
-    void CreateSquare();
+    Venom::ErrorCode CreateFromFile(const std::filesystem::path & path);
+    Venom::ErrorCode CreateSphere(float radius, int sectors, int stacks);
+    Venom::ErrorCode CreateSquare();
 
     virtual void SetVertices(const VertexArray& vertices) = 0;
     VertexArray GetVertices() const;

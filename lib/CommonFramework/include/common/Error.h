@@ -1,6 +1,7 @@
 #pragma once
 
 #include <common/Exception.h>
+#include <common/Assert.h>
 
 namespace Venom
 {

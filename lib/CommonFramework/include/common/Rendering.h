@@ -3,7 +3,7 @@
 #include <common/DLL.h>
 #include <common/Memory.h>
 
-class FrameworkLoader;
+class EngineLoader;
 
 /**
  * @brief Don't forget to define extern function:

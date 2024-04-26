@@ -1,5 +1,5 @@
 #include <common/Model.h>
-#include <common/FrameworkLoader.h>
+#include <common/Engine/EngineLoader.h>
 
 #include <fstream>
 
@@ -7,16 +7,14 @@ typedef Model * (*CreateModelFn)();
 
 Model* Model::CreateModel()
 {
-    CreateModelFn createMeshFn = FrameworkLoader::EngineDll->getFunction<CreateModelFn>("createModel");
-    if (createMeshFn == nullptr)
-        throw DLLException("Failed to load createMesh function from engine dll");
-    Model* mesh = createMeshFn();
-    if (mesh == nullptr)
-        throw DLLException("Failed to create mesh");
-    return mesh;
+    CreateModelFn createMeshFn = EngineLoader::GetEngineDll()->getFunction<CreateModelFn>("createModel");
+    assert(createMeshFn != nullptr);
+    Model* model = createMeshFn();
+    assert(model != nullptr);
+    return model;
 }
 
-void Model::CreateFromFile(const std::filesystem::path& path)
+Venom::ErrorCode Model::CreateFromFile(const std::filesystem::path& path)
 {
     VertexArray vertices;
 
@@ -32,11 +30,13 @@ void Model::CreateFromFile(const std::filesystem::path& path)
     }
     else
     {
-        throw RuntimeException("Unsupported file format: {0}", extension.string().c_str());
+        Logger::Print("Unsupported file format: {0}", extension.string().c_str());
+        return Venom::ErrorCode::Failure;
     }
+    return Venom::ErrorCode::Success;
 }
 
-void Model::CreateSphere(float radius, int sectors, int stacks)
+Venom::ErrorCode Model::CreateSphere(float radius, int sectors, int stacks)
 {
     // Assembling the sphere vertices
     VertexArray vertices;
@@ -82,9 +82,10 @@ void Model::CreateSphere(float radius, int sectors, int stacks)
     }
 
     SetVertices(verticesProcessed);
+    return Venom::ErrorCode::Success;
 }
 
-void Model::CreateSquare()
+Venom::ErrorCode Model::CreateSquare()
 {
     // Assembling the square vertices
     const VertexArray verticesProcessed = {
@@ -94,6 +95,7 @@ void Model::CreateSquare()
         { glm::vec3(0.5f, 0.5f, 0.0f), glm::vec3(0.0f, 0.0f, 1.0f), glm::vec2(1.0f, 1.0f) }
     };
     SetVertices(verticesProcessed);
+    return Venom::ErrorCode::Success;
 }
 
 VertexArray Model::GetVertices() const

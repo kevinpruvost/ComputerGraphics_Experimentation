@@ -92,7 +92,12 @@ void Camera::RotatePitch(float angle)
 
 void Camera::LookAt(const glm::vec3& target)
 {
-    __viewMatrix = glm::lookAt(__position, target, glm::vec3(0.0f, 1.0f, 0.0f));
+    glm::vec3 direction = glm::normalize(target - __position);
+
+    // Update camera's yaw and pitch
+    __yaw   = glm::degrees(atan2(direction.z, direction.x));
+    __pitch = glm::degrees(asin(direction.y));
+    updateViewMatrix();
 }
 
 void Camera::updateViewMatrix() {
