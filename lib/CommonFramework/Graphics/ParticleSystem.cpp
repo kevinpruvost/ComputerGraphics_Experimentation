@@ -1,5 +1,8 @@
 #include <common/ParticleSystem.h>
 
+#include <common/Engine/EngineLoader.h>
+#include <common/Rendering.h>
+
 constexpr const float defaultFloat = -999.0f;
 
 ParticleSystem::ParticleSystem()
@@ -21,6 +24,19 @@ ParticleSystem::ParticleSystem()
 
 ParticleSystem::~ParticleSystem()
 {
+}
+
+typedef ParticleSystem* (*CreateParticleSystemFn)();
+
+ParticleSystem* ParticleSystem::CreateParticleSystem()
+{
+    CreateParticleSystemFn createParticleSystemFn = EngineLoader::GetEngineDll()->getFunction<CreateParticleSystemFn>("createParticleSystem");
+    if (createParticleSystemFn == nullptr)
+        throw DLLException("Failed to load createParticleSystem function from engine dll");
+    ParticleSystem* shader = createParticleSystemFn();
+    if (shader == nullptr)
+        throw DLLException("Failed to create shader");
+    return shader;
 }
 
 void ParticleSystem::Draw() { RenderParticles(); }
@@ -78,8 +94,10 @@ void ParticleSystem::AddParticle(const float deltaTime)
 
 void ParticleSystem::RenderParticles()
 {
+    Rendering::SetDepthTest(false);
     Camera * camera = __camera ? __camera : Camera::MainCamera;
-    if (__model == nullptr) __model = Model::CreateSquareModel();
+    if (__model == nullptr)
+        __model = Model::CreateSquareModel();
     Model * model = __model;
 
     __particleShaderPipeline->Use();
@@ -91,12 +109,27 @@ void ParticleSystem::RenderParticles()
     __particleShaderPipeline->SetUniformInt("textureSampler", 0);
     for (const auto& particle : __particles)
     {
-        if (_drawMode & Drawable3D::DrawMode::SOLID)
-        {
+        __particleShaderPipeline->SetUniformVec4("color", particle.color);
+        glm::mat4 modelMatrix = glm::mat4(1.0f);
+        modelMatrix = glm::translate(modelMatrix, particle.position);
+        modelMatrix = glm::scale(modelMatrix, glm::vec3(particle.size));
+        // Rotates towards camera
+        // Calculate the direction from the object's position to the camera position
+        glm::vec3 objectToCamera = camera->GetPosition() - particle.position;
 
-        }
+        // Calculate the rotation quaternion to align the object with the camera direction
+        glm::quat rotation = glm::quatLookAt(glm::normalize(objectToCamera), glm::vec3(0.0f, 1.0f, 0.0f)); // Assuming up direction is (0, 1, 0)
 
+        // Convert the quaternion to a rotation matrix
+        glm::mat4 rotationMatrix = glm::mat4_cast(rotation);
+
+        // Apply the rotation to the model matrix
+        modelMatrix = modelMatrix * rotationMatrix;
+        __particleShaderPipeline->SetUniformMatrix4("model", modelMatrix);
+        __model->SetDrawMode(_drawMode);
+        __model->Draw();
     }
+    Rendering::SetDepthTest(true);
 }
 
 void ParticleSystem::Pause()
@@ -131,3 +164,12 @@ void ParticleSystem::SetEmissionRate(float rate) { __emissionRate = rate; }
 void ParticleSystem::SetCamera(Camera* camera) { __camera = camera; }
 glm::vec3 ParticleSystem::GetEmitterPosition() const { return __emitterPosition; }
 ShaderPipeline* ParticleSystem::GetParticleShaderPipeline() const { return __particleShaderPipeline; }
+int ParticleSystem::GetMaxParticles() const { return __maxParticles; }
+float ParticleSystem::GetParticleSize() const { return __particleSize; }
+Texture* ParticleSystem::GetParticleTexture() const { return __particleTexture; }
+glm::vec4 ParticleSystem::GetParticleColor() const { return __particleColor; }
+float ParticleSystem::GetParticleLifetime() const { return __particleLifetime; }
+glm::vec3 ParticleSystem::GetParticleInitialVelocity() const { return __particleInitialVelocity; }
+glm::vec3 ParticleSystem::GetParticleAcceleration() const { return __particleAcceleration; }
+float ParticleSystem::GetEmissionRate() const { return __emissionRate; }
+Camera* ParticleSystem::GetCamera() const { return __camera; }

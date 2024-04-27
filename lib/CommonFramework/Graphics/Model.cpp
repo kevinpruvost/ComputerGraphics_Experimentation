@@ -88,11 +88,15 @@ Venom::ErrorCode Model::CreateSphere(float radius, int sectors, int stacks)
 Venom::ErrorCode Model::CreateSquare()
 {
     // Assembling the square vertices
-    const VertexArray verticesProcessed = {
+    const VertexArray vertices = {
         { glm::vec3(-0.5f, 0.5f, 0.0f), glm::vec3(0.0f, 0.0f, 1.0f), glm::vec2(0.0f, 1.0f) },
         { glm::vec3(-0.5f, -0.5f, 0.0f), glm::vec3(0.0f, 0.0f, 1.0f), glm::vec2(0.0f, 0.0f) },
         { glm::vec3(0.5f, -0.5f, 0.0f), glm::vec3(0.0f, 0.0f, 1.0f), glm::vec2(1.0f, 0.0f) },
         { glm::vec3(0.5f, 0.5f, 0.0f), glm::vec3(0.0f, 0.0f, 1.0f), glm::vec2(1.0f, 1.0f) }
+    };
+    const VertexArray verticesProcessed = {
+        vertices[0], vertices[1], vertices[2],
+        vertices[0], vertices[2], vertices[3]
     };
     SetVertices(verticesProcessed);
     return Venom::ErrorCode::Success;

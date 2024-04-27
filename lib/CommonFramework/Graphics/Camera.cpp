@@ -14,6 +14,7 @@ Camera::Camera(int screenWidth, int screenHeight, float fov, float nearClip, flo
     , __pitch{ 0.0f }
 {
     updateProjectionMatrix();
+    if (MainCamera == nullptr) MainCamera = this;
 }
 
 Camera::~Camera()

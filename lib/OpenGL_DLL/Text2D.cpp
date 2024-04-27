@@ -9,7 +9,6 @@ void OGL_Text2D::RenderText(const char* text, float x, float y, float scale, con
 {
     // Activate corresponding render state
     glEnable(GL_CULL_FACE);
-    glEnable(GL_BLEND);
     glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
     glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
 
@@ -54,7 +53,6 @@ void OGL_Text2D::RenderText(const char* text, float x, float y, float scale, con
 
     glBindVertexArray(0);
     glBindTexture(GL_TEXTURE_2D, 0);
-    glDisable(GL_BLEND);
 }
 
 void OGL_Text2D::LoadCharacter(char character) {

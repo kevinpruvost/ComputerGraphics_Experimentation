@@ -151,6 +151,9 @@ Venom::ErrorCode GLFWWindow::_Init()
 
     glfwMakeContextCurrent(__mainW);
 
+    if (_settings.vsync)
+        glfwSwapInterval(1);
+
     //glViewport(0, 0, _settings.width, _settings.height);
     glfwSetFramebufferSizeCallback(__mainW, framebuffer_size_callback);
     glfwSetKeyCallback(__mainW, key_callback);

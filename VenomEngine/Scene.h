@@ -1,33 +1,28 @@
 #pragma once
 
-#include <common/Engine/EngineLoader.h>
-#include <common/Logger.h>
+#include <common/Scene.h>
 
-#include <stdexcept>
-#include <iostream>
-
-#include <common/Window.h>
-#include <common/Shader.h>
-#include <common/ShaderPipeline.h>
-#include <common/Model.h>
-#include <common/Memory.h>
-#include <common/Math_Base.h>
-#include <common/Camera.h>
-#include <common/GUI.h>
-#include <common/Texture.h>
-#include <common/Entity.h>
-#include <common/Time.h>
-#include <common/Text2D.h>
-
-class Scene
+class MainScene : public Scene
 {
 public:
-    static Scene * CreateScene(Window* window, BaseFramework* framework, GUI* g);
-    virtual void Update() = 0;
+	MainScene(Window* window, BaseFramework* framework, GUI* g);
+    void Update() override;
 protected:
-    Scene(Window* window, BaseFramework* framework, GUI* g);
+	int displayMode = 1;
+	Ptr<ShaderPipeline> m_shader, m_textShader, m_particleShader, m_wireframeShader;
+	Ptr<Model>	 m_sphereModel;
+	Ptr<Texture> m_textureParticles, m_textureSun;
+	Ptr<ParticleSystem> m_ParticleSystem;
+	Ptr<Text2D> m_text2D;
+	Ptr<Entity> m_sun;
+	std::vector<Entity*> m_objects;
+	Camera camera;
 
-    Window* w;
-    BaseFramework* fw;
-    GUI* gui;
+	bool cameraLock = false;
+	bool drawFaces = true;
+	bool drawLines = false;
+	bool drawPoints = false;
+
+	float rotationSpeed = 1.0f;
+	glm::vec3 verticesColor = { 1.0f, 0.0f, 0.0f };
 };

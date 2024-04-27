@@ -39,33 +39,33 @@ void ShaderPipeline_OGL::SetPipeline(const std::vector<Shader*>& shaders)
     }
 }
 
-Venom::ErrorCode ShaderPipeline_OGL::Use()
+Venom::ErrorCode ShaderPipeline_OGL::_Use()
 {
     glUseProgram(m_program);
     return Venom::ErrorCode::Success;
 }
 
-void ShaderPipeline_OGL::SetUniformMatrix4(const std::string& name, const glm::mat4& matrix)
+void ShaderPipeline_OGL::_SetUniformMatrix4(const std::string& name, const glm::mat4& matrix)
 {
     glUniformMatrix4fv(GetUniformLocation(name.c_str()), 1, GL_FALSE, glm::value_ptr(matrix));
 }
 
-void ShaderPipeline_OGL::SetUniformVec3(const std::string& name, const glm::vec3& vec)
+void ShaderPipeline_OGL::_SetUniformVec3(const std::string& name, const glm::vec3& vec)
 {
     glUniform3fv(GetUniformLocation(name.c_str()), 1, glm::value_ptr(vec));
 }
 
-void ShaderPipeline_OGL::SetUniformVec4(const std::string& name, const glm::vec4& vec)
+void ShaderPipeline_OGL::_SetUniformVec4(const std::string& name, const glm::vec4& vec)
 {
     glUniform4fv(GetUniformLocation(name.c_str()), 1, glm::value_ptr(vec));
 }
 
-void ShaderPipeline_OGL::SetUniformFloat(const std::string& name, float value)
+void ShaderPipeline_OGL::_SetUniformFloat(const std::string& name, float value)
 {
     glUniform1f(GetUniformLocation(name.c_str()), value);
 }
 
-void ShaderPipeline_OGL::SetUniformInt(const std::string& name, int value)
+void ShaderPipeline_OGL::_SetUniformInt(const std::string& name, int value)
 {
     glUniform1i(GetUniformLocation(name.c_str()), value);
 }

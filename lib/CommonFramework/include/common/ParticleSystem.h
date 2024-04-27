@@ -5,12 +5,15 @@
 #include "Drawable3D.h"
 #include "ShaderPipeline.h"
 #include "Camera.h"
+#include "Scene.h"
 
 class ParticleSystem : public Drawable3D
 {
 public:
     ParticleSystem();
     ~ParticleSystem();
+
+    static ParticleSystem * CreateParticleSystem();
 
     void Draw() override;
 
@@ -62,10 +65,19 @@ public:
 
     // Get Position
     glm::vec3 GetEmitterPosition() const;
-
-    ShaderPipeline * GetParticleShaderPipeline() const;
-
+    int GetMaxParticles() const;
+    float GetParticleSize() const;
+    Texture* GetParticleTexture() const;
+    ShaderPipeline* GetParticleShaderPipeline() const;
+    glm::vec4 GetParticleColor() const;
+    float GetParticleLifetime() const;
+    glm::vec3 GetParticleInitialVelocity() const;
+    glm::vec3 GetParticleAcceleration() const;
+    float GetEmissionRate() const;
+    Camera* GetCamera() const;
 private:
+    friend class Scene;
+
     // Function to add a new particle to the system
     void AddParticle(const float deltaTime);
     // Renders the particles

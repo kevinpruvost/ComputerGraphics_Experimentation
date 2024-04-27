@@ -4,6 +4,39 @@
 #include <common/Error.h>
 
 template <typename T>
+class Ptr
+{
+public:
+    Ptr(T * ptr = nullptr) : __ptr(ptr) {}
+    // Assignment operator
+    Ptr& operator=(const Ptr& other) {
+        __ptr = other.__ptr;
+        return *this;
+    }
+
+    // Dereference operator
+    T& operator*() const {
+        return *__ptr;
+    }
+
+    // Member access operator
+    T* operator->() const {
+        return __ptr;
+    }
+
+    // Conversion to bool operator
+    explicit operator bool() const {
+        return __ptr != nullptr;
+    }
+
+    operator T* () const {
+        return __ptr;
+    }
+private:
+    T * __ptr;
+};
+
+template <typename T>
 class UPtr : public std::unique_ptr<T>
 {
 public:

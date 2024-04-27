@@ -27,6 +27,7 @@ void scene()
 
 int main()
 {
+	int errorCode = static_cast<int>(Venom::ErrorCode::Success);
 	try
 	{
 		Logger::Initialize("test.txt");
@@ -48,7 +49,7 @@ int main()
 		gui->SetEngineAndWindowForInit(w.get(), fw.get());
 		gui->Init();
 
-		s = Scene::CreateScene(w.get(), fw.get(), gui.get());
+		s = new MainScene(w.get(), fw.get(), gui.get());
 
 		fw->Launch();
 		fw->GetLogger()->Log("Framework launched with %d\n", engineApi);
@@ -62,7 +63,7 @@ int main()
 	catch (const std::exception& e)
 	{
 		std::cerr << e.what() << std::endl;
-		return (int)Venom::ErrorCode::Failure;
+		errorCode = static_cast<int>(Venom::ErrorCode::Failure);
 	}
-    return (int)Venom::ErrorCode::Success;
+	return errorCode;
 }
