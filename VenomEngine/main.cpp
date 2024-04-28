@@ -49,6 +49,8 @@ int main()
 		gui->SetEngineAndWindowForInit(w.get(), fw.get());
 		gui->Init();
 
+		config.LoadResources();
+
 		s = new MainScene(w.get(), fw.get(), gui.get());
 
 		fw->Launch();

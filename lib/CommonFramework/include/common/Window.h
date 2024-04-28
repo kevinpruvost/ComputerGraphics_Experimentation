@@ -45,13 +45,10 @@ public:
 	virtual Venom::ErrorCode SetWindowFocused(bool focused) = 0;
 
 	void SetSceneLoopCallback(CallbackContainer<void> callback);
-	void SetSceneLoopCallback(Callback<void> callback);
 
 	void SetApplicationLoopCallback(CallbackContainer<void> callback);
-	void SetApplicationLoopCallback(Callback<void> callback);
 
 	void SetFramebufferSizeCallback(CallbackContainer<void, int, int> callback);
-	void SetFramebufferSizeCallback(Callback<void, int, int> callback);
 
 	virtual int GetWindowWidth() const = 0;
 	virtual int GetWindowHeight() const = 0;

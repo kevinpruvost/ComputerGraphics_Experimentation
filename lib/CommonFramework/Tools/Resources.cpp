@@ -9,7 +9,7 @@ void Resources::Clear()
     resources.clear();
 }
 
-Resource* Resources::GetResource(const char* name)
+Resource* Resources::GetResource(const char const * name)
 {
     auto it = resources.find(name);
     if (it != resources.end())
@@ -17,7 +17,7 @@ Resource* Resources::GetResource(const char* name)
     return nullptr;
 }
 
-void Resources::AddResource(const char* name, Resource* resource)
+void Resources::AddResource(const char const * name, Resource* resource)
 {
     resources[name] = SPtr<Resource>(resource);
 }

@@ -11,7 +11,7 @@ protected:
 	int displayMode = 1;
 	Ptr<ShaderPipeline> m_shader, m_textShader, m_particleShader, m_wireframeShader;
 	Ptr<Model>	 m_sphereModel;
-	Ptr<Texture> m_textureParticles, m_textureSun;
+	Ptr<Texture> m_textureParticles, m_backgroundTexture;
 	Ptr<ParticleSystem> m_ParticleSystem;
 	Ptr<Text2D> m_text2D;
 	Ptr<Entity> m_sun;

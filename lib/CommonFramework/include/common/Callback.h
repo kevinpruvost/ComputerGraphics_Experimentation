@@ -19,15 +19,6 @@ public:
 		this->Reset(callback);
 		return *this;
 	}
-	Callback(const Callback<ReturnType, Args...>& callback)
-		: std::unique_ptr<CallbackContainer<ReturnType, Args...>>(callback != nullptr ? new CallbackContainer<ReturnType, Args...>(*callback) : nullptr)
-	{
-    }
-	Callback& operator=(const Callback<ReturnType, Args...>& callback)
-	{
-        this->Reset(*callback.get());
-        return *this;
-    }
 	~Callback() = default;
 	ReturnType operator()(Args... args)
 	{

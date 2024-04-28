@@ -60,11 +60,6 @@ void Window::SetSceneLoopCallback(CallbackContainer<void> callback)
     _sceneLoopCallback = callback;
 }
 
-void Window::SetSceneLoopCallback(Callback<void> callback)
-{
-    _sceneLoopCallback = callback;
-}
-
 Venom::ErrorCode Window::Init(const Config& config)
 {
     _settings = config.WindowSettings();
@@ -76,17 +71,7 @@ void Window::SetApplicationLoopCallback(CallbackContainer<void> callback)
     _appLoopCallback = callback;
 }
 
-void Window::SetApplicationLoopCallback(Callback<void> callback)
-{
-    _appLoopCallback = callback;
-}
-
 void Window::SetFramebufferSizeCallback(CallbackContainer<void, int, int> callback)
-{
-    _framebufferSizeCallback = callback;
-}
-
-void Window::SetFramebufferSizeCallback(Callback<void, int, int> callback)
 {
     _framebufferSizeCallback = callback;
 }

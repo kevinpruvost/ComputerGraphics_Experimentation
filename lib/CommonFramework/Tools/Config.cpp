@@ -4,6 +4,9 @@
 #include <ryml.hpp>
 #include <c4/std/string.hpp>
 
+#include <common/Resources.h>
+#include <common/ShaderPipeline.h>
+
 std::unordered_map<std::string, std::unique_ptr<Config>> Config::m_instances;
 
 size_t file_get_contents(const char* filename, std::string * v)
@@ -115,4 +118,44 @@ EngineSettings Config::EngineSettings() const
         throw NotImplementedException("Engine API mentioned in YAML config file not recognized. (has to be OpenGL/Vulkan/DirectX11)");
     engineNode["name"] >> settings.name;
     return settings;
+}
+
+void Config::LoadResources() const
+{
+    ryml::Tree root = *(ryml::Tree*)m_node;
+    c4::yml::NodeRef resourcesNode = root["resources"];
+    for (auto node : resourcesNode.children())
+    {
+        c4::csubstr name = node.key();
+        if (name == "shaders")
+        {
+            for (auto shader : node.children())
+            {
+                auto shaderNameNode = shader["name"].val();
+                auto pathNode = shader["path"].val();
+                const std::string shaderName(shaderNameNode.str, shaderNameNode.len);
+                const std::string path(pathNode.str, pathNode.len);
+                Resources::Load<ShaderPipeline>(shaderName.c_str(), path.c_str());
+            }
+        }
+        //else if (name == "textures")
+        //{
+        //    for (auto texture : node)
+        //    {
+        //        const c4::csubstr texture_sub = texture.val();
+        //        const std::string textureName(texture_sub.str, texture_sub.len);
+        //        Resources::Load<Texture>(textureName.c_str());
+        //    }
+        //}
+        //else if (name == "models")
+        //{
+        //    for (auto model : node)
+        //    {
+        //        const c4::csubstr model_sub = model.val();
+        //        const std::string modelName(model_sub.str, model_sub.len);
+        //        Resources::Load<Model>(modelName.c_str());
+        //    }
+        //}
+        // Load resource
+    }
 }

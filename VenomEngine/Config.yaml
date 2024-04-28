@@ -6,10 +6,24 @@ window_settings:
     width: 1920
     height: 1080
     resizable: true
-    fullscreen: true
+    fullscreen: false
     vsync: true
     focused: true
     refreshRate: 60
 engine_settings:
     api: OpenGL # OpenGL or Vulkan or DirectX11
     name: OpenGLEngine
+resources:
+    shaders:
+        - name: Background_Texture
+          path: Shaders/Background_Texture
+        - name: Skybox_Panorama
+          path: Shaders/Skybox_Panorama
+        - name: Particle
+          path: Shaders/Particle
+        - name: Particle_Snow
+          path: Shaders/Particle_Snow
+        - name: Wireframe
+          path: Shaders/Wireframe
+        - name: Text2D
+          path: Shaders/Text2D

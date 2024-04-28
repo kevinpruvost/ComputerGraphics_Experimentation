@@ -105,9 +105,9 @@ void ShaderPipeline::GiveUniformVariablesToOtherShader(ShaderPipeline* otherShad
 }
 
 template<>
-ShaderPipeline * Resources::_Load(const char* name)
+ShaderPipeline * Resources::_Load(const char const* name)
 {
-    auto frag = Shader::CreateShader(fmt::format("resources/{}.frag", name), Shader::ShaderType::Fragment);
-    auto vert = Shader::CreateShader(fmt::format("resources/{}.vert", name), Shader::ShaderType::Vertex);
+    auto frag = Shader::CreateShader(fmt::format("resources/Shaders/{}.frag", name), Shader::ShaderType::Fragment);
+    auto vert = Shader::CreateShader(fmt::format("resources/Shaders/{}.vert", name), Shader::ShaderType::Vertex);
     return ShaderPipeline::CreateShaderPipeline({ frag, vert });
 }

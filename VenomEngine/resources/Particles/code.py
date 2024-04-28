@@ -6,7 +6,7 @@ def preprocess_image_with_alpha(image_path):
     img_data = img.getdata()
 
     # Pre-multiply RGB values by alpha channel
-    premultiplied_data = [(int(r), int(g), int(b), r) for r, g, b, a in img_data]
+    premultiplied_data = [(int(r), int(g), int(b), a - r) for r, g, b, a in img_data]
 
     # Create a new image with the pre-multiplied data
     preprocessed_img = Image.new('RGBA', img.size)
@@ -18,5 +18,4 @@ def preprocess_image_with_alpha(image_path):
     print("Image preprocessed successfully.")
 
 # Example usage
-preprocess_image_with_alpha("Star.bmp")
-preprocess_image_with_alpha("Particle.bmp")
+preprocess_image_with_alpha("Snow.png")

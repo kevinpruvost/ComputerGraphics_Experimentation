@@ -3,30 +3,25 @@
 #include <common/Rendering.h>
 #include <common/ParticleSystem.h>
 
+#include <type_traits>
+
 MainScene::MainScene(Window* window, BaseFramework* framework, GUI* g)
-		: Scene(window, framework, g)
-		, camera{ window->GetWindowWidth(), window->GetWindowHeight() }
+	: Scene(window, framework, g)
+	, camera{ window->GetWindowWidth(), window->GetWindowHeight() }
 {
 	w->LockCursor();
 	m_wireframeShader = Resources::Load<ShaderPipeline>("Wireframe");
-	m_particleShader = Resources::Load<ShaderPipeline>("Particle");
-	m_shader = Resources::Load<ShaderPipeline>("shader_test");
+	m_particleShader = Resources::Load<ShaderPipeline>("Particle_Snow");
+	m_shader = Resources::Load<ShaderPipeline>("Background_Texture");
 	m_textShader = Resources::Load<ShaderPipeline>("Text2D");
 
 	m_sphereModel = Model::CreateSphereModel(1.0f, 30, 30);
 
 	m_ParticleSystem = ParticleSystem::CreateParticleSystem();
 
-	m_textureParticles = Texture::CreateTexture("resources/Particles/preprocessed_Star.png");
+	m_textureParticles = Texture::CreateTexture("resources/Particles/Snow.png");
 
-	m_textureSun = Texture::CreateTexture("resources/Planets/sun.jpg");
-
-	// Create the sun (no parent)
-	m_sun = new Entity(m_sphereModel, m_textureSun, { 0.0f, 0.0f, 0.0f }, glm::vec3{ 0.0f }, glm::vec3{ 2.0f });
-	m_sun->SetName("Sun");
-
-	//m_objects.push_back(m_sun.get());
-
+	m_backgroundTexture = Texture::CreateTexture("resources/Skybox/cloudy_sunset_8k.png");
 
 	// Create text objects
 	const char* fontPath = "resources/fonts/arial.ttf";
@@ -94,15 +89,19 @@ MainScene::MainScene(Window* window, BaseFramework* framework, GUI* g)
 		});
 
 	m_ParticleSystem->SetEmitterPosition(glm::vec3(5.0f));
-	m_ParticleSystem->SetDrawMode(Drawable3D::DrawMode::WIREFRAME_SOLID_POINTS);
 	m_ParticleSystem->SetParticleTexture(m_textureParticles);
 	m_ParticleSystem->SetParticleSize(1.0f);
 	m_ParticleSystem->SetParticleColor(glm::vec4(1.0f, 1.0f, 1.0f, 1.0f));
-	m_ParticleSystem->SetParticleAcceleration(glm::vec3(0.0f, 0.0f, 0.0f));
-	m_ParticleSystem->SetParticleInitialVelocity(glm::vec3(0.0f, 2.0f, 0.0f));
+	m_ParticleSystem->SetParticleAcceleration(glm::vec3(0.0f, -1.0f, 0.0f));
+	m_ParticleSystem->SetParticleInitialVelocity(glm::vec3(0.0f, -1.0f, 0.0f));
 	m_ParticleSystem->SetParticleLifetime(10.0f);
 	m_ParticleSystem->SetEmissionRate(3);
 	m_ParticleSystem->SetMaxParticles(1000);
+	m_ParticleSystem->SetParticleGenerationFunction([&](ParticleSystem* sys, const float deltaTime) {
+		Particle p = sys->GetDefaultParticle();
+		p.position = glm::vec3(glm::linearRand<float>(-5.0f, 5.0f), p.position.y, p.position.z);
+		sys->EmitParticle(p);
+	});
 
 	m_wireframeShader->Use();
 	m_wireframeShader->SetUniformVec3("wireframeColor", verticesColor);
@@ -117,7 +116,6 @@ MainScene::MainScene(Window* window, BaseFramework* framework, GUI* g)
 
 void MainScene::Update()
 {
-	static bool archimedeanSpiral = false;
 	gui->NewFrame();
 	{
 		static float f = 0.0f;
@@ -173,33 +171,16 @@ void MainScene::Update()
 		{
             m_ParticleSystem->SetMaxParticles(maxParticles);
         }
-		if (!archimedeanSpiral)
+		glm::vec3 initialVelocity = m_ParticleSystem->GetParticleInitialVelocity();
+		if (ImGui::SliderFloat3("Initial Velocity", glm::value_ptr(initialVelocity), -10.0f, 10.0f))
 		{
-			glm::vec3 initialVelocity = m_ParticleSystem->GetParticleInitialVelocity();
-			if (ImGui::SliderFloat3("Initial Velocity", glm::value_ptr(initialVelocity), -10.0f, 10.0f))
-			{
-				m_ParticleSystem->SetParticleInitialVelocity(initialVelocity);
-			}
+			m_ParticleSystem->SetParticleInitialVelocity(initialVelocity);
 		}
 		glm::vec3 acceleration = m_ParticleSystem->GetParticleAcceleration();
 		if (ImGui::SliderFloat3("Acceleration", glm::value_ptr(acceleration), -10.0f, 10.0f))
 		{
 			m_ParticleSystem->SetParticleAcceleration(acceleration);
 		}
-		if (ImGui::Checkbox("Archimedean Spiral", &archimedeanSpiral))
-		{
-		}
-		if (archimedeanSpiral)
-		{
-			static float b = 1.0f; 
-			ImGui::SliderFloat("Loop distance", &b, 0.1f, 10.0f);
-			double theta = Time::GetLambdaFromBeginning();
-			float radius = 0.1f * b * theta;
-			glm::vec3 initialVelocity = glm::vec3(radius * cos(theta), radius * sin(theta), 0.0f);
-			m_ParticleSystem->SetParticleInitialVelocity(initialVelocity);
-		}
-
-
 
 		ImGui::SameLine();
 
@@ -209,6 +190,7 @@ void MainScene::Update()
 	glm::mat4 view = camera.GetViewMatrix();
 	glm::mat4 projection = camera.GetProjectionMatrix();
 
+	Rendering::SetBlendingFunction(Rendering::BlendingFunction::SRC_ALPHA, Rendering::BlendingFunction::ONE_MINUS_SRC_ALPHA);
 	m_ParticleSystem->Update(Time::GetLambda());
 
 	for (auto& obj : m_objects)

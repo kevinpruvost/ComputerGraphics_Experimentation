@@ -19,6 +19,7 @@ ParticleSystem::ParticleSystem()
     , __particleShaderPipeline(nullptr)
     , __emitterPosition(defaultFloat)
     , __model(nullptr)
+    , __particleGenerationFunction(nullptr)
 {
 }
 
@@ -70,17 +71,44 @@ void ParticleSystem::Update(float deltaTime)
     __timeSinceLastEmission += deltaTime;
     while (__timeSinceLastEmission >= 1.0f / __emissionRate)
     {
-        AddParticle(deltaTime);
+        if (__particles.size() < __maxParticles)
+        {
+            if (__particleGenerationFunction != nullptr)
+                __particleGenerationFunction(this, deltaTime);
+            else
+                // Add a particle (default behavior
+                AddParticle(deltaTime);
+        }
         __timeSinceLastEmission -= 1.0f / __emissionRate;
     }
 
     RenderParticles();
 }
 
+Particle ParticleSystem::GetDefaultParticle() const
+{
+    return {
+        __emitterPosition,
+        __particleInitialVelocity,
+        __particleAcceleration,
+        __particleColor,
+        __particleLifetime,
+        __particleSize
+    };
+}
+
+void ParticleSystem::EmitParticle(const Particle& particle)
+{
+    __particles.push_back(particle);
+}
+
+void ParticleSystem::EmitParticle()
+{
+    __particles.push_back(GetDefaultParticle());
+}
+
 void ParticleSystem::AddParticle(const float deltaTime)
 {
-    if (__particles.size() >= __maxParticles) return;
-
     Particle particle = {
         __emitterPosition,
         __particleInitialVelocity,
@@ -162,6 +190,7 @@ void ParticleSystem::SetParticleInitialVelocity(const glm::vec3& velocity) { __p
 void ParticleSystem::SetParticleAcceleration(const glm::vec3& acceleration) { __particleAcceleration = acceleration; }
 void ParticleSystem::SetEmissionRate(float rate) { __emissionRate = rate; }
 void ParticleSystem::SetCamera(Camera* camera) { __camera = camera; }
+void ParticleSystem::SetParticleGenerationFunction(CallbackContainer<void, ParticleSystem*, const float> generationFunction) { __particleGenerationFunction = generationFunction; }
 glm::vec3 ParticleSystem::GetEmitterPosition() const { return __emitterPosition; }
 ShaderPipeline* ParticleSystem::GetParticleShaderPipeline() const { return __particleShaderPipeline; }
 int ParticleSystem::GetMaxParticles() const { return __maxParticles; }

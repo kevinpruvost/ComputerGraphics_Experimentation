@@ -63,13 +63,13 @@ PROPERTIES FOLDER "ExternalLibraries")
 add_subdirectory("./CommonFramework")
 
 # Graphics API Libraries
-add_subdirectory("./Vulkan_DLL")
+#add_subdirectory("./Vulkan_DLL")
 add_subdirectory("./OpenGL_DLL")
-add_subdirectory("./DX12_DLL")
+#add_subdirectory("./DX12_DLL")
 
 # GUI Libraries
 add_subdirectory("./GUI")
 
 # Context Libraries
 add_subdirectory("./GLFWWindow")
-add_subdirectory("./WinNativeWindow")
+#add_subdirectory("./WinNativeWindow")

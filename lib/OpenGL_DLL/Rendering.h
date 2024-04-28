@@ -7,13 +7,9 @@
 class Rendering_OGL : public Rendering
 {
 public:
-    virtual void _SetDepthTest(bool enable) const
-    {
-        if (enable)
-            glEnable(GL_DEPTH_TEST);
-        else
-            glDisable(GL_DEPTH_TEST);
-    }
+    void _SetDepthTest(bool enable) const override;
+    void _SetBlendingFunction(BlendingFunction src, BlendingFunction dst) const override;
+    void _SetBlendingEquation(BlendingEquation eq) const override;
 };
 
 extern "C"

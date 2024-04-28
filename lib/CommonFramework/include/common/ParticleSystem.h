@@ -7,6 +7,16 @@
 #include "Camera.h"
 #include "Scene.h"
 
+struct Particle
+{
+    glm::vec3 position;
+    glm::vec3 velocity;
+    glm::vec3 acceleration;
+    glm::vec4 color;
+    float lifetime;
+    float size;
+};
+
 class ParticleSystem : public Drawable3D
 {
 public:
@@ -63,6 +73,9 @@ public:
     // Set Camera
     void SetCamera(Camera * camera);
 
+    // Set Particle Generation Function
+    void SetParticleGenerationFunction(CallbackContainer<void, ParticleSystem *, const float> generationFunction);
+
     // Get Position
     glm::vec3 GetEmitterPosition() const;
     int GetMaxParticles() const;
@@ -75,6 +88,10 @@ public:
     glm::vec3 GetParticleAcceleration() const;
     float GetEmissionRate() const;
     Camera* GetCamera() const;
+
+    Particle GetDefaultParticle() const;
+    void EmitParticle(const Particle & particle);
+    void EmitParticle();
 private:
     friend class Scene;
 
@@ -83,16 +100,7 @@ private:
     // Renders the particles
     void RenderParticles();
 
-    struct Particle
-    {
-        glm::vec3 position;
-        glm::vec3 velocity;
-        glm::vec3 acceleration;
-        glm::vec4 color;
-        float lifetime;
-        float size;
-    };
-
+    Callback<void, ParticleSystem *, const float> __particleGenerationFunction;
     ShaderPipeline * __particleShaderPipeline;
 
     glm::vec3 __emitterPosition;
