@@ -212,6 +212,7 @@ void MainScene::Update()
 
 	Rendering::SetBlendingFunction(Rendering::BlendingFunction::SRC_ALPHA, Rendering::BlendingFunction::ONE_MINUS_SRC_ALPHA);
 	m_ParticleSystem->Update(Time::GetLambda());
+	m_ParticleSystem->SetEmissionRate(m_ParticleSystem->GetEmissionRate() + Time::GetLambda() * 0.25f);
 
 	for (auto& obj : m_objects)
 	{
