@@ -30,7 +30,7 @@ Venom::ErrorCode Model::CreateFromFile(const std::filesystem::path& path)
     }
     else
     {
-        Logger::Print("Unsupported file format: {0}", extension.string().c_str());
+        Logger::Print("Unsupported file format: %s", extension.string().c_str());
         return Venom::ErrorCode::Failure;
     }
     return Venom::ErrorCode::Success;
@@ -102,9 +102,20 @@ Venom::ErrorCode Model::CreateSquare()
     return Venom::ErrorCode::Success;
 }
 
+void Model::SetVertices(const VertexArray& vertices)
+{
+    _vertexBuffer = VertexBuffer::CreateVertexBuffer();
+    _vertexBuffer->SetVertices(vertices);
+}
+
+void Model::SetVertices(VertexBuffer* vertices)
+{
+    _vertexBuffer = vertices;
+}
+
 VertexArray Model::GetVertices() const
 {
-    return _vertices;
+    return _vertexBuffer->GetVertices();
 }
 
 void Model::AddMesh(Mesh* mesh)
@@ -115,4 +126,9 @@ void Model::AddMesh(Mesh* mesh)
 void Model::AddMaterial(Material* material)
 {
     _materials.push_back(std::shared_ptr<Material>(material));
+}
+
+Model::Model()
+    : _vertexBuffer{ nullptr }
+{
 }

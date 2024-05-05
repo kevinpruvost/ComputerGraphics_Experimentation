@@ -2,6 +2,7 @@
 
 EngineObject::EngineObject()
 {
+    EngineObjectPool::InsertObject(this);
 }
 
 EngineObject::~EngineObject()

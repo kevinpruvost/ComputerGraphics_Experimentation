@@ -10,5 +10,6 @@ uniform mat4 projection;
 void main()
 {
     TexCoords = vertexPosition; // Pass texture coordinates as vertex position
-    gl_Position = projection * view * vec4(vertexPosition, 1.0);
+    vec4 pos = projection * view * vec4(vertexPosition, 1.0);
+    gl_Position = pos.xyww;
 }

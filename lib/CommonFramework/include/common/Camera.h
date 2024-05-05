@@ -26,6 +26,7 @@ public:
     glm::mat4 GetViewMatrix() const;
     glm::mat4 GetProjectionMatrix() const;
     glm::vec3 GetPosition() const;
+    glm::vec3 & GetPositionRef();
     float GetYaw() const;
     float GetPitch() const;
 
@@ -34,6 +35,12 @@ public:
     void RotateYaw(float angle);
     void RotatePitch(float angle);
     void LookAt(const glm::vec3& target);
+
+    // Update the view matrix based on position and rotation
+    void UpdateViewMatrix();
+
+    // Update the projection matrix based on screen dimensions and projection type
+    void UpdateProjectionMatrix();
 
     static Camera * MainCamera;
 
@@ -46,10 +53,4 @@ private:
     float __yaw, __pitch;
     glm::vec3 __forward, __right, __up;
     CameraProjection __projection;
-
-    // Update the view matrix based on position and rotation
-    void updateViewMatrix();
-
-    // Update the projection matrix based on screen dimensions and projection type
-    void updateProjectionMatrix();
 };

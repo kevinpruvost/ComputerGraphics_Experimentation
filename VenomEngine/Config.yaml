@@ -17,8 +17,8 @@ resources:
     shaders:
         - name: Background_Texture
           path: Shaders/Background_Texture
-        - name: Skybox_Panorama
-          path: Shaders/Skybox_Panorama
+        - name: Skybox
+          path: Shaders/Skybox
         - name: Particle
           path: Shaders/Particle
         - name: Particle_Snow

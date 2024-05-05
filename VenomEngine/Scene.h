@@ -15,6 +15,7 @@ protected:
 	Ptr<ParticleSystem> m_ParticleSystem;
 	Ptr<Text2D> m_text2D;
 	Ptr<Entity> m_sun;
+	UPtr<Skybox> m_skybox;
 	std::vector<Entity*> m_objects;
 	Camera camera;
 

@@ -49,4 +49,30 @@ void Rendering_OGL::_SetBlendingEquation(BlendingEquation eq) const
     glBlendEquation(GetGLBlendingEquation(eq));
 }
 
+void Rendering_OGL::_DrawVertices(const VertexBuffer * vertices) const
+{
+    vertices->Bind();
+    glDrawArrays(GL_TRIANGLES, 0, vertices->GetVertexCount());
+    vertices->Unbind();
+}
+
+void Rendering_OGL::_SetDrawMode(const Drawable3D::DrawMode drawMode) const
+{
+    switch (drawMode)
+    {
+    case Drawable3D::DrawMode::SOLID:
+        glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
+        break;
+    case Drawable3D::DrawMode::WIREFRAME:
+        glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
+        break;
+    case Drawable3D::DrawMode::POINTS:
+        glPolygonMode(GL_FRONT_AND_BACK, GL_POINT);
+        break;
+    default:
+        assert(false && "Can only do SOLID, WIREFRAME or POINTS");
+        break;
+    }
+}
+
 

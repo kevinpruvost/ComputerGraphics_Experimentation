@@ -22,6 +22,11 @@ public:
     void SetDrawMode(Drawable3D::DrawMode mode) override;
 
 private:
+#ifdef _DEBUG
+    void _SetUniformVariableSignatures() override;
+#endif
+
+
     GLuint m_program;
 
     std::unordered_map<const char*, GLint> m_uniformLocations;

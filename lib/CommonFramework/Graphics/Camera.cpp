@@ -13,7 +13,7 @@ Camera::Camera(int screenWidth, int screenHeight, float fov, float nearClip, flo
     , __yaw{ 0.0f }
     , __pitch{ 0.0f }
 {
-    updateProjectionMatrix();
+    UpdateProjectionMatrix();
     if (MainCamera == nullptr) MainCamera = this;
 }
 
@@ -24,22 +24,22 @@ Camera::~Camera()
 
 void Camera::SetPosition(const glm::vec3& position) {
     __position = position;
-    updateViewMatrix();
+    UpdateViewMatrix();
 }
 
 void Camera::SetFOV(float fov) {
     __fov = fov;
-    updateProjectionMatrix();
+    UpdateProjectionMatrix();
 }
 
 void Camera::SetNearClip(float nearClip) {
     __nearClip = nearClip;
-    updateProjectionMatrix();
+    UpdateProjectionMatrix();
 }
 
 void Camera::SetFarClip(float farClip) {
     __farClip = farClip;
-    updateProjectionMatrix();
+    UpdateProjectionMatrix();
 }
 
 void Camera::SetAsMainCamera()
@@ -59,6 +59,11 @@ glm::vec3 Camera::GetPosition() const {
     return __position;
 }
 
+glm::vec3& Camera::GetPositionRef()
+{
+    return __position;
+}
+
 float Camera::GetYaw() const
 {
     return __yaw;
@@ -72,13 +77,13 @@ float Camera::GetPitch() const
 void Camera::Translate(const glm::vec3& translation) {
     glm::vec3 realTranslation = translation.x * __right + translation.y * __up + translation.z * __forward;
     __position += realTranslation;
-    updateViewMatrix();
+    UpdateViewMatrix();
 }
 
 void Camera::RotateYaw(float angle)
 {
     __yaw += angle;
-    updateViewMatrix();
+    UpdateViewMatrix();
 }
 
 void Camera::RotatePitch(float angle)
@@ -88,7 +93,7 @@ void Camera::RotatePitch(float angle)
         __pitch = 89.0f;
     else if (__pitch < -89.0f)
         __pitch = -89.0f;
-    updateViewMatrix();
+    UpdateViewMatrix();
 }
 
 void Camera::LookAt(const glm::vec3& target)
@@ -98,10 +103,10 @@ void Camera::LookAt(const glm::vec3& target)
     // Update camera's yaw and pitch
     __yaw   = glm::degrees(atan2(direction.z, direction.x));
     __pitch = glm::degrees(asin(direction.y));
-    updateViewMatrix();
+    UpdateViewMatrix();
 }
 
-void Camera::updateViewMatrix() {
+void Camera::UpdateViewMatrix() {
     // Calculate the new Front vector
     glm::vec3 front;
     front.x = cos(glm::radians(__yaw)) * cos(glm::radians(__pitch));
@@ -115,7 +120,7 @@ void Camera::updateViewMatrix() {
     __viewMatrix = glm::lookAt(__position, __position + __forward, __up);
 }
 
-void Camera::updateProjectionMatrix() {
+void Camera::UpdateProjectionMatrix() {
     if (__projection == CameraProjection::Perspective)
         __projectionMatrix = glm::perspective(glm::radians(__fov), static_cast<float>(__screenWidth) / static_cast<float>(__screenHeight), __nearClip, __farClip);
     else if (__projection == CameraProjection::Orthographic)

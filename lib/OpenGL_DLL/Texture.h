@@ -9,11 +9,13 @@ public:
     Texture_OGL();
     ~Texture_OGL();
 
-    void CreateFromFile(const std::filesystem::path& path) override;
+    Venom::ErrorCode CreateFromFile(const std::filesystem::path& path) override;
+    Venom::ErrorCode CreateCubemap(const std::array<std::filesystem::path, 6>& paths) override;
     int GetTextureID() const override;
-    void BindTexture() const override;
+    void BindTexture(const TextureType textureType) const override;
 
 private:
+    Venom::ErrorCode GenerateTexture();
 
 private:
     GLuint __textureID;

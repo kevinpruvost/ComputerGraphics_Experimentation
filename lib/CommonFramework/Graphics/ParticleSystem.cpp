@@ -32,11 +32,9 @@ typedef ParticleSystem* (*CreateParticleSystemFn)();
 ParticleSystem* ParticleSystem::CreateParticleSystem()
 {
     CreateParticleSystemFn createParticleSystemFn = EngineLoader::GetEngineDll()->getFunction<CreateParticleSystemFn>("createParticleSystem");
-    if (createParticleSystemFn == nullptr)
-        throw DLLException("Failed to load createParticleSystem function from engine dll");
+    assert(createParticleSystemFn != nullptr);
     ParticleSystem* shader = createParticleSystemFn();
-    if (shader == nullptr)
-        throw DLLException("Failed to create shader");
+    assert(shader != nullptr);
     return shader;
 }
 

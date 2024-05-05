@@ -6,3 +6,5 @@
 #include "Cast.h"
 #include "DLL.h"
 #include "Assert.h"
+
+#include <array>

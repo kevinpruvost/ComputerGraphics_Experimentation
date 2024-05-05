@@ -35,7 +35,8 @@ public:
     Venom::ErrorCode CreateSphere(float radius, int sectors, int stacks);
     Venom::ErrorCode CreateSquare();
 
-    virtual void SetVertices(const VertexArray& vertices) = 0;
+    void SetVertices(const VertexArray& vertices);
+    void SetVertices(VertexBuffer * vertices);
     VertexArray GetVertices() const;
     virtual void SetIndices(const TriangleArray& indices) = 0;
 
@@ -43,11 +44,11 @@ public:
     void AddMaterial(Material * material);
 
 protected:
-    Model() = default;
+    Model();
 
     std::vector<std::shared_ptr<Mesh>> _meshes;
     std::vector<std::shared_ptr<Material>> _materials;
-    VertexArray _vertices;
+    VertexBuffer * _vertexBuffer;
 
 private:
     // Parser

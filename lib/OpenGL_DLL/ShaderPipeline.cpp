@@ -89,6 +89,48 @@ void ShaderPipeline_OGL::SetDrawMode(Drawable3D::DrawMode mode)
     }
 }
 
+#ifdef _DEBUG
+void ShaderPipeline_OGL::_SetUniformVariableSignatures()
+{
+    GLint numUniforms = 0;
+    glGetProgramiv(m_program, GL_ACTIVE_UNIFORMS, &numUniforms);
+
+    for (int i = 0; i < numUniforms; i++)
+    {
+        GLint size;
+        GLenum type;
+        GLchar name[256] = { 0 };
+        glGetActiveUniform(m_program, i, 256, NULL, &size, &type, name);
+
+        UniformVariableSignature signature = { name };
+        switch (type)
+        {
+            case GL_FLOAT:
+                signature.type = ShaderPipeline::UniformVariable::Type::FLOAT;
+                break;
+            case GL_INT:
+            case GL_SAMPLER_2D:
+            case GL_SAMPLER_CUBE:
+                signature.type = ShaderPipeline::UniformVariable::Type::INT;
+                break;
+            case GL_FLOAT_VEC3:
+                signature.type = ShaderPipeline::UniformVariable::Type::VEC3;
+                break;
+            case GL_FLOAT_VEC4:
+                signature.type = ShaderPipeline::UniformVariable::Type::VEC4;
+                break;
+            case GL_FLOAT_MAT4:
+                signature.type = ShaderPipeline::UniformVariable::Type::MATRIX4;
+                break;
+            default:
+                Logger::Print("Unknown uniform type (OpenGL): %x", type);
+                break;
+        }
+        __uniformVariableSignatures.emplace_back(signature);
+    }
+}
+#endif
+
 // Export the factory function to create an instance of the class
 EXPORT ShaderPipeline* createShaderPipeline() {
     return new ShaderPipeline_OGL();

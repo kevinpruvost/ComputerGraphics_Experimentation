@@ -19,6 +19,7 @@
 #include <common/Time.h>
 #include <common/Text2D.h>
 #include <common/ParticleSystem.h>
+#include <common/Skybox.h>
 
 class Scene
 {

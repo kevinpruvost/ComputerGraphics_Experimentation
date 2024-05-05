@@ -12,16 +12,25 @@ MainScene::MainScene(Window* window, BaseFramework* framework, GUI* g)
 	w->LockCursor();
 	m_wireframeShader = Resources::Load<ShaderPipeline>("Wireframe");
 	m_particleShader = Resources::Load<ShaderPipeline>("Particle_Snow");
-	m_shader = Resources::Load<ShaderPipeline>("Background_Texture");
+	m_shader = Resources::Load<ShaderPipeline>("Skybox");
 	m_textShader = Resources::Load<ShaderPipeline>("Text2D");
 
 	m_sphereModel = Model::CreateSphereModel(1.0f, 30, 30);
 
 	m_ParticleSystem = ParticleSystem::CreateParticleSystem();
 
-	m_textureParticles = Texture::CreateTexture("resources/Particles/Snow.png");
+	m_textureParticles = Texture::CreateTexture();
+	m_textureParticles->CreateFromFile("resources/Particles/Snow.png");
 
-	m_backgroundTexture = Texture::CreateTexture("resources/Skybox/cloudy_sunset_8k.png");
+	m_backgroundTexture = Texture::CreateTexture();
+	m_backgroundTexture->CreateCubemap({
+		"resources/Skybox/right.png",
+		"resources/Skybox/left.png",
+		"resources/Skybox/top.png",
+		"resources/Skybox/bottom.png",
+		"resources/Skybox/front.png",
+		"resources/Skybox/back.png"
+	});
 
 	// Create text objects
 	const char* fontPath = "resources/fonts/arial.ttf";
@@ -99,7 +108,8 @@ MainScene::MainScene(Window* window, BaseFramework* framework, GUI* g)
 	m_ParticleSystem->SetMaxParticles(1000);
 	m_ParticleSystem->SetParticleGenerationFunction([&](ParticleSystem* sys, const float deltaTime) {
 		Particle p = sys->GetDefaultParticle();
-		p.position = glm::vec3(glm::linearRand<float>(-5.0f, 5.0f), p.position.y, p.position.z);
+		p.position = glm::vec3(glm::linearRand<float>(-10.0f, 10.0f), p.position.y, glm::linearRand<float>(-10.0f, 10.0f));
+		p.size = glm::linearRand<float>(0.5f, 3.0f);
 		sys->EmitParticle(p);
 	});
 
@@ -110,6 +120,8 @@ MainScene::MainScene(Window* window, BaseFramework* framework, GUI* g)
 
 	camera.SetPosition(glm::vec3(-3.0f, 0.0f, -3.0f));
 	camera.LookAt(m_ParticleSystem->GetEmitterPosition());
+
+	m_skybox = std::make_unique<Skybox>(m_shader, m_backgroundTexture);
 
 	Time::SetStartTime();
 }
@@ -128,6 +140,12 @@ void MainScene::Update()
 			if (!cameraLock) w->LockCursor();
 			else w->UnlockCursor();
 		}
+		ImGui::Text("Camera Properties:");
+		if (ImGui::SliderFloat3("Position", glm::value_ptr(camera.GetPositionRef()), -100, 100.0f))
+		{
+			camera.UpdateViewMatrix();
+		}
+		
 		if (ImGui::Checkbox("Draw Faces", &drawFaces))
 		{
 		}
@@ -189,6 +207,8 @@ void MainScene::Update()
 
 	glm::mat4 view = camera.GetViewMatrix();
 	glm::mat4 projection = camera.GetProjectionMatrix();
+
+	m_skybox->Draw();
 
 	Rendering::SetBlendingFunction(Rendering::BlendingFunction::SRC_ALPHA, Rendering::BlendingFunction::ONE_MINUS_SRC_ALPHA);
 	m_ParticleSystem->Update(Time::GetLambda());

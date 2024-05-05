@@ -15,18 +15,30 @@ typedef ShaderPipeline* (*CreateShaderPipelineFn)();
 ShaderPipeline * ShaderPipeline::CreateShaderPipeline(const std::vector<Shader*>& shaders)
 {
     CreateShaderPipelineFn createShaderFn = EngineLoader::GetEngineDll()->getFunction<CreateShaderPipelineFn>("createShaderPipeline");
-    if (createShaderFn == nullptr)
-        throw DLLException("Failed to load createShader function from engine dll");
+    assert(createShaderFn != nullptr);
     ShaderPipeline * shader = createShaderFn();
-    if (shader == nullptr)
-        throw DLLException("Failed to create shader");
+    assert(shader != nullptr);
     shader->SetPipeline(shaders);
+#if _DEBUG
+    const auto & shaderVariables = shader->GetUniformVariableSignatures();
+    for (const auto& var : shaderVariables)
+    {
+        Logger::DebugPrint("Uniform variable:[%s]:\"%s\"", ShaderPipeline::UniformVariable::GetTypeString(var.type), var.name.c_str());
+    }
+#endif
     return shader;
 }
 
 ShaderPipeline* ShaderPipeline::GetCurrentlyUsedPipeline()
 {
     return currentlyUsedPipeline;
+}
+
+const std::vector<ShaderPipeline::UniformVariableSignature>& ShaderPipeline::GetUniformVariableSignatures()
+{
+    if (__uniformVariableSignatures.empty())
+        _SetUniformVariableSignatures();
+    return __uniformVariableSignatures;
 }
 
 void ShaderPipeline::SetUniformMatrix4(const std::string& name, const glm::mat4& matrix)
@@ -36,7 +48,7 @@ void ShaderPipeline::SetUniformMatrix4(const std::string& name, const glm::mat4&
         UniformVariable::Type::MATRIX4
     };
     var.matrix = matrix;
-    m_uniformVariables[name] = var;
+    __uniformVariables[name] = var;
 }
 
 void ShaderPipeline::SetUniformVec3(const std::string& name, const glm::vec3& vec)
@@ -46,7 +58,7 @@ void ShaderPipeline::SetUniformVec3(const std::string& name, const glm::vec3& ve
         UniformVariable::Type::VEC3
     };
     var.vec3 = vec;
-    m_uniformVariables[name] = var;
+    __uniformVariables[name] = var;
 }
 
 void ShaderPipeline::SetUniformVec4(const std::string& name, const glm::vec4& vec)
@@ -56,7 +68,7 @@ void ShaderPipeline::SetUniformVec4(const std::string& name, const glm::vec4& ve
         UniformVariable::Type::VEC4
     };
     var.vec4 = vec;
-    m_uniformVariables[name] = var;
+    __uniformVariables[name] = var;
 }
 
 void ShaderPipeline::SetUniformFloat(const std::string& name, float value)
@@ -66,7 +78,7 @@ void ShaderPipeline::SetUniformFloat(const std::string& name, float value)
         UniformVariable::Type::FLOAT
     };
     var.f = value;
-    m_uniformVariables[name] = var;
+    __uniformVariables[name] = var;
 }
 
 void ShaderPipeline::SetUniformInt(const std::string& name, int value)
@@ -76,12 +88,12 @@ void ShaderPipeline::SetUniformInt(const std::string& name, int value)
         UniformVariable::Type::INT
     };
     var.i = value;
-    m_uniformVariables[name] = var;
+    __uniformVariables[name] = var;
 }
 
 void ShaderPipeline::GiveUniformVariablesToOtherShader(ShaderPipeline* otherShader)
 {
-    for (auto& [name, var] : m_uniformVariables)
+    for (auto& [name, var] : __uniformVariables)
     {
         switch (var.type)
         {
@@ -107,6 +119,7 @@ void ShaderPipeline::GiveUniformVariablesToOtherShader(ShaderPipeline* otherShad
 template<>
 ShaderPipeline * Resources::_Load(const char const* name)
 {
+    Logger::DebugPrint("Loading shader pipeline: %s", name);
     auto frag = Shader::CreateShader(fmt::format("resources/Shaders/{}.frag", name), Shader::ShaderType::Fragment);
     auto vert = Shader::CreateShader(fmt::format("resources/Shaders/{}.vert", name), Shader::ShaderType::Vertex);
     return ShaderPipeline::CreateShaderPipeline({ frag, vert });

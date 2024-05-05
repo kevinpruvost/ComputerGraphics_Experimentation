@@ -1,6 +1,7 @@
 #pragma once
 
 #include <common/Rendering.h>
+#include <common/Vertex.h>
 #include <glad/glad.h>
 
 
@@ -10,6 +11,9 @@ public:
     void _SetDepthTest(bool enable) const override;
     void _SetBlendingFunction(BlendingFunction src, BlendingFunction dst) const override;
     void _SetBlendingEquation(BlendingEquation eq) const override;
+    void _DrawVertices(const VertexBuffer * vertices) const override;
+    void _SetDrawMode(const Drawable3D::DrawMode drawMode) const;
+
 };
 
 extern "C"
