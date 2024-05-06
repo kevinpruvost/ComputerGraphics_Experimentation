@@ -3,6 +3,7 @@
 #include <common/DLL.h>
 #include <common/Window.h>
 #include <common/Engine/EngineLoader.h>
+#include <common/ObjectPool.h>
 #include <imgui.h>
 
 /**
@@ -55,6 +56,11 @@ public:
     // * @return true if interaction has occured
     // */
     //virtual bool ColorEdit3(const char* txt, float* colorRef) = 0;
+    void DrawObjectsProperties();
+private:
+    void DrawObjectProperties(Object** obj);
+    void DrawEngineObjectProperties(const char * name, EngineObject ** obj);
+
 protected:
     Window * _window;
     BaseFramework* _engine;

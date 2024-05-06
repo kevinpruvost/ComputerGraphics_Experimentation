@@ -28,6 +28,7 @@ Vertex::~Vertex()
 }
 
 VertexBuffer::VertexBuffer()
+    : EngineObject(EngineObjectType::Object)
 {
 }
 

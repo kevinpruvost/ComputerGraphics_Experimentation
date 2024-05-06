@@ -3,6 +3,8 @@
 Entity::Entity(Model* model, Texture* texture, const glm::vec3& position, const glm::vec3& rotation, const glm::vec3& scale)
     : __model(model), __texture(texture), __position(position), __rotation(rotation), __scale(scale), __parent(nullptr)
 {
+    _properties.SetProperty("Model", &__model);
+    //_properties.SetProperty("Texture", &__texture);
 }
 
 void Entity::Draw() const
@@ -57,12 +59,12 @@ void Entity::SetParent(Entity* parent)
 
 void Entity::SetName(const char* name)
 {
-    __name = name;
+    _objectName = name;
 }
 
 const char* Entity::GetName() const
 {
-    return __name;
+    return _objectName.c_str();
 }
 
 glm::vec3 Entity::GetWorldPosition() const
@@ -78,12 +80,22 @@ glm::vec3 Entity::GetWorldPosition() const
     return glm::vec3(worldPosition);
 }
 
-glm::vec3 Entity::GetPosition() const
+const glm::vec3 & Entity::GetPosition() const
 {
     return __position;
 }
 
-glm::vec3 Entity::GetRotation() const
+glm::vec3& Entity::GetPositionRef()
+{
+    return __position;
+}
+
+const glm::vec3 & Entity::GetRotation() const
+{
+    return __rotation;
+}
+
+glm::vec3& Entity::GetRotationRef()
 {
     return __rotation;
 }

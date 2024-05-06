@@ -55,3 +55,13 @@ public:
     using std::shared_ptr<T>::operator=;
     using std::shared_ptr<T>::operator*;
 };
+
+// Define specialization of std::hash for SPtr<T>
+namespace std {
+    template<typename T>
+    struct hash<SPtr<T>> {
+        std::size_t operator()(const SPtr<T>& sptr) const noexcept {
+            return std::hash<T*>{}(sptr.get());
+        }
+    };
+}

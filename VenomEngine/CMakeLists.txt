@@ -13,7 +13,7 @@ endif()
 
 project ("VenomEngineExe")
 
-file(GLOB SHADERS "./resources/Shaders/*.frag" "./resources/Shaders/*.vert")
+file(GLOB SHADERS "./resources/Shaders/*")
 
 # Add source to this project's executable.
 add_executable (VenomEngineExe

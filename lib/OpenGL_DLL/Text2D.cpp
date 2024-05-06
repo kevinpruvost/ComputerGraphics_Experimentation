@@ -7,6 +7,7 @@ EXPORT Text2D * createText2D() {
 
 void OGL_Text2D::RenderText(const char* text, float x, float y, float scale, const glm::vec3& color)
 {
+    assert(text);
     // Activate corresponding render state
     glEnable(GL_CULL_FACE);
     glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);

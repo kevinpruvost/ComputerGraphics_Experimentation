@@ -9,6 +9,8 @@
 
 class COMMONFRAMEWORK_API ShaderPipeline : public Resource
 {
+protected:
+    ShaderPipeline();
 public:
     struct UniformVariable
     {
@@ -82,7 +84,7 @@ public:
     virtual void SetPipeline(const std::vector<Shader *> & shaders) = 0;
     Venom::ErrorCode Use();
     virtual Venom::ErrorCode _Use() = 0;
-    static ShaderPipeline* CreateShaderPipeline(const std::vector<Shader*>& shaders);
+    static ShaderPipeline* CreateShaderPipeline(const char * name, const std::vector<Shader*>& shaders);
 
 #ifdef _DEBUG
     /**

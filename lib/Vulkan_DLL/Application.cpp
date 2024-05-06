@@ -30,7 +30,7 @@ void Application::initWindow()
 void Application::initVulkan()
 {
     createInstance();
-#if _DEBUG
+#ifdef _DEBUG
     setupDebugMessenger();
 #endif
 }
@@ -51,7 +51,7 @@ void Application::createInstance()
     createInfo.enabledLayerCount = 0;
     createInfo.ppEnabledLayerNames = nullptr;
 
-#if _DEBUG
+#ifdef _DEBUG
     checkAvailableExtensions();
     if (!checkValidationLayerSupport())
         throw std::runtime_error("validation layers requested, but not available!");
@@ -77,7 +77,7 @@ std::vector<const char*> Application::getRequiredExtensions()
     std::vector<const char*> extensions(glfwExtensions, glfwExtensions + glfwExtensionCount);
     extensions.push_back(VK_KHR_PORTABILITY_ENUMERATION_EXTENSION_NAME);
 
-#if _DEBUG
+#ifdef _DEBUG
     extensions.push_back(VK_EXT_DEBUG_UTILS_EXTENSION_NAME);
 #endif
 

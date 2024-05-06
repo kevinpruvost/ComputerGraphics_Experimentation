@@ -17,7 +17,7 @@ struct Particle
     float size;
 };
 
-class ParticleSystem : public Drawable3D
+class ParticleSystem : public Drawable3D, public Object
 {
 public:
     ParticleSystem();

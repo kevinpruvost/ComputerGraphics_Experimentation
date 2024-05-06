@@ -89,6 +89,12 @@ void ShaderPipeline_OGL::SetDrawMode(Drawable3D::DrawMode mode)
     }
 }
 
+Venom::ErrorCode ShaderPipeline_OGL::ReloadObjectFromEngine()
+{
+    Logger::Print("NOT IMPLEMENTED!");
+    return Venom::ErrorCode::Failure;
+}
+
 #ifdef _DEBUG
 void ShaderPipeline_OGL::_SetUniformVariableSignatures()
 {

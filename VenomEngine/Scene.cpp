@@ -112,6 +112,7 @@ MainScene::MainScene(Window* window, BaseFramework* framework, GUI* g)
 		p.size = glm::linearRand<float>(0.5f, 3.0f);
 		sys->EmitParticle(p);
 	});
+	m_ParticleSystem->SetObjectName("Snow Particle System");
 
 	m_wireframeShader->Use();
 	m_wireframeShader->SetUniformVec3("wireframeColor", verticesColor);
@@ -122,6 +123,9 @@ MainScene::MainScene(Window* window, BaseFramework* framework, GUI* g)
 	camera.LookAt(m_ParticleSystem->GetEmitterPosition());
 
 	m_skybox = std::make_unique<Skybox>(m_shader, m_backgroundTexture);
+
+	//m_sun = new Entity(m_sphereModel, m_textureParticles, glm::vec3(0), glm::vec3(0), glm::vec3(3));
+	//m_objects.push_back(m_sun);
 
 	Time::SetStartTime();
 }
@@ -163,44 +167,7 @@ void MainScene::Update()
 			m_wireframeShader->SetUniformVec3("wireframeColor", verticesColor);
 		}
 
-		ImGui::Text("Particles Properties:");
-		glm::vec4 color = m_ParticleSystem->GetParticleColor();
-		if (ImGui::ColorEdit4("Particles Color", glm::value_ptr(color)))
-		{
-			m_ParticleSystem->SetParticleColor(color);
-		}
-		float size = m_ParticleSystem->GetParticleSize();
-		if (ImGui::SliderFloat("Particles Size", &size, 0.1f, 10.0f))
-		{
-            m_ParticleSystem->SetParticleSize(size);
-        }
-		float lifetime = m_ParticleSystem->GetParticleLifetime();
-		if (ImGui::SliderFloat("Particles Lifetime", &lifetime, 0.1f, 100.0f))
-		{
-            m_ParticleSystem->SetParticleLifetime(lifetime);
-        }
-		float emissionRate = m_ParticleSystem->GetEmissionRate();
-		if (ImGui::SliderFloat("Emission Rate", &emissionRate, 0.1f, 100.0f))
-		{
-            m_ParticleSystem->SetEmissionRate(emissionRate);
-        }
-		float maxParticles = m_ParticleSystem->GetMaxParticles();
-		if (ImGui::SliderFloat("Max Particles", &maxParticles, 1.0f, 10000.0f))
-		{
-            m_ParticleSystem->SetMaxParticles(maxParticles);
-        }
-		glm::vec3 initialVelocity = m_ParticleSystem->GetParticleInitialVelocity();
-		if (ImGui::SliderFloat3("Initial Velocity", glm::value_ptr(initialVelocity), -10.0f, 10.0f))
-		{
-			m_ParticleSystem->SetParticleInitialVelocity(initialVelocity);
-		}
-		glm::vec3 acceleration = m_ParticleSystem->GetParticleAcceleration();
-		if (ImGui::SliderFloat3("Acceleration", glm::value_ptr(acceleration), -10.0f, 10.0f))
-		{
-			m_ParticleSystem->SetParticleAcceleration(acceleration);
-		}
-
-		ImGui::SameLine();
+		gui->DrawObjectsProperties();
 
 		ImGui::End();
 	}

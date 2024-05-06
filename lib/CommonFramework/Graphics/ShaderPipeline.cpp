@@ -3,23 +3,30 @@
 
 ShaderPipeline* currentlyUsedPipeline = nullptr;
 
+ShaderPipeline::ShaderPipeline()
+    : Resource(EngineResource::ResourceType::SHADER)
+{
+}
+
 Venom::ErrorCode ShaderPipeline::Use()
 {
     Venom::ErrorCode err = _Use();
     if (err != Venom::ErrorCode::Success)
         return err;
     currentlyUsedPipeline = this;
+    return Venom::ErrorCode::Success;
 }
 
 typedef ShaderPipeline* (*CreateShaderPipelineFn)();
-ShaderPipeline * ShaderPipeline::CreateShaderPipeline(const std::vector<Shader*>& shaders)
+ShaderPipeline * ShaderPipeline::CreateShaderPipeline(const char * name, const std::vector<Shader*>& shaders)
 {
     CreateShaderPipelineFn createShaderFn = EngineLoader::GetEngineDll()->getFunction<CreateShaderPipelineFn>("createShaderPipeline");
     assert(createShaderFn != nullptr);
     ShaderPipeline * shader = createShaderFn();
     assert(shader != nullptr);
     shader->SetPipeline(shaders);
-#if _DEBUG
+    shader->SetResourceName(name);
+#ifdef _DEBUG
     const auto & shaderVariables = shader->GetUniformVariableSignatures();
     for (const auto& var : shaderVariables)
     {
@@ -34,12 +41,14 @@ ShaderPipeline* ShaderPipeline::GetCurrentlyUsedPipeline()
     return currentlyUsedPipeline;
 }
 
+#ifdef _DEBUG
 const std::vector<ShaderPipeline::UniformVariableSignature>& ShaderPipeline::GetUniformVariableSignatures()
 {
     if (__uniformVariableSignatures.empty())
         _SetUniformVariableSignatures();
     return __uniformVariableSignatures;
 }
+#endif
 
 void ShaderPipeline::SetUniformMatrix4(const std::string& name, const glm::mat4& matrix)
 {
@@ -120,7 +129,34 @@ template<>
 ShaderPipeline * Resources::_Load(const char const* name)
 {
     Logger::DebugPrint("Loading shader pipeline: %s", name);
+
+    std::string fragPath = fmt::format("resources/Shaders/{}.frag", name);
+    std::string vertPath = fmt::format("resources/Shaders/{}.vert", name);
+    std::string tcsPath = fmt::format("resources/Shaders/{}.tcs", name);
+    std::string tesPath = fmt::format("resources/Shaders/{}.tes", name);
+    std::string geomPath = fmt::format("resources/Shaders/{}.geom", name);
+
     auto frag = Shader::CreateShader(fmt::format("resources/Shaders/{}.frag", name), Shader::ShaderType::Fragment);
     auto vert = Shader::CreateShader(fmt::format("resources/Shaders/{}.vert", name), Shader::ShaderType::Vertex);
-    return ShaderPipeline::CreateShaderPipeline({ frag, vert });
+    std::vector<Shader*> shaders{ frag, vert };
+
+    // Check if Tessellation Control Shader (TCS) exists
+    if (std::filesystem::exists(tcsPath)) {
+        auto tcs = Shader::CreateShader(tcsPath.c_str(), Shader::ShaderType::TessControl);
+        shaders.push_back(tcs);
+    }
+
+    // Check if Tessellation Evaluation Shader (TES) exists
+    if (std::filesystem::exists(tesPath)) {
+        auto tes = Shader::CreateShader(tesPath.c_str(), Shader::ShaderType::TessEvaluation);
+        shaders.push_back(tes);
+    }
+
+    // Check if Geometry Shader (GS) exists
+    if (std::filesystem::exists(geomPath)) {
+        auto geom = Shader::CreateShader(geomPath.c_str(), Shader::ShaderType::Geometry);
+        shaders.push_back(geom);
+    }
+
+    return ShaderPipeline::CreateShaderPipeline(name, { frag, vert });
 }

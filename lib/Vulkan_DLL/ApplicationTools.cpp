@@ -5,7 +5,7 @@ ApplicationTools::ApplicationTools()
 {
 }
 
-#if _DEBUG
+#ifdef _DEBUG
 
 VKAPI_ATTR VkBool32 VKAPI_CALL debugCallback(
     VkDebugUtilsMessageSeverityFlagBitsEXT messageSeverity,
@@ -19,7 +19,7 @@ VKAPI_ATTR VkBool32 VKAPI_CALL debugCallback(
 
 void ApplicationTools::setupDebugMessenger()
 {
-#if _DEBUG
+#ifdef _DEBUG
     VkDebugUtilsMessengerCreateInfoEXT createInfo{};
     createInfo.sType = VK_STRUCTURE_TYPE_DEBUG_UTILS_MESSENGER_CREATE_INFO_EXT;
     createInfo.messageSeverity = VK_DEBUG_UTILS_MESSAGE_SEVERITY_VERBOSE_BIT_EXT | VK_DEBUG_UTILS_MESSAGE_SEVERITY_WARNING_BIT_EXT | VK_DEBUG_UTILS_MESSAGE_SEVERITY_ERROR_BIT_EXT;
@@ -64,7 +64,7 @@ bool ApplicationTools::checkValidationLayerSupport() {
 
 void ApplicationTools::ApplicationToolsCleanup()
 {
-#if _DEBUG
+#ifdef _DEBUG
     // Destroying the debug messenger
     auto func = (PFN_vkDestroyDebugUtilsMessengerEXT)vkGetInstanceProcAddr(_instance, "vkDestroyDebugUtilsMessengerEXT");
     if (func != nullptr) {

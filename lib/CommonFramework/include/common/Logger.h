@@ -50,7 +50,7 @@ public:
     // Function to print with format strings
     template<typename... Args>
     static inline void DebugLog(const std::string& format, Args... args) {
-#if _DEBUG
+#ifdef _DEBUG
         Log("[DEBUG]: " + format, args...);
 #endif
     }
@@ -58,7 +58,7 @@ public:
     // Function to print with format strings
     template<typename... Args>
     static inline void DebugPrint(const std::string& format, Args... args) {
-#if _DEBUG
+#ifdef _DEBUG
         Print("[DEBUG]: " + format, args...);
 #endif
     }

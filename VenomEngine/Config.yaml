@@ -27,3 +27,5 @@ resources:
           path: Shaders/Wireframe
         - name: Text2D
           path: Shaders/Text2D
+        - name: Bezier
+          path: Shaders/Bezier

@@ -3,8 +3,9 @@
 #include <common/Mesh.h>
 #include <common/Texture.h>
 #include <common/Model.h>
+#include <common/Object.h>
 
-class Entity
+class Entity : public Object
 {
 public:
     Entity(Model* model, Texture* texture, const glm::vec3& position, const glm::vec3& rotation, const glm::vec3& scale);
@@ -22,8 +23,10 @@ public:
     const char * GetName() const;
 
     glm::vec3 GetWorldPosition() const;
-    glm::vec3 GetPosition() const;
-    glm::vec3 GetRotation() const;
+    const glm::vec3 & GetPosition() const;
+    glm::vec3 & GetPositionRef();
+    const glm::vec3 & GetRotation() const;
+    glm::vec3& GetRotationRef();
     glm::mat4 GetModelMatrix() const;
     const Texture * GetTexture() const;
 
@@ -34,6 +37,5 @@ private:
     glm::vec3 __position;
     glm::vec3 __rotation;
     glm::vec3 __scale;
-    const char * __name;
 };
 

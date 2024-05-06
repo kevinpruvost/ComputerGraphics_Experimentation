@@ -28,6 +28,15 @@ void Shader_OGL::SetShaderSource(const std::string& shaderSource, const ShaderTy
         case ShaderType::Fragment:
             m_shaderId = glCreateShader(GL_FRAGMENT_SHADER);
             break;
+        case ShaderType::TessControl:
+            m_shaderId = glCreateShader(GL_TESS_CONTROL_SHADER);
+            break;
+        case ShaderType::TessEvaluation:
+            m_shaderId = glCreateShader(GL_TESS_EVALUATION_SHADER);
+            break;
+        case ShaderType::Geometry:
+            m_shaderId = glCreateShader(GL_GEOMETRY_SHADER);
+            break;
         default:
             throw NotImplementedException("Shader type not implemented");
             break;

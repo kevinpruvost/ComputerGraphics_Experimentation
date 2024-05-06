@@ -1,19 +1,9 @@
 #pragma once
 
+#include <common/Object.h>
+
 #include <unordered_map>
 #include <common/Memory.h>
-
-class Object
-{
-public:
-    Object();
-    ~Object();
-    /**
-     * @brief Deletes Object from ObjectPool and returns nullptr for assignment
-     * @return nullptr
-     */
-    void * Delete();
-};
 
 class ObjectPool
 {
@@ -23,8 +13,9 @@ public:
 
     static void Clear();
     static void AddObject(Object* object);
-    static void RemoveObject(Object* object);
+    static void DeleteObject(Object* object);
+    static std::vector<Object *> & GetAllObjects();
 
 private:
-    static std::unordered_map<Object *, SPtr<Object>> __objects;
+    static std::unordered_set<Object *> __objects;
 };

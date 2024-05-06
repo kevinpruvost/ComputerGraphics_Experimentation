@@ -21,6 +21,8 @@ public:
 
     void SetDrawMode(Drawable3D::DrawMode mode) override;
 
+    Venom::ErrorCode ReloadObjectFromEngine() override;
+
 private:
 #ifdef _DEBUG
     void _SetUniformVariableSignatures() override;

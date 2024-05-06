@@ -1,13 +1,16 @@
 #pragma once
 
 #include <common/Memory.h>
+#include <common/Object.h>
 #include <type_traits>
 #include <c4/std/string.hpp>
 
-class Resource
+class Resource : public EngineResource
 {
 public:
     virtual ~Resource() = default;
+protected:
+    Resource(const ResourceType type);
 };
 
 class Resources
