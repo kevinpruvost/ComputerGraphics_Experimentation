@@ -54,6 +54,7 @@ void OGL_Text2D::RenderText(const char* text, float x, float y, float scale, con
 
     glBindVertexArray(0);
     glBindTexture(GL_TEXTURE_2D, 0);
+    glDisable(GL_CULL_FACE);
 }
 
 void OGL_Text2D::LoadCharacter(char character) {

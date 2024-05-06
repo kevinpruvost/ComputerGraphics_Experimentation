@@ -22,6 +22,7 @@ class ParticleSystem : public Drawable3D, public Object
 public:
     ParticleSystem();
     ~ParticleSystem();
+    ParticleSystem & operator=(const ParticleSystem & other);
 
     static ParticleSystem * CreateParticleSystem();
 

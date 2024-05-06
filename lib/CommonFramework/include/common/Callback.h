@@ -19,6 +19,15 @@ public:
 		this->Reset(callback);
 		return *this;
 	}
+	inline void Copy(const Callback<ReturnType, Args...>& callback)
+	{
+        this->Reset(*callback);
+    }
+	Callback& operator=(const Callback<ReturnType, Args...>& callback)
+	{
+        this->Copy(callback);
+        return *this;
+    }
 	~Callback() = default;
 	ReturnType operator()(Args... args)
 	{

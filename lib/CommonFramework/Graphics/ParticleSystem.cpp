@@ -38,6 +38,26 @@ ParticleSystem::~ParticleSystem()
 {
 }
 
+ParticleSystem& ParticleSystem::operator=(const ParticleSystem& other)
+{
+    __timeSinceLastEmission = other.__timeSinceLastEmission;
+    __paused = other.__paused;
+    __particleColor = other.__particleColor;
+    __particleLifetime = other.__particleLifetime;
+    __particleSize = other.__particleSize;
+    __maxParticles = other.__maxParticles;
+    __emissionRate = other.__emissionRate;
+    __particleInitialVelocity = other.__particleInitialVelocity;
+    __particleAcceleration = other.__particleAcceleration;
+    __particleTexture = other.__particleTexture;
+    __particleShaderPipeline = other.__particleShaderPipeline;
+    __emitterPosition = other.__emitterPosition;
+    __model = other.__model;
+    __particleGenerationFunction = other.__particleGenerationFunction;
+    __camera = other.__camera;
+    return *this;
+}
+
 typedef ParticleSystem* (*CreateParticleSystemFn)();
 
 ParticleSystem* ParticleSystem::CreateParticleSystem()

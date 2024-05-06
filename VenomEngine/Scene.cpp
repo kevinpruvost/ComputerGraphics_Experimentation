@@ -18,6 +18,7 @@ MainScene::MainScene(Window* window, BaseFramework* framework, GUI* g)
 	m_sphereModel = Model::CreateSphereModel(1.0f, 30, 30);
 
 	m_ParticleSystem = ParticleSystem::CreateParticleSystem();
+	m_particlesystem2 = ParticleSystem::CreateParticleSystem();
 
 	m_textureParticles = Texture::CreateTexture();
 	m_textureParticles->CreateFromFile("resources/Particles/Snow.png");
@@ -114,6 +115,9 @@ MainScene::MainScene(Window* window, BaseFramework* framework, GUI* g)
 	});
 	m_ParticleSystem->SetObjectName("Snow Particle System");
 
+	*m_particlesystem2 = *m_ParticleSystem;
+	m_particlesystem2->SetObjectName("Snow Particle System 2");
+
 	m_wireframeShader->Use();
 	m_wireframeShader->SetUniformVec3("wireframeColor", verticesColor);
 
@@ -124,8 +128,8 @@ MainScene::MainScene(Window* window, BaseFramework* framework, GUI* g)
 
 	m_skybox = std::make_unique<Skybox>(m_shader, m_backgroundTexture);
 
-	//m_sun = new Entity(m_sphereModel, m_textureParticles, glm::vec3(0), glm::vec3(0), glm::vec3(3));
-	//m_objects.push_back(m_sun);
+	m_sun = new Entity(m_sphereModel, m_textureParticles, glm::vec3(0), glm::vec3(0), glm::vec3(3));
+	m_objects.push_back(m_sun);
 
 	Time::SetStartTime();
 }
@@ -177,7 +181,6 @@ void MainScene::Update()
 
 	m_skybox->Draw();
 
-	Rendering::SetBlendingFunction(Rendering::BlendingFunction::SRC_ALPHA, Rendering::BlendingFunction::ONE_MINUS_SRC_ALPHA);
 	m_ParticleSystem->Update(Time::GetLambda());
 	m_ParticleSystem->SetEmissionRate(m_ParticleSystem->GetEmissionRate() + Time::GetLambda() * 0.25f);
 
