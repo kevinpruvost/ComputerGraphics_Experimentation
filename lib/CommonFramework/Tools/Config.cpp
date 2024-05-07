@@ -122,6 +122,9 @@ EngineSettings Config::EngineSettings() const
 
 void Config::LoadResources() const
 {
+    // Get current path
+    std::filesystem::path currentPath = std::filesystem::current_path();
+    std::filesystem::current_path(currentPath / "resources");
     ryml::Tree root = *(ryml::Tree*)m_node;
     c4::yml::NodeRef resourcesNode = root["resources"];
     for (auto node : resourcesNode.children())
@@ -154,4 +157,5 @@ void Config::LoadResources() const
         //}
         // Load resource
     }
+    std::filesystem::current_path(currentPath);
 }

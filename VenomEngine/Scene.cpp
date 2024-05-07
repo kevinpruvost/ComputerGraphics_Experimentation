@@ -20,18 +20,9 @@ MainScene::MainScene(Window* window, BaseFramework* framework, GUI* g)
 	m_ParticleSystem = ParticleSystem::CreateParticleSystem();
 	m_particlesystem2 = ParticleSystem::CreateParticleSystem();
 
-	m_textureParticles = Texture::CreateTexture();
-	m_textureParticles->CreateFromFile("resources/Particles/Snow.png");
+	m_textureParticles = Resources::Load<Texture>("Snowflake");
 
-	m_backgroundTexture = Texture::CreateTexture();
-	m_backgroundTexture->CreateCubemap({
-		"resources/Skybox/right.png",
-		"resources/Skybox/left.png",
-		"resources/Skybox/top.png",
-		"resources/Skybox/bottom.png",
-		"resources/Skybox/front.png",
-		"resources/Skybox/back.png"
-	});
+	m_backgroundTexture = Resources::Load<Texture>("Skybox_Texture");
 
 	// Create text objects
 	const char* fontPath = "resources/fonts/arial.ttf";

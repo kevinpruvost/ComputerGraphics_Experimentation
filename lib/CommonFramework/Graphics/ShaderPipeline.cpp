@@ -130,14 +130,14 @@ ShaderPipeline * Resources::_Load(const char const* name, const YamlNode & data)
 {
     Logger::DebugPrint("Loading shader pipeline: %s", name);
 
-    std::string fragPath = fmt::format("resources/Shaders/{}.frag", name);
-    std::string vertPath = fmt::format("resources/Shaders/{}.vert", name);
-    std::string tcsPath = fmt::format("resources/Shaders/{}.tcs", name);
-    std::string tesPath = fmt::format("resources/Shaders/{}.tes", name);
-    std::string geomPath = fmt::format("resources/Shaders/{}.geom", name);
+    std::string fragPath = fmt::format("Shaders/{}.frag", name);
+    std::string vertPath = fmt::format("Shaders/{}.vert", name);
+    std::string tcsPath = fmt::format("Shaders/{}.tcs", name);
+    std::string tesPath = fmt::format("Shaders/{}.tes", name);
+    std::string geomPath = fmt::format("Shaders/{}.geom", name);
 
-    auto frag = Shader::CreateShader(fmt::format("resources/Shaders/{}.frag", name), Shader::ShaderType::Fragment);
-    auto vert = Shader::CreateShader(fmt::format("resources/Shaders/{}.vert", name), Shader::ShaderType::Vertex);
+    auto frag = Shader::CreateShader(fmt::format("Shaders/{}.frag", name), Shader::ShaderType::Fragment);
+    auto vert = Shader::CreateShader(fmt::format("Shaders/{}.vert", name), Shader::ShaderType::Vertex);
     std::vector<Shader*> shaders{ frag, vert };
 
     // Check if Tessellation Control Shader (TCS) exists
