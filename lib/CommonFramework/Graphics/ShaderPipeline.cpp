@@ -126,7 +126,7 @@ void ShaderPipeline::GiveUniformVariablesToOtherShader(ShaderPipeline* otherShad
 }
 
 template<>
-ShaderPipeline * Resources::_Load(const char const* name)
+ShaderPipeline * Resources::_Load(const char const* name, const YamlNode & data)
 {
     Logger::DebugPrint("Loading shader pipeline: %s", name);
 

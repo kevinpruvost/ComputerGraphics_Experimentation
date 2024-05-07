@@ -13,6 +13,7 @@ public:
     Venom::ErrorCode CreateCubemap(const std::array<std::filesystem::path, 6>& paths) override;
     int GetTextureID() const override;
     void BindTexture(const TextureType textureType) const override;
+    Venom::ErrorCode ReloadObjectFromEngine() override;
 
 private:
     Venom::ErrorCode GenerateTexture();

@@ -11,7 +11,7 @@ window_settings:
     focused: true
     refreshRate: 60
 engine_settings:
-    api: OpenGL # OpenGL or Vulkan or DirectX11
+    api: OpenGL # OpenGL or Vulkan or DirectX12
     name: OpenGLEngine
 resources:
     shaders:
@@ -29,3 +29,29 @@ resources:
           path: Shaders/Text2D
         - name: Bezier
           path: Shaders/Bezier
+    textures:
+        - name: Snowflake
+          path: Particles/Snow.png
+        - name: Skybox_Texture
+          type: CubeMap
+          path: [Skybox/right.png, Skybox/left.png, Skybox/top.png, Skybox/bottom.png, Skybox/front.png, Skybox/back.png]
+        - name: Earth
+          path: Planets/earth.jpg
+        - name: Moon
+          path: Planets/moon.jpg
+        - name: Sun
+          path: Planets/sun.jpg
+        - name: Mercury
+          path: Planets/mercury.jpg
+        - name: Venus
+          path: Planets/venus.jpg
+        - name: Mars
+          path: Planets/mars.jpg
+        - name: Jupiter
+          path: Planets/jupiter.jpg
+        - name: Saturn
+          path: Planets/saturn.jpg
+        - name: Uranus
+          path: Planets/uranus.jpg
+        - name: Neptune
+          path: Planets/neptune.jpg

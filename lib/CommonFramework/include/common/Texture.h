@@ -4,8 +4,9 @@
 #include <common/Mesh.h>
 #include <common/Material.h>
 #include <common/Face.h>
+#include <common/Resources.h>
 
-class COMMONFRAMEWORK_API Texture
+class COMMONFRAMEWORK_API Texture : public Resource
 {
 public:
     virtual ~Texture() = default;
@@ -33,8 +34,7 @@ public:
 protected:
 
 protected:
-    Texture() = default;
+    Texture();
 
 private:
 };
-

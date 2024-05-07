@@ -11,7 +11,8 @@ EXPORT Texture * createTexture() {
 }
 
 Texture_OGL::Texture_OGL()
-    : __textureID{ 0 }
+    : Texture()
+    , __textureID{ 0 }
 {
 }
 
@@ -114,6 +115,12 @@ void Texture_OGL::BindTexture(const TextureType textureType) const
             break;
     };
     glBindTexture(textureTypeGL, __textureID);
+}
+
+Venom::ErrorCode Texture_OGL::ReloadObjectFromEngine()
+{
+    Logger::Print("Not implemented");
+    return Venom::ErrorCode::Failure;
 }
 
 Venom::ErrorCode Texture_OGL::GenerateTexture()

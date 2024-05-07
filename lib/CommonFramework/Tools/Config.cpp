@@ -1,11 +1,11 @@
 #include <common/Config.h>
 #include <common/Error.h>
-//#include <yaml-cpp/yaml.h>
 #include <ryml.hpp>
 #include <c4/std/string.hpp>
 
 #include <common/Resources.h>
 #include <common/ShaderPipeline.h>
+#include <common/Texture.h>
 
 std::unordered_map<std::string, std::unique_ptr<Config>> Config::m_instances;
 
@@ -129,24 +129,20 @@ void Config::LoadResources() const
         c4::csubstr name = node.key();
         if (name == "shaders")
         {
-            for (auto shader : node.children())
+            for (const auto & shader : node.children())
             {
-                auto shaderNameNode = shader["name"].val();
-                auto pathNode = shader["path"].val();
-                const std::string shaderName(shaderNameNode.str, shaderNameNode.len);
-                const std::string path(pathNode.str, pathNode.len);
-                Resources::Load<ShaderPipeline>(shaderName.c_str(), path.c_str());
+                const String shaderName = YamlNodeToString(shader["name"]);
+                Resources::Load<ShaderPipeline>(shaderName.c_str(), shader);
             }
         }
-        //else if (name == "textures")
-        //{
-        //    for (auto texture : node)
-        //    {
-        //        const c4::csubstr texture_sub = texture.val();
-        //        const std::string textureName(texture_sub.str, texture_sub.len);
-        //        Resources::Load<Texture>(textureName.c_str());
-        //    }
-        //}
+        else if (name == "textures")
+        {
+            for (const auto & texture : node.children())
+            {
+                const String textureName = YamlNodeToString(texture["name"]);
+                Resources::Load<Texture>(textureName.c_str(), texture);
+            }
+        }
         //else if (name == "models")
         //{
         //    for (auto model : node)
