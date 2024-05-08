@@ -17,10 +17,16 @@ Resource* Resources::GetResource(const char const * name)
     return nullptr;
 }
 
-void Resources::AddResource(const char const * name, Resource* resource)
+Venom::ErrorCode Resources::AddResource(const char const * name, Resource* resource)
 {
+    if (resources.find(name) != resources.end())
+    {
+        Logger::Print("Resource already exists: %s", name);
+        return Venom::ErrorCode::Failure;
+    }
     resource->SetResourceName(name);
     resources[name] = resource;
+    return Venom::ErrorCode::Success;
 }
 
 Resource::Resource(const ResourceType type)

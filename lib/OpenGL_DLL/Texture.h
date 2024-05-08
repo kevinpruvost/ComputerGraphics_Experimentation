@@ -12,7 +12,7 @@ public:
     Venom::ErrorCode CreateFromFile(const std::filesystem::path& path) override;
     Venom::ErrorCode CreateCubemap(const std::array<std::filesystem::path, 6>& paths) override;
     int GetTextureID() const override;
-    void BindTexture(const TextureType textureType) const override;
+    void BindTexture(const TextureType textureType, int textureID) const override;
     Venom::ErrorCode ReloadObjectFromEngine() override;
 
 private:

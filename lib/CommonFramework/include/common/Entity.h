@@ -1,14 +1,15 @@
 #pragma once
 
 #include <common/Mesh.h>
-#include <common/Texture.h>
+#include <common/Material.h>
 #include <common/Model.h>
 #include <common/Object.h>
+#include <common/ShaderPipeline.h>
 
 class Entity : public Object
 {
 public:
-    Entity(Model* model, Texture* texture, const glm::vec3& position, const glm::vec3& rotation, const glm::vec3& scale);
+    Entity(Model* model, ShaderPipeline * shaderPipeline, const glm::vec3& position, const glm::vec3& rotation, const glm::vec3& scale);
     ~Entity() = default;
 
     void Draw() const;
@@ -28,12 +29,11 @@ public:
     const glm::vec3 & GetRotation() const;
     glm::vec3& GetRotationRef();
     glm::mat4 GetModelMatrix() const;
-    const Texture * GetTexture() const;
 
 private:
     Entity* __parent;
     Model* __model;
-    Texture* __texture;
+    ShaderPipeline* __shaderPipeline;
     glm::vec3 __position;
     glm::vec3 __rotation;
     glm::vec3 __scale;

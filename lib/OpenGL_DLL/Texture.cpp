@@ -37,7 +37,7 @@ Venom::ErrorCode Texture_OGL::CreateFromFile(const std::filesystem::path& path)
             format = GL_RGBA;
 
         GenerateTexture();
-        BindTexture(TextureType::Texture2D);
+        BindTexture(TextureType::Texture2D, 0);
         glTexImage2D(GL_TEXTURE_2D, 0, format, width, height, 0, format, GL_UNSIGNED_BYTE, data);
         glGenerateMipmap(GL_TEXTURE_2D);
 
@@ -59,7 +59,7 @@ Venom::ErrorCode Texture_OGL::CreateFromFile(const std::filesystem::path& path)
 Venom::ErrorCode Texture_OGL::CreateCubemap(const std::array<std::filesystem::path, 6>& paths)
 {
     GenerateTexture();
-    BindTexture(TextureType::TextureCubemap);
+    BindTexture(TextureType::TextureCubemap, 0);
 
     int width, height, nrChannels;
     for (unsigned int i = 0; i < paths.size(); i++)
@@ -98,9 +98,9 @@ int Texture_OGL::GetTextureID() const
     return __textureID;
 }
 
-void Texture_OGL::BindTexture(const TextureType textureType) const
+void Texture_OGL::BindTexture(const TextureType textureType, int textureID) const
 {
-    glActiveTexture(GL_TEXTURE0);
+    glActiveTexture(GL_TEXTURE0 + textureID);
     GLenum textureTypeGL;
     switch (textureType)
     {

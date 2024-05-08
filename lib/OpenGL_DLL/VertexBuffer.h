@@ -10,13 +10,16 @@ public:
     ~Vertex_OGL();
 
     void SetVertices(const VertexArray& vertices) override;
+    void SetVertices(const VertexArray& vertices, const IndexArray& indices) override;
     void Bind() const override;
     void Unbind() const override;
+    void Draw() const override;
     Venom::ErrorCode ReloadObjectFromEngine() override;
 
 private:
     GLuint __vbo;
     GLuint __vao;
+    GLuint __ebo;
 };
 
 extern "C"

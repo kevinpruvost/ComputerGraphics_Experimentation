@@ -1,8 +1,6 @@
 #pragma once
 
 #include <common/DLL.h>
-#include <common/Mesh.h>
-#include <common/Material.h>
 #include <common/Face.h>
 #include <common/Resources.h>
 
@@ -29,7 +27,7 @@ public:
         Texture2D,
         TextureCubemap
     };
-    virtual void BindTexture(const TextureType textureType = TextureType::Texture2D) const = 0;
+    virtual void BindTexture(const TextureType textureType = TextureType::Texture2D, int textureID = 0) const = 0;
 
 protected:
 

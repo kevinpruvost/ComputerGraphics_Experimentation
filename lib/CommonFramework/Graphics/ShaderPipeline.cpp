@@ -10,6 +10,8 @@ ShaderPipeline::ShaderPipeline()
 
 Venom::ErrorCode ShaderPipeline::Use()
 {
+    if (currentlyUsedPipeline == this)
+        return Venom::ErrorCode::Success;
     Venom::ErrorCode err = _Use();
     if (err != Venom::ErrorCode::Success)
         return err;

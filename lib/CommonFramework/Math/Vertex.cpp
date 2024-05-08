@@ -53,7 +53,12 @@ size_t VertexBuffer::GetVertexRawSize() const
     return _v.size() * sizeof(Vertex);
 }
 
-VertexArray VertexBuffer::GetVertices() const
+const VertexArray & VertexBuffer::GetVertices() const
 {
     return _v;
+}
+
+const IndexArray& VertexBuffer::GetIndices() const
+{
+    return _i;
 }

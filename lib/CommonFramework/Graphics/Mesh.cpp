@@ -13,3 +13,31 @@ Mesh* Mesh::CreateMesh()
         throw DLLException("Failed to create mesh");
     return mesh;
 }
+
+void Mesh::SetVertexBuffer(VertexBuffer* vertexBuffer)
+{
+    _vertexBuffer = vertexBuffer;
+}
+
+void Mesh::SetMaterialId(int materialId)
+{
+    _materialId = materialId;
+}
+
+const VertexBuffer* Mesh::GetVertexBuffer() const
+{
+    return _vertexBuffer;
+}
+
+const int Mesh::GetMaterialId() const
+{
+    return _materialId;
+}
+
+Mesh::Mesh()
+    : Resource(ResourceType::MESH)
+    , _vertexBuffer{ nullptr }
+    , _materialId{ 0 }
+{
+
+}

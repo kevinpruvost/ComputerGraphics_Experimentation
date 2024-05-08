@@ -1,5 +1,7 @@
 #include "Text2D.h"
 
+#include <common/Rendering.h>
+
 // Export the factory function to create an instance of the class
 EXPORT Text2D * createText2D() {
     return new OGL_Text2D();
@@ -11,7 +13,7 @@ void OGL_Text2D::RenderText(const char* text, float x, float y, float scale, con
     // Activate corresponding render state
     glEnable(GL_CULL_FACE);
     glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
-    glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
+    Rendering::SetDrawMode(Drawable3D::DrawMode::SOLID);
 
     glActiveTexture(GL_TEXTURE0);
     glBindVertexArray(VAO);

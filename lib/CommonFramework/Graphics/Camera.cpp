@@ -12,6 +12,7 @@ Camera::Camera(int screenWidth, int screenHeight, float fov, float nearClip, flo
     , __projection{ projection }
     , __yaw{ 0.0f }
     , __pitch{ 0.0f }
+    , __speed{ 1.0f }
 {
     UpdateProjectionMatrix();
     if (MainCamera == nullptr) MainCamera = this;
@@ -74,9 +75,14 @@ float Camera::GetPitch() const
     return __pitch;
 }
 
+float& Camera::GetSpeedRef()
+{
+    return __speed;
+}
+
 void Camera::Translate(const glm::vec3& translation) {
     glm::vec3 realTranslation = translation.x * __right + translation.y * __up + translation.z * __forward;
-    __position += realTranslation;
+    __position += realTranslation * __speed;
     UpdateViewMatrix();
 }
 

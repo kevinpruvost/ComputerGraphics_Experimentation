@@ -32,6 +32,10 @@ public:
     operator T* () const {
         return __ptr;
     }
+
+    T * get() const {
+        return __ptr;
+    }
 private:
     T * __ptr;
 };

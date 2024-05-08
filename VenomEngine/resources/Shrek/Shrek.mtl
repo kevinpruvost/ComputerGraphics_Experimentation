@@ -12,8 +12,8 @@ newmtl 08___Default
 	Kd 0.5882 0.5882 0.5882
 	Ks 0.0000 0.0000 0.0000
 	Ke 0.0000 0.0000 0.0000
-	map_Ka Shrek_Head_Legs.dds
-	map_Kd Shrek_Head_Legs.dds
+	map_Ka Shrek_Head_Legs.png
+	map_Kd Shrek_Head_Legs.png
 
 newmtl 02___Default
 	Ns 10.0000
@@ -26,5 +26,5 @@ newmtl 02___Default
 	Kd 0.5882 0.5882 0.5882
 	Ks 0.0000 0.0000 0.0000
 	Ke 0.0000 0.0000 0.0000
-	map_Ka Shrek_Body.dds
-	map_Kd Shrek_Body.dds
+	map_Ka Shrek_Body.png
+	map_Kd Shrek_Body.png

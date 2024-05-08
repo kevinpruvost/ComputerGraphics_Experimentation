@@ -36,6 +36,7 @@ public:
         MODEL,
         SOUND,
         FONT,
+        MESH
     };
 
     const char* GetResourceName() const;

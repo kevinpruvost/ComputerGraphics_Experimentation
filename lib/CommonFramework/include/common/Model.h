@@ -5,28 +5,32 @@
 #include <common/Material.h>
 #include <common/Face.h>
 #include <common/ObjectPool.h>
+#include <common/Resources.h>
 
-class COMMONFRAMEWORK_API Model : public Drawable3D
+#include <assimp/Importer.hpp>
+#include <assimp/scene.h>
+#include <assimp/postprocess.h>
+
+class COMMONFRAMEWORK_API Model : virtual public Drawable3D, public Resource
 {
 public:
     virtual ~Model() = default;
 
-    static Model * CreateModel();
     static inline Model* CreateModel(const std::filesystem::path& path)
     {
-        Model * mesh = CreateModel();
+        Model * mesh = Create();
         mesh->CreateFromFile(path);
         return mesh;
     }
     static inline Model* CreateSphereModel(float radius, int sectors, int stacks)
     {
-        Model* mesh = CreateModel();
+        Model* mesh = Create();
         mesh->CreateSphere(radius, sectors, stacks);
         return mesh;
     }
     static inline Model* CreateSquareModel()
     {
-        Model* mesh = CreateModel();
+        Model* mesh = Create();
         mesh->CreateSquare();
         return mesh;
     }
@@ -35,23 +39,25 @@ public:
     Venom::ErrorCode CreateSphere(float radius, int sectors, int stacks);
     Venom::ErrorCode CreateSquare();
 
-    void SetVertices(const VertexArray& vertices);
-    void SetVertices(VertexBuffer * vertices);
-    VertexArray GetVertices() const;
     virtual void SetIndices(const TriangleArray& indices) = 0;
 
     void AddMesh(Mesh * mesh);
     void AddMaterial(Material * material);
 
 protected:
+    friend class Resources;
+    static Model* Create();
     Model();
 
-    std::vector<std::shared_ptr<Mesh>> _meshes;
-    std::vector<std::shared_ptr<Material>> _materials;
-    VertexBuffer * _vertexBuffer;
+    std::vector<Ptr<Mesh>> _meshes;
+    std::vector<Ptr<Material>> _materials;
 
 private:
     // Parser
     void ParseObj(const std::filesystem::path & path);
+    Venom::ErrorCode ParseFbx(const std::filesystem::path& path);
+    Venom::ErrorCode Assimp_ProcessNode(aiNode* node, const aiScene* scene);
+    Venom::ErrorCode Assimp_ProcessMesh(aiMesh* mesh);
+    Venom::ErrorCode Assimp_LoadMaterials(const std::filesystem::path& modelPath, const aiScene* scene);
 };
 

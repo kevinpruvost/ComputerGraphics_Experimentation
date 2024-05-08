@@ -12,10 +12,11 @@ MainScene::MainScene(Window* window, BaseFramework* framework, GUI* g)
 	w->LockCursor();
 	m_wireframeShader = Resources::Load<ShaderPipeline>("Wireframe");
 	m_particleShader = Resources::Load<ShaderPipeline>("Particle_Snow");
-	m_shader = Resources::Load<ShaderPipeline>("Skybox");
+	m_skyboxShader = Resources::Load<ShaderPipeline>("Skybox");
+	m_shader = Resources::Load<ShaderPipeline>("Normal_Shader");
 	m_textShader = Resources::Load<ShaderPipeline>("Text2D");
 
-	m_sphereModel = Model::CreateSphereModel(1.0f, 30, 30);
+	m_sphereModel = Resources::Load<Model>("Sphere");
 
 	m_ParticleSystem = ParticleSystem::CreateParticleSystem();
 	m_particlesystem2 = ParticleSystem::CreateParticleSystem();
@@ -117,9 +118,12 @@ MainScene::MainScene(Window* window, BaseFramework* framework, GUI* g)
 	camera.SetPosition(glm::vec3(-3.0f, 0.0f, -3.0f));
 	camera.LookAt(m_ParticleSystem->GetEmitterPosition());
 
-	m_skybox = std::make_unique<Skybox>(m_shader, m_backgroundTexture);
+	m_skybox = std::make_unique<Skybox>(m_skyboxShader, m_backgroundTexture);
 
-	m_sun = new Entity(m_sphereModel, m_textureParticles, glm::vec3(0), glm::vec3(0), glm::vec3(3));
+	Material * mat = Resources::Create<Material>("SunMaterial");
+	mat->AddTexture(Resources::Load<Texture>("Mars"));
+	m_sphereModel->AddMaterial(mat);
+	m_sun = new Entity(m_sphereModel, Resources::Load<ShaderPipeline>("Normal_Shader"), glm::vec3(0), glm::vec3(0), glm::vec3(0.5));
 	m_objects.push_back(m_sun);
 
 	Time::SetStartTime();
@@ -144,17 +148,13 @@ void MainScene::Update()
 		{
 			camera.UpdateViewMatrix();
 		}
+		ImGui::SliderFloat("Speed", &camera.GetSpeedRef(), 0.0f, 100.0f);
+
 		
-		if (ImGui::Checkbox("Draw Faces", &drawFaces))
+		if (ImGui::Checkbox("Draw Faces", &drawFaces) || ImGui::Checkbox("Draw Lines", &drawLines) || ImGui::Checkbox("Draw Points", &drawPoints))
 		{
+			Rendering::SetGlobalDrawMode(Drawable3D::GetDrawMode(drawPoints, drawLines, drawFaces));
 		}
-		if (ImGui::Checkbox("Draw Lines", &drawLines))
-		{
-		}
-		if (ImGui::Checkbox("Draw Points", &drawPoints))
-		{
-		}
-		m_ParticleSystem->SetDrawMode(Drawable3D::GetDrawMode(drawPoints, drawLines, drawFaces));
 
 		if (ImGui::ColorEdit3("Vertex/Lines Color", glm::value_ptr(verticesColor)))
 		{
@@ -177,28 +177,7 @@ void MainScene::Update()
 
 	for (auto& obj : m_objects)
 	{
-		m_shader->Use();
-		m_shader->SetUniformMatrix4("view", view);
-		m_shader->SetUniformMatrix4("projection", projection);
-		m_shader->SetUniformVec3("vertColor", verticesColor);
-		m_shader->SetUniformInt("textureSampler", 0);
-		m_shader->SetUniformMatrix4("model", obj->GetModelMatrix());
-		obj->GetTexture()->BindTexture();
-		if (drawFaces)
-		{
-			m_sphereModel->SetDrawMode(Drawable3D::DrawMode::SOLID);
-			obj->Draw();
-		}
-		if (drawLines)
-		{
-			m_sphereModel->SetDrawMode(Drawable3D::DrawMode::WIREFRAME);
-			obj->Draw();
-		}
-		if (drawPoints)
-		{
-			m_sphereModel->SetDrawMode(Drawable3D::DrawMode::POINTS);
-			obj->Draw();
-		}
+		obj->Draw();
 	}
 
 

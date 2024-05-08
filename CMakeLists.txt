@@ -5,6 +5,8 @@ cmake_minimum_required (VERSION 3.8)
 
 project("VenomEngine")
 
+set(CMAKE_DEBUG_POSTFIX "")
+
 set(PROJECT_PATH ${CMAKE_SOURCE_DIR}/)
 set(LIBS_PATH ${CMAKE_SOURCE_DIR}/lib/)
 set(GRAPHICS_DLL_PROPS_PATH ${CMAKE_SOURCE_DIR}/GraphicsDLLProps.cmake)

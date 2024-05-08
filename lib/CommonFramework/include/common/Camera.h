@@ -29,6 +29,7 @@ public:
     glm::vec3 & GetPositionRef();
     float GetYaw() const;
     float GetPitch() const;
+    float & GetSpeedRef();
 
     // Move the camera
     void Translate(const glm::vec3& translation);
@@ -53,4 +54,5 @@ private:
     float __yaw, __pitch;
     glm::vec3 __forward, __right, __up;
     CameraProjection __projection;
+    float __speed;
 };

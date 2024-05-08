@@ -35,8 +35,11 @@ public:
         Subtract,
     };
     static inline void SetBlendingEquation(BlendingEquation eq) { _instance->_SetBlendingEquation(eq); }
-    static inline void SetDrawMode(const Drawable3D::DrawMode drawMode) { _instance->_SetDrawMode(drawMode); }
+    static inline void SetDrawMode(const Drawable3D::DrawMode drawMode) { if (_lastDrawMode == drawMode) return; _instance->_SetDrawMode(drawMode); _lastDrawMode = drawMode; }
     static inline void DrawVertices(const VertexBuffer * vertices) { _instance->_DrawVertices(vertices); }
+
+    static inline void SetGlobalDrawMode(const Drawable3D::DrawMode drawMode) { assert(drawMode != Drawable3D::DrawMode::GLOBAL); _globalDrawMode = drawMode; }
+    static inline Drawable3D::DrawMode GetGlobalDrawMode() { return _globalDrawMode; }
 
 protected:
     virtual void _SetDepthTest(bool enable) const = 0;
@@ -44,4 +47,6 @@ protected:
     virtual void _SetBlendingEquation(BlendingEquation eq) const = 0;
     virtual void _DrawVertices(const VertexBuffer * vertices) const = 0;
     virtual void _SetDrawMode(const Drawable3D::DrawMode drawMode) const = 0;
+    static Drawable3D::DrawMode _globalDrawMode;
+    static Drawable3D::DrawMode _lastDrawMode;
 };

@@ -9,6 +9,9 @@ class Resource : public EngineResource
 {
 public:
     virtual ~Resource() = default;
+
+    template<typename T>
+    static T* Create();
 protected:
     Resource(const ResourceType type);
 };
@@ -21,10 +24,11 @@ public:
     {
         static_assert(std::is_base_of<Resource, T>::value, "T must be a derived class of Resource");
         Resource* resource = GetResource(name);
-        if (resource == nullptr)
+        if (resource == nullptr || dynamic_cast<T*>(resource) == nullptr)
         {
             resource = _Load<T>(name, data);
-            AddResource(name, resource);
+            if (AddResource(name, resource) != Venom::ErrorCode::Success)
+                return nullptr;
         }
         return dynamic_cast<T*>(resource);
     }
@@ -41,12 +45,28 @@ public:
         return dynamic_cast<T*>(resource);
     }
 
+    template<typename T>
+    static T* Create(const char const* name)
+    {
+        static_assert(std::is_base_of<Resource, T>::value, "T must be a derived class of Resource");
+        Resource* resource = GetResource(name);
+        if (resource != nullptr)
+        {
+            Logger::Print("Resource already exists: %s", name);
+            return nullptr;
+        }
+        resource = T::Create();
+        if (AddResource(name, resource) != Venom::ErrorCode::Success)
+            return nullptr;
+        return dynamic_cast<T*>(resource);
+    }
+
     static void Clear();
+    static Venom::ErrorCode AddResource(const char const* name, Resource* resource);
 
 private:
     template <typename T>
     static T* _Load(const char const * name, const YamlNode & data);
 
     static Resource* GetResource(const char const * name);
-    static void AddResource(const char const * name, Resource* resource);
 };

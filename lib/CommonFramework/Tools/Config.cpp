@@ -6,6 +6,7 @@
 #include <common/Resources.h>
 #include <common/ShaderPipeline.h>
 #include <common/Texture.h>
+#include <common/Model.h>
 
 std::unordered_map<std::string, std::unique_ptr<Config>> Config::m_instances;
 
@@ -120,7 +121,7 @@ EngineSettings Config::EngineSettings() const
     return settings;
 }
 
-void Config::LoadResources() const
+Venom::ErrorCode Config::LoadResources() const
 {
     // Get current path
     std::filesystem::path currentPath = std::filesystem::current_path();
@@ -135,7 +136,8 @@ void Config::LoadResources() const
             for (const auto & shader : node.children())
             {
                 const String shaderName = YamlNodeToString(shader["name"]);
-                Resources::Load<ShaderPipeline>(shaderName.c_str(), shader);
+                if (Resources::Load<ShaderPipeline>(shaderName.c_str(), shader) == nullptr)
+                    return Venom::ErrorCode::Failure;
             }
         }
         else if (name == "textures")
@@ -143,19 +145,20 @@ void Config::LoadResources() const
             for (const auto & texture : node.children())
             {
                 const String textureName = YamlNodeToString(texture["name"]);
-                Resources::Load<Texture>(textureName.c_str(), texture);
+                if (Resources::Load<Texture>(textureName.c_str(), texture) == nullptr)
+                    return Venom::ErrorCode::Failure;
             }
         }
-        //else if (name == "models")
-        //{
-        //    for (auto model : node)
-        //    {
-        //        const c4::csubstr model_sub = model.val();
-        //        const std::string modelName(model_sub.str, model_sub.len);
-        //        Resources::Load<Model>(modelName.c_str());
-        //    }
-        //}
-        // Load resource
+        else if (name == "models")
+        {
+            for (const auto& model : node.children())
+            {
+                const String modelName = YamlNodeToString(model["name"]);
+                if (Resources::Load<Model>(modelName.c_str(), model) == nullptr)
+                    return Venom::ErrorCode::Failure;
+            }
+        }
     }
     std::filesystem::current_path(currentPath);
+    return Venom::ErrorCode::Success;
 }

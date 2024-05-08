@@ -15,7 +15,7 @@ public:
     static Config* Get(const std::filesystem::path & path);
     WindowSettings WindowSettings() const;
     EngineSettings EngineSettings() const;
-    void LoadResources() const;
+    Venom::ErrorCode LoadResources() const;
 
     ~Config();
 private:

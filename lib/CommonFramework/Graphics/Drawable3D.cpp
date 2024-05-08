@@ -19,6 +19,6 @@ void Drawable3D::SetDrawMode(DrawMode mode)
 
 Drawable3D::Drawable3D()
     : EngineObject(EngineObjectType::Object)
-    , _drawMode(DrawMode::SOLID)
+    , _drawMode(DrawMode::GLOBAL)
 {
 }

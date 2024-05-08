@@ -64,7 +64,7 @@ public:
             p.engineObject = reinterpret_cast<EngineObject**>(prop);
         }
         else if constexpr (std::is_base_of<Object, T>::value) {
-            p.type = Property::OBJECT_PTR;
+            p.type = Property::Type::OBJECT_PTR;
             p.object = reinterpret_cast<Object**>(prop);
         }
         else {

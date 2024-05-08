@@ -102,10 +102,6 @@ if (SPIRV_CROSS_FORCE_STL_TYPES)
 	set(spirv-compiler-defines ${spirv-compiler-defines} SPIRV_CROSS_FORCE_STL_TYPES)
 endif()
 
-if (WIN32)
-	set(CMAKE_DEBUG_POSTFIX "d")
-endif()
-
 if (CMAKE_COMPILER_IS_GNUCXX OR ((${CMAKE_CXX_COMPILER_ID} MATCHES "Clang") AND NOT MSVC))
 	set(spirv-compiler-options ${spirv-compiler-options} -Wall -Wextra -Wshadow -Wno-deprecated-declarations)
 	if (SPIRV_CROSS_MISC_WARNINGS)

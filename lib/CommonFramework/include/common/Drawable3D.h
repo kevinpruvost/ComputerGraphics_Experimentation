@@ -18,6 +18,7 @@ public:
         WIREFRAME_POINTS = WIREFRAME | POINTS,
         SOLID_POINTS = SOLID | POINTS,
         WIREFRAME_SOLID_POINTS = WIREFRAME | SOLID | POINTS,
+        GLOBAL = 0b10000, // Takes global value as ref
         NONE = 0
     };
     static DrawMode GetDrawMode(bool points, bool wireframe, bool solid);

@@ -29,6 +29,8 @@ resources:
           path: Shaders/Text2D
         - name: Bezier
           path: Shaders/Bezier
+        - name: Normal_Shader
+          path: Shaders/Normal_Shader
     textures:
         - name: Snowflake
           path: Particles/Snow.png
@@ -55,3 +57,19 @@ resources:
           path: Planets/uranus.jpg
         - name: Neptune
           path: Planets/neptune.jpg
+        - name: Shrek_Texture
+          path: Shrek/Shrek_Body.png
+    models:
+        - name: Sphere
+          path: Sphere
+          radius: 1.0
+          sectors: 32
+          stacks: 32
+        - name: Square
+          path: Square
+        - name: Eight
+          path: Assignment1/eight.uniform.obj
+        - name: Shrek_Model
+          path: Shrek/Shrek.obj
+        - name: Floppa_Model
+          path: Floppa/flop.fbx

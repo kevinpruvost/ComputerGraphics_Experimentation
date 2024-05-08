@@ -4,12 +4,12 @@ in vec3 FragPos;
 
 out vec4 FragColor;
 
-uniform sampler2D textureSampler;
+uniform sampler2D textureSampler0;
 uniform vec4 color;
 
 void main()
 {
-    vec4 texColor = texture(textureSampler, TexCoords);
+    vec4 texColor = texture(textureSampler0, TexCoords);
     vec4 finalColor = mix(texColor, texColor * color, color.a);
     finalColor.a *= color.a;
 

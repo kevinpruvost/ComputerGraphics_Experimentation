@@ -44,9 +44,11 @@ add_subdirectory("./stb")
 
 add_subdirectory("./rapidyaml")
 set_target_properties(
-    ryml ryml-uninstall
     c4core-amalgamate c4core
-PROPERTIES FOLDER "ExternalLibraries")
+PROPERTIES FOLDER "ExternalLibraries/c4core")
+set_target_properties(
+    ryml ryml-uninstall
+PROPERTIES FOLDER "ExternalLibraries/ryml")
 
 add_subdirectory("./glm")
 set_target_properties(
@@ -58,6 +60,13 @@ add_subdirectory("./freetype")
 set_target_properties(
     freetype
 PROPERTIES FOLDER "ExternalLibraries")
+
+add_subdirectory("./assimp")
+set_target_properties(
+    assimp
+    zlibstatic
+    UpdateAssimpLibsDebugSymbolsAndDLLs
+PROPERTIES FOLDER "ExternalLibraries/assimp")
 
 # Common Framework Library
 add_subdirectory("./CommonFramework")

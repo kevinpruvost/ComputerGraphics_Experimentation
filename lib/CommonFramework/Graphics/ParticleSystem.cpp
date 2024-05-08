@@ -153,8 +153,14 @@ void ParticleSystem::RenderParticles()
 {
     Rendering::SetDepthTest(false);
     Camera * camera = __camera ? __camera : Camera::MainCamera;
-    if (__model == nullptr)
-        __model = Model::CreateSquareModel();
+    if (__model == nullptr) {
+        __model = Resources::Create<Model>(fmt::format("{}_Square_Particle_Model", GetObjectName()).c_str());
+        __model->CreateSquare();
+        Material* mat = Resources::Create<Material>(fmt::format("{}_Square_Particle_Mesh", GetObjectName()).c_str());
+        const auto & textures = mat->GetTextures();
+        mat->AddTexture(__particleTexture);
+        __model->AddMaterial(mat);
+    }
     Model * model = __model;
 
     __particleShaderPipeline->Use();
@@ -163,7 +169,8 @@ void ParticleSystem::RenderParticles()
     __particleShaderPipeline->SetUniformMatrix4("view", camera->GetViewMatrix());
     __particleShaderPipeline->SetUniformMatrix4("projection", camera->GetProjectionMatrix());
     __particleShaderPipeline->SetUniformVec3("cameraPos", camera->GetPosition());
-    __particleShaderPipeline->SetUniformInt("textureSampler", 0);
+    __particleShaderPipeline->SetUniformInt("textureSampler0", 0);
+    Drawable3D::DrawMode drawMode = (_drawMode == Drawable3D::DrawMode::GLOBAL) ? Rendering::GetGlobalDrawMode() : _drawMode;
     for (const auto& particle : __particles)
     {
         __particleShaderPipeline->SetUniformVec4("color", particle.color);
@@ -183,7 +190,7 @@ void ParticleSystem::RenderParticles()
         // Apply the rotation to the model matrix
         modelMatrix = modelMatrix * rotationMatrix;
         __particleShaderPipeline->SetUniformMatrix4("model", modelMatrix);
-        __model->SetDrawMode(_drawMode);
+        __model->SetDrawMode(drawMode);
         __model->Draw();
     }
     Rendering::SetDepthTest(true);

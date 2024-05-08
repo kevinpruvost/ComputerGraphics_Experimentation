@@ -9,7 +9,7 @@ public:
     void Update() override;
 protected:
 	int displayMode = 1;
-	Ptr<ShaderPipeline> m_shader, m_textShader, m_particleShader, m_wireframeShader;
+	Ptr<ShaderPipeline> m_shader, m_skyboxShader, m_textShader, m_particleShader, m_wireframeShader;
 	Ptr<Model>	 m_sphereModel;
 	Ptr<Texture> m_textureParticles, m_backgroundTexture;
 	Ptr<ParticleSystem> m_ParticleSystem, m_particlesystem2;

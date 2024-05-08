@@ -28,6 +28,7 @@ void scene()
 int main()
 {
 	int errorCode = static_cast<int>(Venom::ErrorCode::Success);
+	Venom::ErrorCode err;
 	try
 	{
 		Logger::Initialize("test.txt");
@@ -49,7 +50,8 @@ int main()
 		gui->SetEngineAndWindowForInit(w.get(), fw.get());
 		gui->Init();
 
-		config.LoadResources();
+		if ((err = config.LoadResources()) != Venom::ErrorCode::Success)
+			return (int)err;
 
 		s = new MainScene(w.get(), fw.get(), gui.get());
 

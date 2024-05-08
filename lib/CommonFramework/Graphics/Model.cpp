@@ -5,7 +5,7 @@
 
 typedef Model * (*CreateModelFn)();
 
-Model* Model::CreateModel()
+Model* Model::Create()
 {
     CreateModelFn createMeshFn = EngineLoader::GetEngineDll()->getFunction<CreateModelFn>("createModel");
     assert(createMeshFn != nullptr);
@@ -23,10 +23,10 @@ Venom::ErrorCode Model::CreateFromFile(const std::filesystem::path& path)
 
     const auto extension = path.extension();
     if (extension == ".obj") {
-        ParseObj(path);
+        ParseFbx(path);
     } else if (extension == ".fbx")
     {
-
+        ParseFbx(path);
     }
     else
     {
@@ -81,7 +81,14 @@ Venom::ErrorCode Model::CreateSphere(float radius, int sectors, int stacks)
         }
     }
 
-    SetVertices(verticesProcessed);
+    Mesh* meshResource = Mesh::CreateMesh();
+    std::string name = fmt::format("{}_Sphere_Mesh", GetResourceName());
+    meshResource->SetResourceName(name.c_str());
+    Resources::AddResource(name.c_str(), meshResource);
+    VertexBuffer* vertexBuffer = VertexBuffer::CreateVertexBuffer();
+    vertexBuffer->SetVertices(verticesProcessed);
+    meshResource->SetVertexBuffer(vertexBuffer);
+    _meshes.push_back(meshResource);
     return Venom::ErrorCode::Success;
 }
 
@@ -98,37 +105,47 @@ Venom::ErrorCode Model::CreateSquare()
         vertices[0], vertices[1], vertices[2],
         vertices[0], vertices[2], vertices[3]
     };
-    SetVertices(verticesProcessed);
+
+    Mesh * meshResource = Mesh::CreateMesh();
+    std::string name = fmt::format("{}_Square_Mesh", GetResourceName());
+    meshResource->SetResourceName(name.c_str());
+    Resources::AddResource(name.c_str(), meshResource);
+    VertexBuffer* vertexBuffer = VertexBuffer::CreateVertexBuffer();
+    vertexBuffer->SetVertices(verticesProcessed);
+    meshResource->SetVertexBuffer(vertexBuffer);
+    _meshes.push_back(meshResource);
     return Venom::ErrorCode::Success;
-}
-
-void Model::SetVertices(const VertexArray& vertices)
-{
-    _vertexBuffer = VertexBuffer::CreateVertexBuffer();
-    _vertexBuffer->SetVertices(vertices);
-}
-
-void Model::SetVertices(VertexBuffer* vertices)
-{
-    _vertexBuffer = vertices;
-}
-
-VertexArray Model::GetVertices() const
-{
-    return _vertexBuffer->GetVertices();
 }
 
 void Model::AddMesh(Mesh* mesh)
 {
-    _meshes.push_back(std::shared_ptr<Mesh>(mesh));
+    _meshes.push_back(Ptr<Mesh>(mesh));
 }
 
 void Model::AddMaterial(Material* material)
 {
-    _materials.push_back(std::shared_ptr<Material>(material));
+    _materials.push_back(Ptr<Material>(material));
 }
 
 Model::Model()
-    : _vertexBuffer{ nullptr }
+    : Drawable3D()
+    , Resource(ResourceType::MODEL)
 {
+}
+
+template<>
+Model * Resources::_Load(const char const* name, const YamlNode& data)
+{
+    Logger::DebugPrint("Loading model: %s", name);
+
+    Model* model = Model::Create();
+    model->SetResourceName(name);
+    std::string path = YamlNodeToString(data["path"]);
+    if (path == "Square")
+        model->CreateSquare();
+    else if (path == "Sphere")
+        model->CreateSphere(YamlNodeToFloat(data["radius"]), YamlNodeToInt(data["sectors"]), YamlNodeToInt(data["stacks"]));
+    else
+        model->CreateFromFile(path);
+    return model;
 }

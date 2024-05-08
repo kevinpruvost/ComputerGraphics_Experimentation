@@ -23,6 +23,7 @@ public:
 };
 
 typedef std::vector<Vertex> VertexArray;
+typedef std::vector<unsigned int> IndexArray;
 
 class COMMONFRAMEWORK_API VertexBuffer : public EngineObject
 {
@@ -36,10 +37,14 @@ public:
 
 public:
     virtual void SetVertices(const VertexArray& vertices) = 0;
+    virtual void SetVertices(const VertexArray& vertices, const IndexArray & indices) = 0;
     virtual void Bind() const = 0;
     virtual void Unbind() const = 0;
-    VertexArray GetVertices() const;
+    virtual void Draw() const = 0;
+    const VertexArray & GetVertices() const;
+    const IndexArray & GetIndices() const;
 
 protected:
     VertexArray _v;
+    IndexArray _i;
 };

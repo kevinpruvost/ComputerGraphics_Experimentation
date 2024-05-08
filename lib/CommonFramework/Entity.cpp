@@ -1,14 +1,22 @@
 #include <common/Entity.h>
+#include <common/Camera.h>
 
-Entity::Entity(Model* model, Texture* texture, const glm::vec3& position, const glm::vec3& rotation, const glm::vec3& scale)
-    : __model(model), __texture(texture), __position(position), __rotation(rotation), __scale(scale), __parent(nullptr)
+Entity::Entity(Model* model, ShaderPipeline* shaderPipeline, const glm::vec3& position, const glm::vec3& rotation, const glm::vec3& scale)
+    : __model(model), __position(position), __rotation(rotation), __scale(scale), __parent(nullptr), __shaderPipeline(shaderPipeline)
 {
+    _properties.SetProperty("Position", __position);
+    _properties.SetProperty("Rotation", __rotation);
+    _properties.SetProperty("Scale", __scale);
+    _properties.SetProperty("Parent", &__parent);
     _properties.SetProperty("Model", &__model);
-    //_properties.SetProperty("Texture", &__texture);
 }
 
 void Entity::Draw() const
 {
+    __shaderPipeline->Use();
+    __shaderPipeline->SetUniformMatrix4("model", GetModelMatrix());
+    __shaderPipeline->SetUniformMatrix4("view", Camera::MainCamera->GetViewMatrix());
+    __shaderPipeline->SetUniformMatrix4("projection", Camera::MainCamera->GetProjectionMatrix());
     __model->Draw();
 }
 
@@ -116,9 +124,4 @@ glm::mat4 Entity::GetModelMatrix() const
     }
 
     return model;
-}
-
-const Texture* Entity::GetTexture() const
-{
-    return __texture;
 }
