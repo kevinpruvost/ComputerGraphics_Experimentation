@@ -5,6 +5,8 @@ ShaderPipeline* currentlyUsedPipeline = nullptr;
 
 ShaderPipeline::ShaderPipeline()
     : Resource(EngineResource::ResourceType::SHADER)
+    , _hasTesselationStage{ false }
+    , _hasGeometryStage{ false }
 {
 }
 
@@ -36,29 +38,39 @@ ShaderPipeline* ShaderPipeline::GetCurrentlyUsedPipeline()
     return currentlyUsedPipeline;
 }
 
+bool ShaderPipeline::HasTesselationStage() const
+{
+    return _hasTesselationStage;
+}
+
+bool ShaderPipeline::HasGeometryStage() const
+{
+    return _hasGeometryStage;
+}
+
 const std::vector<ShaderPipeline::UniformVariableSignature>& ShaderPipeline::GetUniformVariableSignatures()
 {
-    if (__uniformVariableSignatures.empty())
+    if (_uniformVariableSignatures.empty())
     {
         _SetUniformVariableSignatures();
 #ifdef _DEBUG
-        for (const auto& var : __uniformVariableSignatures)
+        for (const auto& var : _uniformVariableSignatures)
             Logger::DebugPrint("Uniform variable:[%s]:\"%s\"", ShaderPipeline::UniformVariable::GetTypeString(var.type), var.name.c_str());
 #endif
     }
-    return __uniformVariableSignatures;
+    return _uniformVariableSignatures;
 }
 
 std::vector<ShaderPipeline::UniformVariableSignature>& ShaderPipeline::GetUniformVariableSignaturesRef()
 {
-    if (__uniformVariableSignatures.empty()) {
+    if (_uniformVariableSignatures.empty()) {
         _SetUniformVariableSignatures();
 #ifdef _DEBUG
-        for (const auto& var : __uniformVariableSignatures)
+        for (const auto& var : _uniformVariableSignatures)
             Logger::DebugPrint("Uniform variable:[%s]:\"%s\"", ShaderPipeline::UniformVariable::GetTypeString(var.type), var.name.c_str());
 #endif
     }
-    return __uniformVariableSignatures;
+    return _uniformVariableSignatures;
 }
 
 void ShaderPipeline::SetUniformMatrix4(const std::string& name, const glm::mat4& matrix)
@@ -68,7 +80,7 @@ void ShaderPipeline::SetUniformMatrix4(const std::string& name, const glm::mat4&
         UniformVariable::Type::MATRIX4
     };
     var.matrix = matrix;
-    __uniformVariables[name] = var;
+    _uniformVariables[name] = var;
 }
 
 void ShaderPipeline::SetUniformVec3(const std::string& name, const glm::vec3& vec)
@@ -78,7 +90,7 @@ void ShaderPipeline::SetUniformVec3(const std::string& name, const glm::vec3& ve
         UniformVariable::Type::VEC3
     };
     var.vec3 = vec;
-    __uniformVariables[name] = var;
+    _uniformVariables[name] = var;
 }
 
 void ShaderPipeline::SetUniformVec4(const std::string& name, const glm::vec4& vec)
@@ -88,7 +100,7 @@ void ShaderPipeline::SetUniformVec4(const std::string& name, const glm::vec4& ve
         UniformVariable::Type::VEC4
     };
     var.vec4 = vec;
-    __uniformVariables[name] = var;
+    _uniformVariables[name] = var;
 }
 
 void ShaderPipeline::SetUniformFloat(const std::string& name, float value)
@@ -98,7 +110,7 @@ void ShaderPipeline::SetUniformFloat(const std::string& name, float value)
         UniformVariable::Type::FLOAT
     };
     var.f = value;
-    __uniformVariables[name] = var;
+    _uniformVariables[name] = var;
 }
 
 void ShaderPipeline::SetUniformInt(const std::string& name, int value)
@@ -108,12 +120,12 @@ void ShaderPipeline::SetUniformInt(const std::string& name, int value)
         UniformVariable::Type::INT
     };
     var.i = value;
-    __uniformVariables[name] = var;
+    _uniformVariables[name] = var;
 }
 
 void ShaderPipeline::GiveUniformVariablesToOtherShader(ShaderPipeline* otherShader)
 {
-    for (auto& [name, var] : __uniformVariables)
+    for (auto& [name, var] : _uniformVariables)
     {
         switch (var.type)
         {
@@ -141,14 +153,37 @@ ShaderPipeline * Resources::_Load(const char const* name, const YamlNode & data)
 {
     Logger::DebugPrint("Loading shader pipeline: %s", name);
 
-    std::string fragPath = fmt::format("Shaders/{}.frag", name);
-    std::string vertPath = fmt::format("Shaders/{}.vert", name);
-    std::string tcsPath = fmt::format("Shaders/{}.tcs", name);
-    std::string tesPath = fmt::format("Shaders/{}.tes", name);
-    std::string geomPath = fmt::format("Shaders/{}.geom", name);
+    const ConstYamlNode& path = data["path"];
+    bool is_seq = path.is_seq();
+    bool is_map = path.is_map();
+    bool is_val = path.is_val();
+    std::string fragPath, vertPath, tcsPath, tesPath, geomPath;
+    if (is_seq) {
+        for (int i = 0; i < path.num_children(); ++i) {
+            String pathStr = YamlNodeToString(path[i]);
+            if (pathStr.find(".frag") != std::string::npos) fragPath = pathStr;
+            else if (pathStr.find(".vert") != std::string::npos) vertPath = pathStr;
+            else if (pathStr.find(".tcs") != std::string::npos) tcsPath = pathStr;
+            else if (pathStr.find(".tes") != std::string::npos) tesPath = pathStr;
+            else if (pathStr.find(".geom") != std::string::npos) geomPath = pathStr;
+        }
+        if (fragPath.empty()) fragPath = fmt::format("Shaders/{}.frag", name);
+        if (vertPath.empty()) vertPath = fmt::format("Shaders/{}.vert", name);
+        if (tcsPath.empty()) tcsPath = fmt::format("Shaders/{}.tcs", name);
+        if (tesPath.empty()) tesPath = fmt::format("Shaders/{}.tes", name);
+        if (geomPath.empty()) geomPath = fmt::format("Shaders/{}.geom", name);
+    }
+    else
+    {
+        fragPath = fmt::format("Shaders/{}.frag", name);
+        vertPath = fmt::format("Shaders/{}.vert", name);
+        tcsPath = fmt::format("Shaders/{}.tcs", name);
+        tesPath = fmt::format("Shaders/{}.tes", name);
+        geomPath = fmt::format("Shaders/{}.geom", name);
+    }
 
-    auto frag = Shader::CreateShader(fmt::format("Shaders/{}.frag", name), Shader::ShaderType::Fragment);
-    auto vert = Shader::CreateShader(fmt::format("Shaders/{}.vert", name), Shader::ShaderType::Vertex);
+    auto frag = Shader::CreateShader(fragPath, Shader::ShaderType::Fragment);
+    auto vert = Shader::CreateShader(vertPath, Shader::ShaderType::Vertex);
     std::vector<Shader*> shaders{ frag, vert };
 
     // Check if Tessellation Control Shader (TCS) exists
@@ -169,21 +204,21 @@ ShaderPipeline * Resources::_Load(const char const* name, const YamlNode & data)
         shaders.push_back(geom);
     }
 
-    return ShaderPipeline::CreateShaderPipeline(name, { frag, vert });
+    return ShaderPipeline::CreateShaderPipeline(name, shaders);
 }
 
 std::unordered_map<std::string, ShaderPipeline::UniformVariable>& ShaderPipeline::GetUniformVariables()
 {
-    return __uniformVariables;
+    return _uniformVariables;
 }
 
 void ShaderPipeline::SetDefaultValuesForUniformVariables()
 {
-    if (__uniformVariableSignatures.size() != __uniformVariables.size())
+    if (_uniformVariableSignatures.size() != _uniformVariables.size())
     {
-        if (__uniformVariableSignatures.empty())
+        if (_uniformVariableSignatures.empty())
             _SetUniformVariableSignatures();
-        for (const auto& var : __uniformVariableSignatures)
+        for (const auto& var : _uniformVariableSignatures)
         {
 #ifdef _DEBUG
             Logger::DebugPrint("Uniform variable:[%s]:\"%s\"", ShaderPipeline::UniformVariable::GetTypeString(var.type), var.name.c_str());

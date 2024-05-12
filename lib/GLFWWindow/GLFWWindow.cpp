@@ -2,6 +2,7 @@
 
 #include <common/Logger.h>
 #include <common/Time.h>
+#include <common/Scene.h>
 
 #define STB_IMAGE_IMPLEMENTATION
 #include <stb/stb_image.h>
@@ -115,8 +116,8 @@ Venom::ErrorCode GLFWWindow::_Init()
 
     glfwSetErrorCallback(glfw_onError);
 
-    glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
-    glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 3);
+    glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 4);
+    glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 1);
     glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
 #ifdef __APPLE__
     glfwWindowHint(GLFW_OPENGL_FORWARD_COMPAT, GL_TRUE); // uncomment this statement to fix compilation on OS X
@@ -272,10 +273,14 @@ bool GLFWWindow::ProcessInput()
 
 Venom::ErrorCode GLFWWindow::Loop()
 {
-    if (_appLoopCallback == nullptr)
-        throw RuntimeException("App loop callback is not set");
-    if (_sceneLoopCallback == nullptr)
-        throw RuntimeException("Scene loop callback is not set");
+    if (_appLoopCallback == nullptr) {
+        Logger::Print("App loop callback is not set");
+        return Venom::ErrorCode::Failure;
+    }
+    if (_scene == nullptr) {
+        Logger::Print("Scene is not set");
+        return Venom::ErrorCode::Failure;
+    }
 
     Time::SetStartTime();
     while (!glfwWindowShouldClose(__mainW)) {
@@ -283,7 +288,7 @@ Venom::ErrorCode GLFWWindow::Loop()
         if (!ProcessInput()) break;
 
         _appLoopCallback();
-        _sceneLoopCallback();
+        _scene->Update();
 
         glfwSwapBuffers(__mainW);
 

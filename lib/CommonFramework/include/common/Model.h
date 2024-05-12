@@ -7,6 +7,8 @@
 #include <common/ObjectPool.h>
 #include <common/Resources.h>
 
+#include <common/ShaderPipeline.h>
+
 #include <assimp/Importer.hpp>
 #include <assimp/scene.h>
 #include <assimp/postprocess.h>
@@ -44,6 +46,9 @@ public:
     void AddMesh(Mesh * mesh);
     void AddMaterial(Material * material);
 
+    void SetShader(ShaderPipeline * shader);
+    void SetWireframeShader(ShaderPipeline * shader);
+
 protected:
     friend class Resources;
     static Model* Create();
@@ -51,6 +56,7 @@ protected:
 
     std::vector<Ptr<Mesh>> _meshes;
     std::vector<Ptr<Material>> _materials;
+    ShaderPipeline * _shader, * _wireframeShader;
 
 private:
     // Parser

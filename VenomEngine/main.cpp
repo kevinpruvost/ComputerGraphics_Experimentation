@@ -18,13 +18,6 @@
 #include <common/Text2D.h>
 #include "Scene.h"
 
-UPtr<Scene> s;
-
-void scene()
-{
-	s->Update();
-}
-
 int main()
 {
 	int errorCode = static_cast<int>(Venom::ErrorCode::Success);
@@ -39,7 +32,6 @@ int main()
 
 		UPtr<Window> w = Window::CreateWindowFromAPI(windowApi);
 		w->Init(config);
-		w->SetSceneLoopCallback(scene);
 
 		EngineLoader loader(engineApi);
 		UPtr<BaseFramework> fw = loader.GetFramework();
@@ -53,10 +45,10 @@ int main()
 		if ((err = config.LoadResources()) != Venom::ErrorCode::Success)
 			return (int)err;
 
-		s = new MainScene(w.get(), fw.get(), gui.get());
+		UPtr<Scene> s = new MainScene(w.get(), fw.get(), gui.get());
+		w->SetScene(s.get());
 
 		fw->Launch();
-		fw->GetLogger()->Log("Framework launched with %d\n", engineApi);
 
 		// Order of destruction has to be this way because of dependence
 		s.reset();

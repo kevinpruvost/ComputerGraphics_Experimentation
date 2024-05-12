@@ -2,6 +2,8 @@
 
 #include "BufferManager.h"
 
+#include <common/ShaderPipeline.h>
+
 // Export the factory function to create an instance of the class
 EXPORT VertexBuffer * createVertexBuffer() {
     return new Vertex_OGL();
@@ -91,12 +93,15 @@ void Vertex_OGL::Unbind() const
 
 void Vertex_OGL::Draw() const
 {
-	glBindVertexArray(__vao);
-	if (__ebo != 0)
-	    glDrawElements(GL_TRIANGLES, _i.size(), GL_UNSIGNED_INT, 0);
-	else
-		glDrawArrays(GL_TRIANGLES, 0, _v.size());
-    glBindVertexArray(0);
+	auto shader = ShaderPipeline::GetCurrentlyUsedPipeline();
+	if (shader->HasTesselationStage()) {
+		glDrawArrays(GL_PATCHES, 0, _v.size());
+	} else {
+		if (__ebo != 0)
+			glDrawElements(GL_TRIANGLES, _i.size(), GL_UNSIGNED_INT, 0);
+		else
+			glDrawArrays(GL_TRIANGLES, 0, _v.size());
+	}
 }
 
 Venom::ErrorCode Vertex_OGL::ReloadObjectFromEngine()

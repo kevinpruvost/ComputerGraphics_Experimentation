@@ -1,8 +1,5 @@
 #include <common/Window.h>
 
-//#include "GLFWWindow.h"
-//#include "WinNativeWindow.h"
-
 UPtr<DLL> Window::__dll(nullptr);
 
 Window::~Window()
@@ -49,21 +46,21 @@ Window* Window::CreateWindowFromAPI(const WindowAPI& api)
 Window::Window(const WindowAPI& api)
     : InputSystem()
     , __api{ api }
-    , _sceneLoopCallback{ nullptr }
+    , _scene{ nullptr }
     , _appLoopCallback { nullptr }
     , _framebufferSizeCallback { nullptr }
 {
-}
-
-void Window::SetSceneLoopCallback(CallbackContainer<void> callback)
-{
-    _sceneLoopCallback = callback;
 }
 
 Venom::ErrorCode Window::Init(const Config& config)
 {
     _settings = config.WindowSettings();
     return _Init();
+}
+
+void Window::SetScene(Scene* scene)
+{
+    _scene = scene;
 }
 
 void Window::SetApplicationLoopCallback(CallbackContainer<void> callback)

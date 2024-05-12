@@ -68,6 +68,7 @@ void Rendering_OGL::_SetDrawMode(const Drawable3D::DrawMode drawMode) const
         break;
     case Drawable3D::DrawMode::POINTS:
         glPolygonMode(GL_FRONT_AND_BACK, GL_POINT);
+        glPointSize(5.0f);
         break;
     default:
         assert(false && "Can only do SOLID, WIREFRAME or POINTS");

@@ -127,9 +127,21 @@ void Model::AddMaterial(Material* material)
     _materials.push_back(Ptr<Material>(material));
 }
 
+void Model::SetShader(ShaderPipeline* shader)
+{
+    _shader = shader;
+}
+
+void Model::SetWireframeShader(ShaderPipeline* shader)
+{
+    _wireframeShader = shader;
+}
+
 Model::Model()
     : Drawable3D()
     , Resource(ResourceType::MODEL)
+    , _shader{ nullptr }
+    , _wireframeShader{ nullptr }
 {
 }
 

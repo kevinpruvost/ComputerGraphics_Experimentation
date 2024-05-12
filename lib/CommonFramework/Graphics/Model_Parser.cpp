@@ -123,13 +123,11 @@ std::vector<Material> materials;
 // Load a single mesh
 Venom::ErrorCode Model::Assimp_ProcessMesh(aiMesh* mesh) {
     if (!mesh->HasFaces()) {
-        Logger::Print("Mesh does not have faces.");
-        return Venom::ErrorCode::Failure;
+        Logger::Print("Mesh [%s] does not have faces.", mesh->mName.C_Str());
     }
 
     if (!mesh->HasNormals()) {
         Logger::Print("Mesh [%s] does not have normals.", mesh->mName.C_Str());
-        return Venom::ErrorCode::Failure;
     }
 
     if (!mesh->HasTextureCoords(0)) {
@@ -146,27 +144,32 @@ Venom::ErrorCode Model::Assimp_ProcessMesh(aiMesh* mesh) {
     VertexArray vertices(mesh->mNumVertices);
     for (unsigned int i = 0; i < mesh->mNumVertices; ++i) {
         memcpy(&vertices[i].pos, &mesh->mVertices[i], sizeof(glm::vec3));
-        memcpy(&vertices[i].normals, &mesh->mNormals[i], sizeof(glm::vec3));
+        if (mesh->HasNormals())
+            memcpy(&vertices[i].normals, &mesh->mNormals[i], sizeof(glm::vec3));
         if (mesh->HasTextureCoords(0))
             memcpy(&vertices[i].textureCoords, &mesh->mTextureCoords[0][i], sizeof(glm::vec2));
-        //vertices[i].pos = glm::vec3(mesh->mVertices[i].x, mesh->mVertices[i].y, mesh->mVertices[i].z);
-        //vertices[i].normals = glm::vec3(mesh->mNormals[i].x, mesh->mNormals[i].y, mesh->mNormals[i].z);
-        //vertices[i].textureCoords = glm::vec2(mesh->mTextureCoords[0][i].x, mesh->mTextureCoords[0][i].y);
     }
-    IndexArray indices(mesh->mNumFaces * 3);
-    int index = 0;
-    for (unsigned int i = 0; i < mesh->mNumFaces; ++i) {
-        aiFace face = mesh->mFaces[i];
-        if (face.mNumIndices != 3) {
-            Logger::Print("Face is not a triangle.");
-            return Venom::ErrorCode::Failure;
+
+    VertexBuffer* vertexBuffer = VertexBuffer::CreateVertexBuffer();
+    if (mesh->HasFaces())
+    {
+        IndexArray indices(mesh->mNumFaces * 3);
+        int index = 0;
+        for (unsigned int i = 0; i < mesh->mNumFaces; ++i) {
+            aiFace face = mesh->mFaces[i];
+            if (face.mNumIndices != 3) {
+                Logger::Print("Face is not a triangle.");
+                return Venom::ErrorCode::Failure;
+            }
+            for (unsigned int j = 0; j < face.mNumIndices; ++j) {
+                indices[index++] = face.mIndices[j];
+            }
         }
-        for (unsigned int j = 0; j < face.mNumIndices; ++j) {
-            indices[index++] = face.mIndices[j];
-        }
+        vertexBuffer->SetVertices(vertices, indices);
     }
-    VertexBuffer * vertexBuffer = VertexBuffer::CreateVertexBuffer();
-    vertexBuffer->SetVertices(vertices, indices);
+    else {
+        vertexBuffer->SetVertices(vertices);
+    }
     meshResource->SetVertexBuffer(vertexBuffer);
     meshResource->SetMaterialId(mesh->mMaterialIndex);
     _meshes.push_back(meshResource);

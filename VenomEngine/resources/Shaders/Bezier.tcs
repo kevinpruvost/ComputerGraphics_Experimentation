@@ -2,15 +2,15 @@
 
 layout( vertices = 16 ) out;
 
-uniform float uOuter02, uOuter13, uInner0, uInner1;
+uniform float mod_uOuter02 = 4, mod_uOuter13 = 4, mod_uInner0 = 4, mod_uInner1 = 4;
 
 void main(){
 	gl_out[gl_InvocationID].gl_Position = gl_in[gl_InvocationID].gl_Position;
 	// set tessellation levels
-	gl_TessLevelOuter[0] = uOuter02;
-    gl_TessLevelOuter[1] = uOuter13;
-    gl_TessLevelOuter[2] = uOuter02;
-    gl_TessLevelOuter[3] = uOuter13;
-    gl_TessLevelInner[0] = uInner0;
-    gl_TessLevelInner[1] = uInner1;
+	gl_TessLevelOuter[0] = mod_uOuter02;
+    gl_TessLevelOuter[1] = mod_uOuter13;
+    gl_TessLevelOuter[2] = mod_uOuter02;
+    gl_TessLevelOuter[3] = mod_uOuter13;
+    gl_TessLevelInner[0] = mod_uInner0;
+    gl_TessLevelInner[1] = mod_uInner1;
 }

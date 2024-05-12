@@ -17,6 +17,12 @@ void ShaderPipeline_OGL::SetPipeline(const std::vector<Shader*>& shaders)
     for (auto shader : shaders)
     {
         glAttachShader(m_program, reinterpret_cast<Shader_OGL *>(shader)->GetShaderId());
+        GLint shaderType;
+        glGetShaderiv(reinterpret_cast<Shader_OGL*>(shader)->GetShaderId(), GL_SHADER_TYPE, &shaderType);
+        if (shaderType == GL_TESS_CONTROL_SHADER)
+            _hasTesselationStage = true;
+        else if (shaderType == GL_GEOMETRY_SHADER)
+            _hasGeometryStage = true;
     }
 
     // Link the program
@@ -131,7 +137,7 @@ void ShaderPipeline_OGL::_SetUniformVariableSignatures()
                 Logger::Print("Unknown uniform type (OpenGL): %x", type);
                 break;
         }
-        __uniformVariableSignatures.emplace_back(signature);
+        _uniformVariableSignatures.emplace_back(signature);
     }
 }
 

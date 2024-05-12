@@ -21,12 +21,12 @@ void Model_OGL::SetIndices(const TriangleArray& indices)
 
 void Model_OGL::Draw()
 {
-	ShaderPipeline* shader = ShaderPipeline::GetCurrentlyUsedPipeline(), * wireframeShader = nullptr;
+	ShaderPipeline* shader = _shader ? _shader : ShaderPipeline::GetCurrentlyUsedPipeline(), * wireframeShader = _wireframeShader ? _wireframeShader : nullptr;
 	assert(shader);
 	DrawMode drawMode = (_drawMode == DrawMode::GLOBAL) ? Rendering::GetGlobalDrawMode() : _drawMode;
 	if (drawMode & DrawMode::WIREFRAME || drawMode & DrawMode::POINTS)
 	{
-		wireframeShader = Resources::Load<ShaderPipeline>("Wireframe");
+		if (!wireframeShader) wireframeShader = Resources::Load<ShaderPipeline>("Wireframe");
 		wireframeShader->Use();
 		shader->GiveUniformVariablesToOtherShader(wireframeShader);
 	}
@@ -36,6 +36,9 @@ void Model_OGL::Draw()
 		shader->Use();
 		const VertexBuffer* vertexBuffer = mesh->GetVertexBuffer();
 		vertexBuffer->Bind();
+		if (shader->HasTesselationStage() && vertexBuffer->GetVertexCount() < GL_MAX_PATCH_VERTICES) {
+			glPatchParameteri(GL_PATCH_VERTICES, vertexBuffer->GetVertexCount());
+		}
 		if (mesh->GetMaterialId() <= _materials.size())
 		{
 			const Material* material = _materials[mesh->GetMaterialId()];

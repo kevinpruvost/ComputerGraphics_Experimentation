@@ -4,6 +4,8 @@
 #include <common/InputSystem.h>
 #include <array>
 
+class Scene;
+
 /**
  * @brief Window class common to all 3 APIs, managed with GLFW for now
  */
@@ -44,7 +46,7 @@ public:
 	virtual Venom::ErrorCode SetWindowResizable(bool enabled) = 0;
 	virtual Venom::ErrorCode SetWindowFocused(bool focused) = 0;
 
-	void SetSceneLoopCallback(CallbackContainer<void> callback);
+	void SetScene(Scene * scene);
 
 	void SetApplicationLoopCallback(CallbackContainer<void> callback);
 
@@ -62,10 +64,10 @@ protected:
 
 protected:
 	WindowSettings _settings;
-	Callback<void> _sceneLoopCallback;
 	Callback<void> _appLoopCallback;
 	// Framebuffer size callback
 	Callback<void, int, int> _framebufferSizeCallback;
+	Scene * _scene;
 
 private:
 	const WindowAPI __api;

@@ -123,8 +123,18 @@ MainScene::MainScene(Window* window, BaseFramework* framework, GUI* g)
 	Material * mat = Resources::Create<Material>("SunMaterial");
 	mat->AddTexture(Resources::Load<Texture>("Mars"));
 	m_sphereModel->AddMaterial(mat);
-	m_sun = new Entity(m_sphereModel, Resources::Load<ShaderPipeline>("Normal_Shader"), glm::vec3(0), glm::vec3(0), glm::vec3(0.5));
-	m_objects.push_back(m_sun);
+	auto test = new Entity(m_sphereModel, Resources::Load<ShaderPipeline>("Normal_Shader"), glm::vec3(0), glm::vec3(0), glm::vec3(0.5));
+	m_objects.push_back(test);
+	mat = Resources::Create<Material>("Assignment5_Material");
+	mat->AddTexture(Resources::Load<Texture>("Assignment5_Texture"));
+	auto model = Resources::Load<Model>("Assignment5_Model");
+	model->AddMaterial(mat);
+	model->SetShader(Resources::Load<ShaderPipeline>("Bezier"));
+	model->SetWireframeShader(Resources::Load<ShaderPipeline>("Bezier_Wireframe"));
+	test = new Entity(
+		model,
+		Resources::Load<ShaderPipeline>("Bezier"), glm::vec3(5), glm::vec3(0), glm::vec3(0.5));
+	m_objects.push_back(test);
 
 	Time::SetStartTime();
 }
@@ -160,6 +170,8 @@ void MainScene::Update()
 		{
 			m_wireframeShader->Use();
 			m_wireframeShader->SetUniformVec3("wireframeColor", verticesColor);
+			Resources::Load<ShaderPipeline>("Bezier_Wireframe")->Use();
+			Resources::Load<ShaderPipeline>("Bezier_Wireframe")->SetUniformVec3("wireframeColor", verticesColor);
 		}
 
 		gui->DrawObjectsProperties();

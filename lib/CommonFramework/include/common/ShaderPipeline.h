@@ -83,6 +83,10 @@ public:
     };
 
     virtual ~ShaderPipeline() = default;
+    /**
+     * @brief Sets pipeline given all shaders, MUST SET _hasTesselationStage and _hasGeometryStage
+     * @param shaders 
+     */
     virtual void SetPipeline(const std::vector<Shader *> & shaders) = 0;
     Venom::ErrorCode Use();
     virtual Venom::ErrorCode _Use() = 0;
@@ -110,6 +114,9 @@ public:
 
     static ShaderPipeline* GetCurrentlyUsedPipeline();
 
+    bool HasTesselationStage() const;
+    bool HasGeometryStage() const;
+
 protected:
     virtual void _SetUniformMatrix4(const std::string& name, const glm::mat4& matrix) = 0;
     virtual void _SetUniformVec3(const std::string& name, const glm::vec3& vec) = 0;
@@ -120,8 +127,10 @@ protected:
     virtual void _SetUniformVariableSignatures() = 0;
 
 protected:
-    std::unordered_map<std::string, UniformVariable> __uniformVariables;
-    std::vector<UniformVariableSignature> __uniformVariableSignatures;
+    std::unordered_map<std::string, UniformVariable> _uniformVariables;
+    std::vector<UniformVariableSignature> _uniformVariableSignatures;
+    bool _hasTesselationStage;
+    bool _hasGeometryStage;
 
 private:
     friend class GUI;

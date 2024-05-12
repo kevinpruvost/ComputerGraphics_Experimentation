@@ -29,6 +29,8 @@ resources:
           path: Shaders/Text2D
         - name: Bezier
           path: Shaders/Bezier
+        - name: Bezier_Wireframe
+          path: [Shaders/Wireframe.frag, Shaders/Wireframe.vert, Shaders/Bezier.tcs, Shaders/Bezier.tes]
         - name: Normal_Shader
           path: Shaders/Normal_Shader
     textures:
@@ -59,6 +61,8 @@ resources:
           path: Planets/neptune.jpg
         - name: Shrek_Texture
           path: Shrek/Shrek_Body.png
+        - name: Assignment5_Texture
+          path: Assignment5/texture.png
     models:
         - name: Sphere
           path: Sphere
@@ -73,3 +77,5 @@ resources:
           path: Shrek/Shrek.obj
         - name: Floppa_Model
           path: Floppa/flop.fbx
+        - name: Assignment5_Model
+          path: Assignment5/model.obj
