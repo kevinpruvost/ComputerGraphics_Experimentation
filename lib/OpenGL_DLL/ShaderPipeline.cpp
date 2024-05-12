@@ -95,7 +95,6 @@ Venom::ErrorCode ShaderPipeline_OGL::ReloadObjectFromEngine()
     return Venom::ErrorCode::Failure;
 }
 
-#ifdef _DEBUG
 void ShaderPipeline_OGL::_SetUniformVariableSignatures()
 {
     GLint numUniforms = 0;
@@ -135,7 +134,6 @@ void ShaderPipeline_OGL::_SetUniformVariableSignatures()
         __uniformVariableSignatures.emplace_back(signature);
     }
 }
-#endif
 
 // Export the factory function to create an instance of the class
 EXPORT ShaderPipeline* createShaderPipeline() {

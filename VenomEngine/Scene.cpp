@@ -131,10 +131,10 @@ MainScene::MainScene(Window* window, BaseFramework* framework, GUI* g)
 
 void MainScene::Update()
 {
+
 	gui->NewFrame();
 	{
-		static float f = 0.0f;
-
+		gui->DrawMainMenuBar();
 		ImGui::Begin("Hello TA!");
 
 		ImGui::Text("Press T to enable/disable the camera from following your cursor movement.");

@@ -9,6 +9,7 @@ Entity::Entity(Model* model, ShaderPipeline* shaderPipeline, const glm::vec3& po
     _properties.SetProperty("Scale", __scale);
     _properties.SetProperty("Parent", &__parent);
     _properties.SetProperty("Model", &__model);
+    _properties.SetProperty("Shader", &__shaderPipeline);
 }
 
 void Entity::Draw() const

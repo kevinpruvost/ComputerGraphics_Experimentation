@@ -7,6 +7,8 @@
 
 #include <memory>
 
+class GUI;
+
 class COMMONFRAMEWORK_API ShaderPipeline : public Resource
 {
 protected:
@@ -86,12 +88,11 @@ public:
     virtual Venom::ErrorCode _Use() = 0;
     static ShaderPipeline* CreateShaderPipeline(const char * name, const std::vector<Shader*>& shaders);
 
-#ifdef _DEBUG
     /**
      * @brief Gets Uniform variable signatures from the shader file
      */
     const std::vector<UniformVariableSignature> & GetUniformVariableSignatures();
-#endif
+    std::vector<UniformVariableSignature>& GetUniformVariableSignaturesRef();
 
     void SetUniformMatrix4(const std::string& name, const glm::mat4& matrix);
     void SetUniformVec3(const std::string& name, const glm::vec3& vec);
@@ -120,7 +121,11 @@ protected:
 
 protected:
     std::unordered_map<std::string, UniformVariable> __uniformVariables;
-#ifdef _DEBUG
     std::vector<UniformVariableSignature> __uniformVariableSignatures;
-#endif
+
+private:
+    friend class GUI;
+
+    std::unordered_map<std::string, UniformVariable> & GetUniformVariables();
+    void SetDefaultValuesForUniformVariables();
 };

@@ -44,6 +44,7 @@ public:
     void SetResourceName(const char* name);
 
     std::vector<EngineResource*>& GetResourcesOfSameType();
+    ResourceType GetResourceType() const;
 
     EngineResource(const ResourceType type);
     virtual ~EngineResource();

@@ -2,7 +2,7 @@ config_name: DefaultConfig
 version: 0.1a
 window_settings:
     api: GLFW # GLFW or WIN32
-    name: Homework1
+    name: VenomEngine
     width: 1920
     height: 1080
     resizable: true

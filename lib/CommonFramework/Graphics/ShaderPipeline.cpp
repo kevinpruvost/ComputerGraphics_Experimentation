@@ -28,13 +28,6 @@ ShaderPipeline * ShaderPipeline::CreateShaderPipeline(const char * name, const s
     assert(shader != nullptr);
     shader->SetPipeline(shaders);
     shader->SetResourceName(name);
-#ifdef _DEBUG
-    const auto & shaderVariables = shader->GetUniformVariableSignatures();
-    for (const auto& var : shaderVariables)
-    {
-        Logger::DebugPrint("Uniform variable:[%s]:\"%s\"", ShaderPipeline::UniformVariable::GetTypeString(var.type), var.name.c_str());
-    }
-#endif
     return shader;
 }
 
@@ -43,14 +36,30 @@ ShaderPipeline* ShaderPipeline::GetCurrentlyUsedPipeline()
     return currentlyUsedPipeline;
 }
 
-#ifdef _DEBUG
 const std::vector<ShaderPipeline::UniformVariableSignature>& ShaderPipeline::GetUniformVariableSignatures()
 {
     if (__uniformVariableSignatures.empty())
+    {
         _SetUniformVariableSignatures();
+#ifdef _DEBUG
+        for (const auto& var : __uniformVariableSignatures)
+            Logger::DebugPrint("Uniform variable:[%s]:\"%s\"", ShaderPipeline::UniformVariable::GetTypeString(var.type), var.name.c_str());
+#endif
+    }
     return __uniformVariableSignatures;
 }
+
+std::vector<ShaderPipeline::UniformVariableSignature>& ShaderPipeline::GetUniformVariableSignaturesRef()
+{
+    if (__uniformVariableSignatures.empty()) {
+        _SetUniformVariableSignatures();
+#ifdef _DEBUG
+        for (const auto& var : __uniformVariableSignatures)
+            Logger::DebugPrint("Uniform variable:[%s]:\"%s\"", ShaderPipeline::UniformVariable::GetTypeString(var.type), var.name.c_str());
 #endif
+    }
+    return __uniformVariableSignatures;
+}
 
 void ShaderPipeline::SetUniformMatrix4(const std::string& name, const glm::mat4& matrix)
 {
@@ -161,4 +170,42 @@ ShaderPipeline * Resources::_Load(const char const* name, const YamlNode & data)
     }
 
     return ShaderPipeline::CreateShaderPipeline(name, { frag, vert });
+}
+
+std::unordered_map<std::string, ShaderPipeline::UniformVariable>& ShaderPipeline::GetUniformVariables()
+{
+    return __uniformVariables;
+}
+
+void ShaderPipeline::SetDefaultValuesForUniformVariables()
+{
+    if (__uniformVariableSignatures.size() != __uniformVariables.size())
+    {
+        if (__uniformVariableSignatures.empty())
+            _SetUniformVariableSignatures();
+        for (const auto& var : __uniformVariableSignatures)
+        {
+#ifdef _DEBUG
+            Logger::DebugPrint("Uniform variable:[%s]:\"%s\"", ShaderPipeline::UniformVariable::GetTypeString(var.type), var.name.c_str());
+#endif
+            switch (var.type)
+            {
+            case UniformVariable::Type::FLOAT:
+                SetUniformFloat(var.name, 0.0f);
+                break;
+            case UniformVariable::Type::INT:
+                SetUniformInt(var.name, 0);
+                break;
+            case UniformVariable::Type::VEC3:
+                SetUniformVec3(var.name, glm::vec3(0.0f));
+                break;
+            case UniformVariable::Type::VEC4:
+                SetUniformVec4(var.name, glm::vec4(0.0f));
+                break;
+            case UniformVariable::Type::MATRIX4:
+                SetUniformMatrix4(var.name, glm::mat4(1.0f));
+                break;
+            }
+        }
+    }
 }

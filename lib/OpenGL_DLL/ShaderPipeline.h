@@ -24,9 +24,7 @@ public:
     Venom::ErrorCode ReloadObjectFromEngine() override;
 
 private:
-#ifdef _DEBUG
     void _SetUniformVariableSignatures() override;
-#endif
 
 
     GLuint m_program;

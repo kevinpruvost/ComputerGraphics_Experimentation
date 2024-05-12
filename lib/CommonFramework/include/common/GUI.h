@@ -56,12 +56,15 @@ public:
     // * @return true if interaction has occured
     // */
     //virtual bool ColorEdit3(const char* txt, float* colorRef) = 0;
+    void DrawMainMenuBar();
     void DrawObjectsProperties();
 private:
     void DrawObjectProperties(Object** obj);
     void DrawEngineObjectProperties(const char * name, EngineObject ** obj);
+    void SetStyle();
 
 protected:
     Window * _window;
     BaseFramework* _engine;
+    ImGuiStyle * _style;
 };
