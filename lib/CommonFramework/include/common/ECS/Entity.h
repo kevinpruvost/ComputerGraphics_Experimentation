@@ -4,10 +4,10 @@
 #include <common/Engine/EngineObject.h>
 #include <common/MemoryPool.h>
 #include <common/Callback.h>
-#include <common/ECS/Component.h>
 #include <string>
 
 class Entity;
+class Component;
 typedef WPtr<Entity> EntityRef;
 
 // Function to remove pointer
@@ -145,7 +145,7 @@ public:
     }
     std::vector<PropertyManager::Property>& GetProperties() { return _properties.GetProperties(); }
     const char* GetObjectName() const { return _objectName.c_str(); }
-    void SetObjectName(const char* name) { _objectName = name; }
+    void SetEntityName(const char* name) { _objectName = name; }
 
     template<typename T>
     T * AddComponent() {

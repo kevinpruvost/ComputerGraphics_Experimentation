@@ -1,6 +1,7 @@
 #pragma once
 
-class Entity;
+#include <common/ECS/Entity.h>
+
 class Component
 {
 public:
@@ -9,6 +10,10 @@ public:
 
     virtual void Update() = 0;
     virtual void Init() = 0;
+
+    void SetEntityName(const char * name) {
+        _entity->SetEntityName(name);
+    }
 
 protected:
     friend class Entity;
@@ -40,7 +45,11 @@ class VenomComponent : public Component
 {
 public:
     static const int ID;
+    static const char * Name;
 };
 
 template<typename T>
 const int VenomComponent<T>::ID = Component::getComponentID();
+
+template<typename T>
+const char* VenomComponent<T>::Name = typeid(T).name();

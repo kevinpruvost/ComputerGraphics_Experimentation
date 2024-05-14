@@ -1,7 +1,7 @@
 #include "Scene.h"
 
 #include <common/Rendering.h>
-#include <common/ParticleSystem.h>
+#include <common/Components/ParticleSystem.h>
 #include <common/ECS/Entity.h>
 
 #include <type_traits>
@@ -17,8 +17,13 @@ MainScene::MainScene(Window* window, BaseFramework* framework, GUI* g)
 	m_shader = Resources::Load<ShaderPipeline>("Normal_Shader");
 	m_textShader = Resources::Load<ShaderPipeline>("Text2D");
 
+	Entity * skybox = Entity::CreateEntity();
+	Skybox * skyboxComponent = skybox->AddComponent<Skybox>();
+	skyboxComponent->shader = Resources::Load<ShaderPipeline>("Skybox");
+	skyboxComponent->texture = Resources::Load<Texture>("Skybox_Texture");
+
 	Entity * e = Entity::CreateEntity();
-	e->AddComponent<Object>();
+	e->AddComponent<Transform>();
 
 	m_sphereModel = Resources::Load<Model>("Sphere");
 
@@ -109,10 +114,10 @@ MainScene::MainScene(Window* window, BaseFramework* framework, GUI* g)
 		p.size = glm::linearRand<float>(0.5f, 3.0f);
 		sys->EmitParticle(p);
 	});
-	m_ParticleSystem->SetName("Snow Particle System");
+	m_ParticleSystem->SetEntityName("Snow Particle System");
 
 	*m_particlesystem2 = *m_ParticleSystem;
-	m_particlesystem2->SetName("Snow Particle System 2");
+	m_particlesystem2->SetEntityName("Snow Particle System 2");
 
 	m_wireframeShader->Use();
 	m_wireframeShader->SetUniformVec3("wireframeColor", verticesColor);
@@ -167,7 +172,7 @@ void MainScene::Update()
 		
 		if (ImGui::Checkbox("Draw Faces", &drawFaces) || ImGui::Checkbox("Draw Lines", &drawLines) || ImGui::Checkbox("Draw Points", &drawPoints))
 		{
-			Rendering::SetGlobalDrawMode(Drawable3D::GetDrawMode(drawPoints, drawLines, drawFaces));
+			Rendering::SetGlobalDrawMode(Drawable3D::GetDrawModeFromStates(drawPoints, drawLines, drawFaces));
 		}
 
 		if (ImGui::ColorEdit3("Vertex/Lines Color", glm::value_ptr(verticesColor)))
@@ -186,28 +191,23 @@ void MainScene::Update()
 	glm::mat4 view = camera.GetViewMatrix();
 	glm::mat4 projection = camera.GetProjectionMatrix();
 
-	m_skybox->Draw();
-
-	m_ParticleSystem->Update();
-	m_ParticleSystem->SetEmissionRate(m_ParticleSystem->GetEmissionRate() + Time::GetLambda() * 0.25f);
-
-	for (auto& obj : m_objects)
-	{
-		obj->Draw();
-	}
+	//for (auto& obj : m_objects)
+	//{
+	//	obj->Draw();
+	//}
 
 
-	for (auto& obj : m_objects)
-	{
-		// Draw Text
-		bool isOnScreen = IsOnScreen(obj->GetWorldPosition(), view, projection, w->GetWindowWidth(), w->GetWindowHeight());
-		if (!isOnScreen) continue;
-		glm::vec2 screenPos = WorldToScreenSpace(obj->GetWorldPosition(), view, projection, w->GetWindowWidth(), w->GetWindowHeight());
-		m_textShader->Use();
-		m_textShader->SetUniformMatrix4("projection", glm::ortho(0.0f, static_cast<float>(w->GetWindowWidth()), 0.0f, static_cast<float>(w->GetWindowHeight())));
-		m_textShader->SetUniformVec3("textColor", glm::vec3{ 0.0f, 1.0f, 0.0f });
-		m_text2D->RenderText(obj->GetName(), screenPos.x, screenPos.y, 1.0f, glm::vec3{ 0.0f, 1.0f, 0.0f });
-	}
+	//for (auto& obj : m_objects)
+	//{
+	//	// Draw Text
+	//	bool isOnScreen = IsOnScreen(obj->GetWorldPosition(), view, projection, w->GetWindowWidth(), w->GetWindowHeight());
+	//	if (!isOnScreen) continue;
+	//	glm::vec2 screenPos = WorldToScreenSpace(obj->GetWorldPosition(), view, projection, w->GetWindowWidth(), w->GetWindowHeight());
+	//	m_textShader->Use();
+	//	m_textShader->SetUniformMatrix4("projection", glm::ortho(0.0f, static_cast<float>(w->GetWindowWidth()), 0.0f, static_cast<float>(w->GetWindowHeight())));
+	//	m_textShader->SetUniformVec3("textColor", glm::vec3{ 0.0f, 1.0f, 0.0f });
+	//	m_text2D->RenderText(obj->GetName(), screenPos.x, screenPos.y, 1.0f, glm::vec3{ 0.0f, 1.0f, 0.0f });
+	//}
 
 	ImGui::Render();
 	gui->RenderDrawData();

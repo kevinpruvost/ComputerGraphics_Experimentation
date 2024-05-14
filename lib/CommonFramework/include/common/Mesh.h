@@ -1,6 +1,6 @@
 #pragma once
 
-#include <common/Drawable3D.h>
+#include <common/Components/Drawable3D.h>
 #include <common/Face.h>
 #include <common/DLL.h>
 #include <common/Resources.h>

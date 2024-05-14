@@ -4,8 +4,9 @@
 #include <common/Face.h>
 #include <common/Common.h>
 #include <common/Engine/EngineObject.h>
+#include <common/Components/Drawable.h>
 
-class Drawable3D
+class Drawable3D : public Drawable
 {
 public:
     enum DrawMode
@@ -21,10 +22,10 @@ public:
         GLOBAL = 0b10000, // Takes global value as ref
         NONE = 0
     };
-    static DrawMode GetDrawMode(bool points, bool wireframe, bool solid);
+    static DrawMode GetDrawModeFromStates(bool points, bool wireframe, bool solid);
 
+    DrawMode GetDrawMode() const;
     void SetDrawMode(DrawMode mode);
-    virtual void Draw() const = 0;
 protected:
     Drawable3D();
 

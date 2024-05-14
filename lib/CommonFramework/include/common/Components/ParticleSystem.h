@@ -1,12 +1,11 @@
 #pragma once
 
-#include "Model.h"
-#include "Texture.h"
-#include "Drawable3D.h"
-#include "ShaderPipeline.h"
-#include "Camera.h"
-#include "Scene.h"
-#include "Object.h"
+#include <common/Model.h>
+#include <common/Texture.h>
+#include <common/Components/Drawable3D.h>
+#include <common/ShaderPipeline.h>
+#include <common/Camera.h>
+#include <common/Scene.h>
 
 struct Particle
 {
@@ -18,7 +17,7 @@ struct Particle
     float size;
 };
 
-class ParticleSystem : public Transform
+class ParticleSystem : public Component, public Drawable3D
 {
 public:
     ParticleSystem();

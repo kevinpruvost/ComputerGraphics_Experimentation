@@ -3,7 +3,8 @@
 #include <common/DLL.h>
 #include <common/Memory.h>
 #include <common/Vertex.h>
-#include <common/Drawable3D.h>
+#include <common/Model.h>
+#include <common/Components/Drawable3D.h>
 
 class EngineLoader;
 
@@ -41,12 +42,15 @@ public:
     static inline void SetGlobalDrawMode(const Drawable3D::DrawMode drawMode) { assert(drawMode != Drawable3D::DrawMode::GLOBAL); _globalDrawMode = drawMode; }
     static inline Drawable3D::DrawMode GetGlobalDrawMode() { return _globalDrawMode; }
 
+    static inline void DrawModel(const Model* model) { _instance->_DrawModel(model); }
+
 protected:
     virtual void _SetDepthTest(bool enable) const = 0;
     virtual void _SetBlendingFunction(BlendingFunction src, BlendingFunction dst) const = 0;
     virtual void _SetBlendingEquation(BlendingEquation eq) const = 0;
     virtual void _DrawVertices(const VertexBuffer * vertices) const = 0;
     virtual void _SetDrawMode(const Drawable3D::DrawMode drawMode) const = 0;
+    virtual void _DrawModel(const Model* model) const = 0;
     static Drawable3D::DrawMode _globalDrawMode;
     static Drawable3D::DrawMode _lastDrawMode;
 };

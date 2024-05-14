@@ -1,5 +1,7 @@
 #include "Rendering.h"
 
+#include "Mesh.h"
+
 EXPORT Rendering* DLL_SINGLETON_LOADING_NAME(Rendering)()
 {
     return new Rendering_OGL();
@@ -76,4 +78,65 @@ void Rendering_OGL::_SetDrawMode(const Drawable3D::DrawMode drawMode) const
     }
 }
 
+void Rendering_OGL::_DrawModel(const Model* model) const
+{
+	ShaderPipeline * shader = model->GetShader();
+	if (!shader) shader = ShaderPipeline::GetCurrentlyUsedPipeline();
+	
+	ShaderPipeline * wireframeShader = model->GetWireframeShader();
 
+	assert(shader);
+	Drawable3D::DrawMode drawMode = model->GetDrawMode();
+	drawMode = (drawMode == Drawable3D::DrawMode::GLOBAL) ? Rendering::GetGlobalDrawMode() : drawMode;
+	if (drawMode & Drawable3D::DrawMode::WIREFRAME || drawMode & Drawable3D::DrawMode::POINTS)
+	{
+		if (!wireframeShader) wireframeShader = Resources::Load<ShaderPipeline>("Wireframe");
+		wireframeShader->Use();
+		shader->GiveUniformVariablesToOtherShader(wireframeShader);
+	}
+	const auto & materials = model->GetMaterials();
+	for (const auto& m : model->GetMeshes())
+	{
+		Mesh_OGL* mesh = dynamic_cast<Mesh_OGL*>(m.get());
+		shader->Use();
+		const VertexBuffer* vertexBuffer = mesh->GetVertexBuffer();
+		vertexBuffer->Bind();
+		if (shader->HasTesselationStage() && vertexBuffer->GetVertexCount() < GL_MAX_PATCH_VERTICES) {
+			glPatchParameteri(GL_PATCH_VERTICES, vertexBuffer->GetVertexCount());
+		}
+		if (mesh->GetMaterialId() <= materials.size())
+		{
+			const Material* material = materials[mesh->GetMaterialId()];
+			const std::vector<Ptr<Texture>>& textures = material->GetTextures();
+			char samplerName[32] = "textureSampler[0]\0"; // [0] is replaced with [i]
+			for (int i = 0; i < textures.size(); i++)
+			{
+				textures[i]->BindTexture(Texture::TextureType::Texture2D, i);
+				samplerName[13] = i + '0';
+				shader->SetUniformInt(samplerName, i);
+			}
+		}
+
+		if (drawMode & Drawable3D::DrawMode::SOLID)
+		{
+			Rendering::SetDrawMode(Drawable3D::DrawMode::SOLID);
+			vertexBuffer->Draw();
+		}
+
+		if (drawMode & Drawable3D::DrawMode::WIREFRAME || drawMode & Drawable3D::DrawMode::POINTS)
+		{
+			wireframeShader->Use();
+			shader->GiveUniformVariablesToOtherShader(wireframeShader);
+		}
+		if (drawMode & Drawable3D::DrawMode::WIREFRAME)
+		{
+			Rendering::SetDrawMode(Drawable3D::DrawMode::WIREFRAME);
+			vertexBuffer->Draw();
+		}
+		if (drawMode & Drawable3D::DrawMode::POINTS)
+		{
+			Rendering::SetDrawMode(Drawable3D::DrawMode::POINTS);
+			vertexBuffer->Draw();
+		}
+	}
+}

@@ -15,10 +15,10 @@
 #include <common/Camera.h>
 #include <common/GUI.h>
 #include <common/Texture.h>
-#include <common/Object.h>
+#include <common/Components/Transform.h>
 #include <common/Time.h>
 #include <common/Text2D.h>
-#include <common/ParticleSystem.h>
+#include <common/Components/ParticleSystem.h>
 #include <common/Skybox.h>
 
 class Scene

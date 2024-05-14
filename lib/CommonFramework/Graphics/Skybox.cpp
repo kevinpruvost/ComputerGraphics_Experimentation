@@ -4,8 +4,8 @@
 
 static VertexBuffer* skyboxVertexBuffer = nullptr;
 
-Skybox::Skybox(ShaderPipeline* shader, Texture* texture)
-    : __shader(shader), __texture(texture)
+Skybox::Skybox()
+    : shader(nullptr), texture(nullptr)
 {
     if (skyboxVertexBuffer == nullptr)
     {
@@ -56,21 +56,29 @@ Skybox::Skybox(ShaderPipeline* shader, Texture* texture)
         skyboxVertexBuffer = VertexBuffer::CreateVertexBuffer();
         skyboxVertexBuffer->SetVertices(skyboxVertices);
     }
-
 }
 
 void Skybox::Draw() const
 {
-    assert(__shader != nullptr && __texture != nullptr);
+    assert(shader != nullptr && texture != nullptr);
 
     Rendering::SetDrawMode(Drawable3D::DrawMode::SOLID);
     Rendering::SetDepthTest(false);
-    __shader->Use();
-    __texture->BindTexture(Texture::TextureType::TextureCubemap);
+    shader->Use();
+    texture->BindTexture(Texture::TextureType::TextureCubemap);
 
-    __shader->SetUniformMatrix4("view", glm::mat4(glm::mat3(Camera::MainCamera->GetViewMatrix())));
-    __shader->SetUniformMatrix4("projection", Camera::MainCamera->GetProjectionMatrix());
-    __shader->SetUniformInt("textureSampler0", 0);
+    shader->SetUniformMatrix4("view", glm::mat4(glm::mat3(Camera::MainCamera->GetViewMatrix())));
+    shader->SetUniformMatrix4("projection", Camera::MainCamera->GetProjectionMatrix());
+    shader->SetUniformInt("textureSampler0", 0);
     Rendering::DrawVertices(skyboxVertexBuffer);
     Rendering::SetDepthTest(true);
+}
+
+void Skybox::Update()
+{
+    Draw();
+}
+
+void Skybox::Init()
+{
 }

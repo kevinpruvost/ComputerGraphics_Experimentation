@@ -3,17 +3,17 @@
 #include <common/Mesh.h>
 #include <common/Material.h>
 #include <common/Model.h>
-#include <common/Object.h>
+#include <common/Components/Transform.h>
 #include <common/ShaderPipeline.h>
-#include <common/ECS/Entity.h>
+#include <common/ECS/Component.h>
 
-class Transform : public VenomComponent<Transform>, public Drawable3D
+class Transform : public VenomComponent<Transform>
 {
 public:
     Transform();
     ~Transform() = default;
 
-    void Draw() const override;
+    void Draw() const;
     void Init() override;
     void Update() override;
     void Rotate(const glm::vec3& rotation);

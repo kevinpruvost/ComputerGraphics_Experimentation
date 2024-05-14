@@ -1,4 +1,4 @@
-#include <common/Object.h>
+#include <common/Components/Transform.h>
 #include <common/Camera.h>
 
 Transform::Transform()
@@ -13,11 +13,11 @@ Transform::Transform()
 
 void Transform::Draw() const
 {
-    __shaderPipeline->Use();
-    __shaderPipeline->SetUniformMatrix4("model", GetModelMatrix());
-    __shaderPipeline->SetUniformMatrix4("view", Camera::MainCamera->GetViewMatrix());
-    __shaderPipeline->SetUniformMatrix4("projection", Camera::MainCamera->GetProjectionMatrix());
-    __model->Draw();
+    //__shaderPipeline->Use();
+    //__shaderPipeline->SetUniformMatrix4("model", GetModelMatrix());
+    //__shaderPipeline->SetUniformMatrix4("view", Camera::MainCamera->GetViewMatrix());
+    //__shaderPipeline->SetUniformMatrix4("projection", Camera::MainCamera->GetProjectionMatrix());
+    //__model->Draw();
 }
 
 void Transform::Init()
@@ -81,7 +81,7 @@ void Transform::SetParent(Transform* parent)
 
 void Transform::SetName(const char* name)
 {
-    _entity->SetObjectName(name);
+    _entity->SetEntityName(name);
 }
 
 const char* Transform::GetName() const

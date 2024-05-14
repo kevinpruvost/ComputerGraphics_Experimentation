@@ -1,6 +1,6 @@
 #pragma once
 
-#include <common/ParticleSystem.h>
+#include <common/Components/ParticleSystem.h>
 
 class ParticleSystem_OGL : public ParticleSystem
 {

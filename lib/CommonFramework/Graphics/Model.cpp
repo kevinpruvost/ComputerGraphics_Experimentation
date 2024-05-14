@@ -141,6 +141,27 @@ void Model::SetWireframeShader(ShaderPipeline* shader)
     _wireframeShader = shader;
 }
 
+ShaderPipeline* Model::GetShader() const
+{
+    return _shader;
+}
+
+ShaderPipeline* Model::GetWireframeShader() const
+{
+    return _wireframeShader;
+}
+
+const std::vector<Ptr<Mesh>>& Model::GetMeshes() const
+{
+    return _meshes;
+}
+
+const std::vector<Ptr<Material>>& Model::GetMaterials() const
+{
+    return _materials;
+}
+
+
 Model::Model()
     : Drawable3D()
     , Resource(ResourceType::MODEL)

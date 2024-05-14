@@ -13,7 +13,7 @@ public:
     void _SetBlendingEquation(BlendingEquation eq) const override;
     void _DrawVertices(const VertexBuffer * vertices) const override;
     void _SetDrawMode(const Drawable3D::DrawMode drawMode) const;
-
+    void _DrawModel(const Model* model) const override;
 };
 
 extern "C"

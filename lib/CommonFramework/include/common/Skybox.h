@@ -2,15 +2,16 @@
 
 #include <common/ShaderPipeline.h>
 #include <common/Texture.h>
+#include <common/ECS/Component.h>
 
-class Skybox : public Drawable3D
+class Skybox : public VenomComponent<Skybox>
 {
 public:
-    Skybox(ShaderPipeline * shader, Texture * texture);
-    void Draw() const override;
+    Skybox();
+    void Draw() const;
+    void Update() override;
+    void Init() override;
 
-private:
-    ShaderPipeline * __shader;
-    Texture * __texture;
-
+    ShaderPipeline * shader;
+    Texture * texture;
 };

@@ -1,6 +1,6 @@
-#include <common/Drawable3D.h>
+#include <common/Components/Drawable3D.h>
 
-Drawable3D::DrawMode Drawable3D::GetDrawMode(bool points, bool wireframe, bool solid)
+Drawable3D::DrawMode Drawable3D::GetDrawModeFromStates(bool points, bool wireframe, bool solid)
 {
     DrawMode mode = DrawMode::NONE;
     if (points)
@@ -10,6 +10,11 @@ Drawable3D::DrawMode Drawable3D::GetDrawMode(bool points, bool wireframe, bool s
     if (solid)
         mode = static_cast<DrawMode>(mode | DrawMode::SOLID);
     return mode;
+}
+
+Drawable3D::DrawMode Drawable3D::GetDrawMode() const
+{
+    return _drawMode;
 }
 
 void Drawable3D::SetDrawMode(DrawMode mode)

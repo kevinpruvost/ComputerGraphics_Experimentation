@@ -1,4 +1,4 @@
-#include <common/ParticleSystem.h>
+#include <common/Components/ParticleSystem.h>
 
 #include <common/Engine/EngineLoader.h>
 #include <common/Rendering.h>
@@ -6,8 +6,7 @@
 constexpr const float defaultFloat = -999.0f;
 
 ParticleSystem::ParticleSystem()
-    : Transform()
-    , __timeSinceLastEmission { 0.0f }
+    : __timeSinceLastEmission { 0.0f }
     , __paused{ false }
     , __particleColor(1.0f, 1.0f, 1.0f, 1.0f)
     , __particleLifetime(defaultFloat)
@@ -197,7 +196,7 @@ void ParticleSystem::RenderParticles() const
         modelMatrix = modelMatrix * rotationMatrix;
         __particleShaderPipeline->SetUniformMatrix4("model", modelMatrix);
         __model->SetDrawMode(drawMode);
-        __model->Draw();
+        Rendering::DrawModel(__model);
     }
     Rendering::SetDepthTest(true);
 }

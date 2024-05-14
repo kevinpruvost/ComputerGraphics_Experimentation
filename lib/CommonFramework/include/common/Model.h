@@ -47,6 +47,10 @@ public:
 
     void SetShader(ShaderPipeline * shader);
     void SetWireframeShader(ShaderPipeline * shader);
+    ShaderPipeline * GetShader() const;
+    ShaderPipeline * GetWireframeShader() const;
+    const std::vector<Ptr<Mesh>> & GetMeshes() const;
+    const std::vector<Ptr<Material>> & GetMaterials() const;
 
 protected:
     friend class Resources;
