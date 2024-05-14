@@ -6,7 +6,7 @@
 constexpr const float defaultFloat = -999.0f;
 
 ParticleSystem::ParticleSystem()
-    : Object()
+    : Transform()
     , __timeSinceLastEmission { 0.0f }
     , __paused{ false }
     , __particleColor(1.0f, 1.0f, 1.0f, 1.0f)

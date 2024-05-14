@@ -14,9 +14,7 @@ protected:
 	Ptr<Texture> m_textureParticles, m_backgroundTexture;
 	Ptr<ParticleSystem> m_ParticleSystem, m_particlesystem2;
 	Ptr<Text2D> m_text2D;
-	Ptr<Object> m_sun;
 	UPtr<Skybox> m_skybox;
-	std::vector<Object*> m_objects;
 	Camera camera;
 
 	bool cameraLock = false;

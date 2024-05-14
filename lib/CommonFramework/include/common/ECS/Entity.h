@@ -149,8 +149,9 @@ public:
 
     template<typename T>
     T * AddComponent() {
-        T* component = Component<T>::CreateComponent();
+        T* component = Component::CreateComponent<T>();
         component->SetEntity(this);
+        __components.push_back(component);
         return component;
     }
 
@@ -168,6 +169,8 @@ protected:
     PropertyManager _properties;
     std::string _objectName;
     Callback<void> _guiCallback;
+private:
+    std::vector<Component *> __components;
 };
 
 #include <common/Memory.h>

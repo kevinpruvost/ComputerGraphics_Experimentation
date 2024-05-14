@@ -18,7 +18,7 @@ struct Particle
     float size;
 };
 
-class ParticleSystem : public Object
+class ParticleSystem : public Transform
 {
 public:
     ParticleSystem();

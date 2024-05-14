@@ -18,6 +18,7 @@ MainScene::MainScene(Window* window, BaseFramework* framework, GUI* g)
 	m_textShader = Resources::Load<ShaderPipeline>("Text2D");
 
 	Entity * e = Entity::CreateEntity();
+	e->AddComponent<Object>();
 
 	m_sphereModel = Resources::Load<Model>("Sphere");
 
@@ -126,18 +127,18 @@ MainScene::MainScene(Window* window, BaseFramework* framework, GUI* g)
 	Material * mat = Resources::Create<Material>("SunMaterial");
 	mat->AddTexture(Resources::Load<Texture>("Mars"));
 	m_sphereModel->AddMaterial(mat);
-	auto test = new Object(m_sphereModel, Resources::Load<ShaderPipeline>("Normal_Shader"), glm::vec3(0), glm::vec3(0), glm::vec3(0.5));
-	m_objects.push_back(test);
-	mat = Resources::Create<Material>("Assignment5_Material");
-	mat->AddTexture(Resources::Load<Texture>("Assignment5_Texture"));
-	auto model = Resources::Load<Model>("Assignment5_Model");
-	model->AddMaterial(mat);
-	model->SetShader(Resources::Load<ShaderPipeline>("Bezier"));
-	model->SetWireframeShader(Resources::Load<ShaderPipeline>("Bezier_Wireframe"));
-	test = new Object(
-		model,
-		Resources::Load<ShaderPipeline>("Bezier"), glm::vec3(5), glm::vec3(0), glm::vec3(0.5));
-	m_objects.push_back(test);
+	//auto test = new Object(m_sphereModel, Resources::Load<ShaderPipeline>("Normal_Shader"), glm::vec3(0), glm::vec3(0), glm::vec3(0.5));
+	//m_objects.push_back(test);
+	//mat = Resources::Create<Material>("Assignment5_Material");
+	//mat->AddTexture(Resources::Load<Texture>("Assignment5_Texture"));
+	//auto model = Resources::Load<Model>("Assignment5_Model");
+	//model->AddMaterial(mat);
+	//model->SetShader(Resources::Load<ShaderPipeline>("Bezier"));
+	//model->SetWireframeShader(Resources::Load<ShaderPipeline>("Bezier_Wireframe"));
+	//test = new Object(
+	//	model,
+	//	Resources::Load<ShaderPipeline>("Bezier"), glm::vec3(5), glm::vec3(0), glm::vec3(0.5));
+	//m_objects.push_back(test);
 
 	Time::SetStartTime();
 }

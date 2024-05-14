@@ -1,8 +1,26 @@
 #include <common/Object.h>
 #include <common/Camera.h>
 
-Object::Object(Model* model, ShaderPipeline* shaderPipeline, const glm::vec3& position, const glm::vec3& rotation, const glm::vec3& scale)
-    : __model(model), __position(position), __rotation(rotation), __scale(scale), __parent(nullptr), __shaderPipeline(shaderPipeline)
+Transform::Transform()
+    : __model(nullptr)
+    , __position(0)
+    , __rotation(0)
+    , __scale(1)
+    , __parent(nullptr)
+    , __shaderPipeline(nullptr)
+{
+}
+
+void Transform::Draw() const
+{
+    __shaderPipeline->Use();
+    __shaderPipeline->SetUniformMatrix4("model", GetModelMatrix());
+    __shaderPipeline->SetUniformMatrix4("view", Camera::MainCamera->GetViewMatrix());
+    __shaderPipeline->SetUniformMatrix4("projection", Camera::MainCamera->GetProjectionMatrix());
+    __model->Draw();
+}
+
+void Transform::Init()
 {
     _entity->SerializeProperty("Position", __position);
     _entity->SerializeProperty("Rotation", __rotation);
@@ -12,39 +30,16 @@ Object::Object(Model* model, ShaderPipeline* shaderPipeline, const glm::vec3& po
     _entity->SerializeProperty("Shader", &__shaderPipeline);
 }
 
-Object::Object(const glm::vec3& position, const glm::vec3& rotation, const glm::vec3& scale)
-    : __position(position), __rotation(rotation), __scale(scale)
-    , __model(nullptr), __parent(nullptr), __shaderPipeline(nullptr)
-{
-    _entity->SerializeProperty("Position", __position);
-    _entity->SerializeProperty("Rotation", __rotation);
-    _entity->SerializeProperty("Scale", __scale);
-    _entity->SerializeProperty("Parent", &__parent);
-}
-
-void Object::Draw() const
-{
-    __shaderPipeline->Use();
-    __shaderPipeline->SetUniformMatrix4("model", GetModelMatrix());
-    __shaderPipeline->SetUniformMatrix4("view", Camera::MainCamera->GetViewMatrix());
-    __shaderPipeline->SetUniformMatrix4("projection", Camera::MainCamera->GetProjectionMatrix());
-    __model->Draw();
-}
-
-void Object::Init()
+void Transform::Update()
 {
 }
 
-void Object::Update()
-{
-}
-
-void Object::Rotate(const glm::vec3& rotation)
+void Transform::Rotate(const glm::vec3& rotation)
 {
     __rotation += rotation;
 }
 
-void Object::RotateAroundParent(const glm::vec3& rotation)
+void Transform::RotateAroundParent(const glm::vec3& rotation)
 {
     if (!__parent) return;
 
@@ -69,32 +64,32 @@ void Object::RotateAroundParent(const glm::vec3& rotation)
     //__position = glm::vec3(rotatedPosition);
 }
 
-void Object::Translate(const glm::vec3& translation)
+void Transform::Translate(const glm::vec3& translation)
 {
     __position += translation;
 }
 
-void Object::Scale(const glm::vec3& scale)
+void Transform::Scale(const glm::vec3& scale)
 {
     __scale += scale;
 }
 
-void Object::SetParent(Object* parent)
+void Transform::SetParent(Transform* parent)
 {
     __parent = parent;
 }
 
-void Object::SetName(const char* name)
+void Transform::SetName(const char* name)
 {
     _entity->SetObjectName(name);
 }
 
-const char* Object::GetName() const
+const char* Transform::GetName() const
 {
     return _entity->GetObjectName();
 }
 
-glm::vec3 Object::GetWorldPosition() const
+glm::vec3 Transform::GetWorldPosition() const
 {
     if (!__parent) return __position;
 
@@ -107,27 +102,27 @@ glm::vec3 Object::GetWorldPosition() const
     return glm::vec3(worldPosition);
 }
 
-const glm::vec3 & Object::GetPosition() const
+const glm::vec3 & Transform::GetPosition() const
 {
     return __position;
 }
 
-glm::vec3& Object::GetPositionRef()
+glm::vec3& Transform::GetPositionRef()
 {
     return __position;
 }
 
-const glm::vec3 & Object::GetRotation() const
+const glm::vec3 & Transform::GetRotation() const
 {
     return __rotation;
 }
 
-glm::vec3& Object::GetRotationRef()
+glm::vec3& Transform::GetRotationRef()
 {
     return __rotation;
 }
 
-glm::mat4 Object::GetModelMatrix() const
+glm::mat4 Transform::GetModelMatrix() const
 {
     glm::mat4 model(1);
     model = glm::translate(model, __position);
