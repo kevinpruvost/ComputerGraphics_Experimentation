@@ -3,7 +3,7 @@
 #include <common/DLL.h>
 #include <common/Window.h>
 #include <common/Engine/EngineLoader.h>
-#include <common/ObjectPool.h>
+#include <common/ECS/Entity.h>
 #include <imgui.h>
 
 /**
@@ -59,7 +59,7 @@ public:
     void DrawMainMenuBar();
     void DrawObjectsProperties();
 private:
-    void DrawObjectProperties(Object** obj);
+    void DrawObjectProperties(Entity** obj);
     void DrawEngineObjectProperties(const char * name, EngineObject ** obj);
     void SetStyle();
 

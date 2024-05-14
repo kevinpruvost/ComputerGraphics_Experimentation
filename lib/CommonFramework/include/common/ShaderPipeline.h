@@ -78,7 +78,7 @@ public:
     };
     struct UniformVariableSignature
     {
-        std::string name;
+        const char * name;
         UniformVariable::Type type;
     };
 
@@ -98,11 +98,11 @@ public:
     const std::vector<UniformVariableSignature> & GetUniformVariableSignatures();
     std::vector<UniformVariableSignature>& GetUniformVariableSignaturesRef();
 
-    void SetUniformMatrix4(const std::string& name, const glm::mat4& matrix);
-    void SetUniformVec3(const std::string& name, const glm::vec3& vec);
-    void SetUniformVec4(const std::string& name, const glm::vec4& vec);
-    void SetUniformFloat(const std::string& name, float value);
-    void SetUniformInt(const std::string& name, int value);
+    void SetUniformMatrix4(const char * name, const glm::mat4& matrix);
+    void SetUniformVec3(const char * name, const glm::vec3& vec);
+    void SetUniformVec4(const char * name, const glm::vec4& vec);
+    void SetUniformFloat(const char * name, float value);
+    void SetUniformInt(const char * name, int value);
 
     /**
      * @brief Gives Previously set uniform variables to other shaders
@@ -118,16 +118,16 @@ public:
     bool HasGeometryStage() const;
 
 protected:
-    virtual void _SetUniformMatrix4(const std::string& name, const glm::mat4& matrix) = 0;
-    virtual void _SetUniformVec3(const std::string& name, const glm::vec3& vec) = 0;
-    virtual void _SetUniformVec4(const std::string& name, const glm::vec4& vec) = 0;
-    virtual void _SetUniformFloat(const std::string& name, float value) = 0;
-    virtual void _SetUniformInt(const std::string& name, int value) = 0;
+    virtual void _SetUniformMatrix4(const char * name, const glm::mat4& matrix) = 0;
+    virtual void _SetUniformVec3(const char * name, const glm::vec3& vec) = 0;
+    virtual void _SetUniformVec4(const char * name, const glm::vec4& vec) = 0;
+    virtual void _SetUniformFloat(const char * name, float value) = 0;
+    virtual void _SetUniformInt(const char * name, int value) = 0;
 
     virtual void _SetUniformVariableSignatures() = 0;
 
 protected:
-    std::unordered_map<std::string, UniformVariable> _uniformVariables;
+    std::unordered_map<const char *, UniformVariable> _uniformVariables;
     std::vector<UniformVariableSignature> _uniformVariableSignatures;
     bool _hasTesselationStage;
     bool _hasGeometryStage;
@@ -135,6 +135,6 @@ protected:
 private:
     friend class GUI;
 
-    std::unordered_map<std::string, UniformVariable> & GetUniformVariables();
+    std::unordered_map<const char *, UniformVariable> & GetUniformVariables();
     void SetDefaultValuesForUniformVariables();
 };

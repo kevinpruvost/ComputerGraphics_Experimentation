@@ -1,7 +1,6 @@
 #include <common/Engine/EngineLoader.h>
 #include <common/Exception.h>
 #include <common/Rendering.h>
-#include <common/ObjectPool.h>
 #include <iostream>
 #include <cstdlib>
 
@@ -27,7 +26,6 @@ void EngineLoader::LoadEngine(const EngineAPI type)
 
     if (EngineDll) {
         __framework = nullptr;
-        ObjectPool::Clear();
     }
 
     switch (type)

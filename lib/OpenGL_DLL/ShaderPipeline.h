@@ -13,11 +13,11 @@ public:
     void SetPipeline(const std::vector<Shader*> & shaders) override;
     Venom::ErrorCode _Use() override;
 
-    void _SetUniformMatrix4(const std::string& name, const glm::mat4& matrix) override;
-    void _SetUniformVec3(const std::string& name, const glm::vec3& vec) override;
-    void _SetUniformVec4(const std::string& name, const glm::vec4& vec) override;
-    void _SetUniformFloat(const std::string& name, float value) override;
-    void _SetUniformInt(const std::string& name, int value) override;
+    void _SetUniformMatrix4(const char * name, const glm::mat4& matrix) override;
+    void _SetUniformVec3(const char * name, const glm::vec3& vec) override;
+    void _SetUniformVec4(const char * name, const glm::vec4& vec) override;
+    void _SetUniformFloat(const char * name, float value) override;
+    void _SetUniformInt(const char * name, int value) override;
 
     void SetDrawMode(Drawable3D::DrawMode mode) override;
 

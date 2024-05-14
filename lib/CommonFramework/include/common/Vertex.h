@@ -44,7 +44,13 @@ public:
     const VertexArray & GetVertices() const;
     const IndexArray & GetIndices() const;
 
+    void SetHasNormals(bool hasNormals);
+    void SetHasTextureCoords(bool hasTextureCoords);
+    bool HasNormals() const;
+    bool HasTextureCoords() const;
+
 protected:
     VertexArray _v;
     IndexArray _i;
+    bool _hasNormals, _hasTextureCoords;
 };

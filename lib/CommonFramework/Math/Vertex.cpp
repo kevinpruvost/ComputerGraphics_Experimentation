@@ -29,6 +29,8 @@ Vertex::~Vertex()
 
 VertexBuffer::VertexBuffer()
     : EngineObject(EngineObjectType::Object)
+    , _hasNormals{ false }
+    , _hasTextureCoords{ false }
 {
 }
 
@@ -61,4 +63,24 @@ const VertexArray & VertexBuffer::GetVertices() const
 const IndexArray& VertexBuffer::GetIndices() const
 {
     return _i;
+}
+
+void VertexBuffer::SetHasNormals(bool hasNormals)
+{
+    _hasNormals = hasNormals;
+}
+
+void VertexBuffer::SetHasTextureCoords(bool hasTextureCoords)
+{
+    _hasTextureCoords = hasTextureCoords;
+}
+
+bool VertexBuffer::HasNormals() const
+{
+    return _hasNormals;
+}
+
+bool VertexBuffer::HasTextureCoords() const
+{
+    return _hasTextureCoords;
 }

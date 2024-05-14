@@ -33,6 +33,10 @@ resources:
           path: [Shaders/Wireframe.frag, Shaders/Wireframe.vert, Shaders/Bezier.tcs, Shaders/Bezier.tes]
         - name: Normal_Shader
           path: Shaders/Normal_Shader
+        - name: Lamp
+          path: Shaders/Lamp
+        - name: Material
+          path: Shaders/Material
     textures:
         - name: Snowflake
           path: Particles/Snow.png

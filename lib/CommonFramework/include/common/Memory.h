@@ -60,6 +60,14 @@ public:
     using std::shared_ptr<T>::operator*;
 };
 
+template <typename T>
+class WPtr : public std::weak_ptr<T>
+{
+public:
+    using std::weak_ptr<T>::weak_ptr;
+    using std::weak_ptr<T>::operator=;
+};
+
 // Define specialization of std::hash for SPtr<T>
 namespace std {
     template<typename T>

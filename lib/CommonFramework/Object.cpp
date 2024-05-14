@@ -1,18 +1,28 @@
-#include <common/Entity.h>
+#include <common/Object.h>
 #include <common/Camera.h>
 
-Entity::Entity(Model* model, ShaderPipeline* shaderPipeline, const glm::vec3& position, const glm::vec3& rotation, const glm::vec3& scale)
+Object::Object(Model* model, ShaderPipeline* shaderPipeline, const glm::vec3& position, const glm::vec3& rotation, const glm::vec3& scale)
     : __model(model), __position(position), __rotation(rotation), __scale(scale), __parent(nullptr), __shaderPipeline(shaderPipeline)
 {
-    _properties.SetProperty("Position", __position);
-    _properties.SetProperty("Rotation", __rotation);
-    _properties.SetProperty("Scale", __scale);
-    _properties.SetProperty("Parent", &__parent);
-    _properties.SetProperty("Model", &__model);
-    _properties.SetProperty("Shader", &__shaderPipeline);
+    _entity->SerializeProperty("Position", __position);
+    _entity->SerializeProperty("Rotation", __rotation);
+    _entity->SerializeProperty("Scale", __scale);
+    _entity->SerializeProperty("Parent", &__parent);
+    _entity->SerializeProperty("Model", &__model);
+    _entity->SerializeProperty("Shader", &__shaderPipeline);
 }
 
-void Entity::Draw() const
+Object::Object(const glm::vec3& position, const glm::vec3& rotation, const glm::vec3& scale)
+    : __position(position), __rotation(rotation), __scale(scale)
+    , __model(nullptr), __parent(nullptr), __shaderPipeline(nullptr)
+{
+    _entity->SerializeProperty("Position", __position);
+    _entity->SerializeProperty("Rotation", __rotation);
+    _entity->SerializeProperty("Scale", __scale);
+    _entity->SerializeProperty("Parent", &__parent);
+}
+
+void Object::Draw() const
 {
     __shaderPipeline->Use();
     __shaderPipeline->SetUniformMatrix4("model", GetModelMatrix());
@@ -21,12 +31,20 @@ void Entity::Draw() const
     __model->Draw();
 }
 
-void Entity::Rotate(const glm::vec3& rotation)
+void Object::Init()
+{
+}
+
+void Object::Update()
+{
+}
+
+void Object::Rotate(const glm::vec3& rotation)
 {
     __rotation += rotation;
 }
 
-void Entity::RotateAroundParent(const glm::vec3& rotation)
+void Object::RotateAroundParent(const glm::vec3& rotation)
 {
     if (!__parent) return;
 
@@ -51,32 +69,32 @@ void Entity::RotateAroundParent(const glm::vec3& rotation)
     //__position = glm::vec3(rotatedPosition);
 }
 
-void Entity::Translate(const glm::vec3& translation)
+void Object::Translate(const glm::vec3& translation)
 {
     __position += translation;
 }
 
-void Entity::Scale(const glm::vec3& scale)
+void Object::Scale(const glm::vec3& scale)
 {
     __scale += scale;
 }
 
-void Entity::SetParent(Entity* parent)
+void Object::SetParent(Object* parent)
 {
     __parent = parent;
 }
 
-void Entity::SetName(const char* name)
+void Object::SetName(const char* name)
 {
-    _objectName = name;
+    _entity->SetObjectName(name);
 }
 
-const char* Entity::GetName() const
+const char* Object::GetName() const
 {
-    return _objectName.c_str();
+    return _entity->GetObjectName();
 }
 
-glm::vec3 Entity::GetWorldPosition() const
+glm::vec3 Object::GetWorldPosition() const
 {
     if (!__parent) return __position;
 
@@ -89,27 +107,27 @@ glm::vec3 Entity::GetWorldPosition() const
     return glm::vec3(worldPosition);
 }
 
-const glm::vec3 & Entity::GetPosition() const
+const glm::vec3 & Object::GetPosition() const
 {
     return __position;
 }
 
-glm::vec3& Entity::GetPositionRef()
+glm::vec3& Object::GetPositionRef()
 {
     return __position;
 }
 
-const glm::vec3 & Entity::GetRotation() const
+const glm::vec3 & Object::GetRotation() const
 {
     return __rotation;
 }
 
-glm::vec3& Entity::GetRotationRef()
+glm::vec3& Object::GetRotationRef()
 {
     return __rotation;
 }
 
-glm::mat4 Entity::GetModelMatrix() const
+glm::mat4 Object::GetModelMatrix() const
 {
     glm::mat4 model(1);
     model = glm::translate(model, __position);

@@ -27,10 +27,10 @@ public:
 
     // Function to log with format strings
     template<typename... Args>
-    static inline void Log(const std::string& format, Args... args) {
-        int length = snprintf(nullptr, 0, format.c_str(), args...);
+    static inline void Log(const char * format, Args... args) {
+        int length = snprintf(nullptr, 0, format, args...);
         std::string message(length+1, 0);
-        sprintf(const_cast<char *>(message.c_str()), format.c_str(), args...);
+        sprintf(const_cast<char *>(message.c_str()), format, args...);
 
         // Log the message
         Log(message);
@@ -38,10 +38,10 @@ public:
 
     // Function to print with format strings
     template<typename... Args>
-    static inline void Print(const std::string& format, Args... args) {
-        int length = snprintf(NULL, 0, format.c_str(), args...);
+    static inline void Print(const char * format, Args... args) {
+        int length = snprintf(NULL, 0, format, args...);
         std::string message(length+1, 0);
-        sprintf(const_cast<char *>(message.c_str()), format.c_str(), args...);
+        sprintf(const_cast<char *>(message.c_str()), format, args...);
 
         // Print the message
         Print(message);
@@ -49,17 +49,21 @@ public:
 
     // Function to print with format strings
     template<typename... Args>
-    static inline void DebugLog(const std::string& format, Args... args) {
+    static inline void DebugLog(const char * format, Args... args) {
 #ifdef _DEBUG
-        Log("[DEBUG]: " + format, args...);
+        std::string msg = "[DEBUG]: ";
+        msg += format;
+        Log(msg.c_str(), args...);
 #endif
     }
 
     // Function to print with format strings
     template<typename... Args>
-    static inline void DebugPrint(const std::string& format, Args... args) {
+    static inline void DebugPrint(const char * format, Args... args) {
 #ifdef _DEBUG
-        Print("[DEBUG]: " + format, args...);
+        std::string msg = "[DEBUG]: ";
+        msg += format;
+        Print(msg.c_str(), args...);
 #endif
     }
 

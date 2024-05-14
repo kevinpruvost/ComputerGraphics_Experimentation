@@ -1,7 +1,7 @@
 #pragma once
 
 #include <common/Memory.h>
-#include <common/Object.h>
+#include <common/Engine/EngineObject.h>
 #include <type_traits>
 #include <common/Yaml.h>
 

@@ -9,7 +9,7 @@ public:
     Model_OGL();
 
     void SetIndices(const TriangleArray& indices) override;
-    void Draw() override;
+    void Draw() const override;
 
     Venom::ErrorCode ReloadObjectFromEngine() override;
 

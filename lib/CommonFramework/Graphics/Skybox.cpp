@@ -59,7 +59,7 @@ Skybox::Skybox(ShaderPipeline* shader, Texture* texture)
 
 }
 
-void Skybox::Draw()
+void Skybox::Draw() const
 {
     assert(__shader != nullptr && __texture != nullptr);
 
@@ -73,9 +73,4 @@ void Skybox::Draw()
     __shader->SetUniformInt("textureSampler0", 0);
     Rendering::DrawVertices(skyboxVertexBuffer);
     Rendering::SetDepthTest(true);
-}
-
-Venom::ErrorCode Skybox::ReloadObjectFromEngine()
-{
-    return Venom::ErrorCode::Success;
 }

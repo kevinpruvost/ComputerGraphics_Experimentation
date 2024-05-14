@@ -134,7 +134,7 @@ void GUI::DrawObjectsProperties()
 {
     if (!ImGui::CollapsingHeader("Object Properties", ImGuiTreeNodeFlags_::ImGuiTreeNodeFlags_DefaultOpen))
         return;
-    auto & objects = ObjectPool::GetAllObjects();
+    std::vector<Entity *> & objects = EntityPool::GetAllEntities();
     // Draws the properties of all objects
     static int item_current_idx = -1;
     if (ImGui::BeginListBox("##Objects", ImVec2(-FLT_MIN, 5 * ImGui::GetTextLineHeightWithSpacing())))
@@ -173,7 +173,7 @@ void GUI::DrawObjectsProperties()
     }
 }
 
-void GUI::DrawObjectProperties(Object** obj)
+void GUI::DrawObjectProperties(Entity** obj)
 {
     ImGui::Text("%s:", (*obj)->GetObjectName());
     if (auto& cb = (*obj)->GetGUICallback())
@@ -270,24 +270,24 @@ void GUI::DrawEngineObjectProperties(const char * name, EngineObject** obj)
                     for (auto& var : vars)
                     {
                         // Only variables with mod_ as prefix for their name can be modified
-                        if (var.first.compare(0, 4, "mod_") != 0)
+                        if (strncmp(var.first, "mod_", 4) != 0)
                             continue;
                         switch (var.second.type)
                         {
                             case ShaderPipeline::UniformVariable::Type::FLOAT:
-                                if (ImGui::DragFloat(var.first.c_str(), &var.second.f))
+                                if (ImGui::DragFloat(var.first, &var.second.f))
                                     shader->SetUniformFloat(var.first, var.second.f);
                                 break;
                             case ShaderPipeline::UniformVariable::Type::INT:
-                                if (ImGui::DragInt(var.first.c_str(), &var.second.i))
+                                if (ImGui::DragInt(var.first, &var.second.i))
                                     shader->SetUniformInt(var.first, var.second.i);
                                 break;
                             case ShaderPipeline::UniformVariable::Type::VEC3:
-                                if (ImGui::DragFloat3(var.first.c_str(), glm::value_ptr(var.second.vec3), 0.01f))
+                                if (ImGui::DragFloat3(var.first, glm::value_ptr(var.second.vec3), 0.01f))
                                     shader->SetUniformVec3(var.first, var.second.vec3);
                                 break;
                             case ShaderPipeline::UniformVariable::Type::VEC4:
-                                if (ImGui::DragFloat4(var.first.c_str(), glm::value_ptr(var.second.vec4), 0.01f))
+                                if (ImGui::DragFloat4(var.first, glm::value_ptr(var.second.vec4), 0.01f))
                                     shader->SetUniformVec4(var.first, var.second.vec4);
                                 break;
                             //case ShaderPipeline::UniformVariable::Type::MAT3:

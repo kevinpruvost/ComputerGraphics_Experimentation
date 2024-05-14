@@ -4,7 +4,6 @@
 #include <common/Mesh.h>
 #include <common/Material.h>
 #include <common/Face.h>
-#include <common/ObjectPool.h>
 #include <common/Resources.h>
 
 #include <common/ShaderPipeline.h>
@@ -60,7 +59,7 @@ protected:
 
 private:
     // Parser
-    void ParseObj(const std::filesystem::path & path);
+    //void ParseObj(const std::filesystem::path & path);
     Venom::ErrorCode ParseFbx(const std::filesystem::path& path);
     Venom::ErrorCode Assimp_ProcessNode(aiNode* node, const aiScene* scene);
     Venom::ErrorCode Assimp_ProcessMesh(aiMesh* mesh);

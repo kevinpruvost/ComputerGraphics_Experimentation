@@ -11,3 +11,14 @@ public:
     void ToLower();
     operator std::string();
 };
+
+class ConcatString
+{
+public:
+    ConcatString(const char* str1, const char* str2);
+    ConcatString(const char* str1, const char* str2, size_t count);
+    ~ConcatString();
+    operator const char *();
+private:
+    char* __str;
+};

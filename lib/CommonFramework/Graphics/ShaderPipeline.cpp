@@ -55,7 +55,7 @@ const std::vector<ShaderPipeline::UniformVariableSignature>& ShaderPipeline::Get
         _SetUniformVariableSignatures();
 #ifdef _DEBUG
         for (const auto& var : _uniformVariableSignatures)
-            Logger::DebugPrint("Uniform variable:[%s]:\"%s\"", ShaderPipeline::UniformVariable::GetTypeString(var.type), var.name.c_str());
+            Logger::DebugPrint("Uniform variable:[%s]:\"%s\"", ShaderPipeline::UniformVariable::GetTypeString(var.type), var.name);
 #endif
     }
     return _uniformVariableSignatures;
@@ -67,13 +67,13 @@ std::vector<ShaderPipeline::UniformVariableSignature>& ShaderPipeline::GetUnifor
         _SetUniformVariableSignatures();
 #ifdef _DEBUG
         for (const auto& var : _uniformVariableSignatures)
-            Logger::DebugPrint("Uniform variable:[%s]:\"%s\"", ShaderPipeline::UniformVariable::GetTypeString(var.type), var.name.c_str());
+            Logger::DebugPrint("Uniform variable:[%s]:\"%s\"", ShaderPipeline::UniformVariable::GetTypeString(var.type), var.name);
 #endif
     }
     return _uniformVariableSignatures;
 }
 
-void ShaderPipeline::SetUniformMatrix4(const std::string& name, const glm::mat4& matrix)
+void ShaderPipeline::SetUniformMatrix4(const char * name, const glm::mat4& matrix)
 {
     _SetUniformMatrix4(name, matrix);
     UniformVariable var = {
@@ -83,7 +83,7 @@ void ShaderPipeline::SetUniformMatrix4(const std::string& name, const glm::mat4&
     _uniformVariables[name] = var;
 }
 
-void ShaderPipeline::SetUniformVec3(const std::string& name, const glm::vec3& vec)
+void ShaderPipeline::SetUniformVec3(const char * name, const glm::vec3& vec)
 {
     _SetUniformVec3(name, vec);
     UniformVariable var = {
@@ -93,7 +93,7 @@ void ShaderPipeline::SetUniformVec3(const std::string& name, const glm::vec3& ve
     _uniformVariables[name] = var;
 }
 
-void ShaderPipeline::SetUniformVec4(const std::string& name, const glm::vec4& vec)
+void ShaderPipeline::SetUniformVec4(const char * name, const glm::vec4& vec)
 {
     _SetUniformVec4(name, vec);
     UniformVariable var = {
@@ -103,7 +103,7 @@ void ShaderPipeline::SetUniformVec4(const std::string& name, const glm::vec4& ve
     _uniformVariables[name] = var;
 }
 
-void ShaderPipeline::SetUniformFloat(const std::string& name, float value)
+void ShaderPipeline::SetUniformFloat(const char * name, float value)
 {
     _SetUniformFloat(name, value);
     UniformVariable var = {
@@ -113,7 +113,7 @@ void ShaderPipeline::SetUniformFloat(const std::string& name, float value)
     _uniformVariables[name] = var;
 }
 
-void ShaderPipeline::SetUniformInt(const std::string& name, int value)
+void ShaderPipeline::SetUniformInt(const char * name, int value)
 {
     _SetUniformInt(name, value);
     UniformVariable var = {
@@ -207,7 +207,7 @@ ShaderPipeline * Resources::_Load(const char const* name, const YamlNode & data)
     return ShaderPipeline::CreateShaderPipeline(name, shaders);
 }
 
-std::unordered_map<std::string, ShaderPipeline::UniformVariable>& ShaderPipeline::GetUniformVariables()
+std::unordered_map<const char *, ShaderPipeline::UniformVariable>& ShaderPipeline::GetUniformVariables()
 {
     return _uniformVariables;
 }
@@ -221,7 +221,7 @@ void ShaderPipeline::SetDefaultValuesForUniformVariables()
         for (const auto& var : _uniformVariableSignatures)
         {
 #ifdef _DEBUG
-            Logger::DebugPrint("Uniform variable:[%s]:\"%s\"", ShaderPipeline::UniformVariable::GetTypeString(var.type), var.name.c_str());
+            Logger::DebugPrint("Uniform variable:[%s]:\"%s\"", ShaderPipeline::UniformVariable::GetTypeString(var.type), var.name);
 #endif
             switch (var.type)
             {

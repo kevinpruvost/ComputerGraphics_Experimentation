@@ -24,6 +24,8 @@ endif()
 
 set(CMAKE_WINDOWS_EXPORT_ALL_SYMBOLS ON)
 
+set(CMAKE_CXX_FLAGS_RELEASE ${CMAKE_CXX_FLAGS_RELEASE} "/O3")
+
 # Libraries
 add_subdirectory(${LIBS_PATH})
 

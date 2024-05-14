@@ -1,6 +1,6 @@
 #include <common/MemoryPool.h>
 
-constexpr const int batch_size = 200;
+constexpr const int batch_size = 1000;
 
 std::unordered_map<MemoryPoolObject*, SPtr<MemoryPoolObject>> MemoryPool::__objects;
 static MemoryPool memoryPool;
@@ -26,18 +26,20 @@ void MemoryPool::DeleteObject(MemoryPoolObject* object)
     __objects.erase(object);
 }
 
-void MemoryPool::AddObject(MemoryPoolObject* object)
+WPtr<MemoryPoolObject> MemoryPool::AddObject(MemoryPoolObject* object)
 {
-    __objects[object] = SPtr<MemoryPoolObject>(object);
+    SPtr<MemoryPoolObject> sptr(object);
+    __objects[object] = sptr;
     if (__objects.size() % batch_size == 0)
     {
         __objects.reserve(__objects.size() + batch_size);
     }
+    return WPtr<MemoryPoolObject>(sptr);
 }
 
 MemoryPoolObject::MemoryPoolObject()
 {
-    MemoryPool::AddObject(this);
+    __selfRef = MemoryPool::AddObject(this);
 }
 
 MemoryPoolObject::~MemoryPoolObject()

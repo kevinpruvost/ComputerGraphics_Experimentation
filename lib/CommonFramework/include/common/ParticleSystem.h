@@ -6,6 +6,7 @@
 #include "ShaderPipeline.h"
 #include "Camera.h"
 #include "Scene.h"
+#include "Object.h"
 
 struct Particle
 {
@@ -17,7 +18,7 @@ struct Particle
     float size;
 };
 
-class ParticleSystem : public Drawable3D, public Object
+class ParticleSystem : public Object
 {
 public:
     ParticleSystem();
@@ -26,10 +27,12 @@ public:
 
     static ParticleSystem * CreateParticleSystem();
 
-    void Draw() override;
+    void Draw() const;
+
+    void Init() override;
 
     // Updates the particle system based on the time passed
-    void Update(float deltaTime);
+    void Update() override;
 
     // Pauses/Resumes the particle system
     void Pause();
@@ -99,7 +102,7 @@ private:
     // Function to add a new particle to the system
     void AddParticle(const float deltaTime);
     // Renders the particles
-    void RenderParticles();
+    void RenderParticles() const;
 
     Callback<void, ParticleSystem *, const float> __particleGenerationFunction;
     ShaderPipeline * __particleShaderPipeline;
@@ -118,7 +121,7 @@ private:
     float __timeSinceLastEmission;
 
     Texture* __particleTexture;
-    Model* __model;
+    mutable Model* __model;
 
     Camera * __camera;
 

@@ -19,7 +19,7 @@ void Model_OGL::SetIndices(const TriangleArray& indices)
 {
 }
 
-void Model_OGL::Draw()
+void Model_OGL::Draw() const
 {
 	ShaderPipeline* shader = _shader ? _shader : ShaderPipeline::GetCurrentlyUsedPipeline(), * wireframeShader = _wireframeShader ? _wireframeShader : nullptr;
 	assert(shader);
@@ -43,10 +43,12 @@ void Model_OGL::Draw()
 		{
 			const Material* material = _materials[mesh->GetMaterialId()];
 			const std::vector<Ptr<Texture>>& textures = material->GetTextures();
+			char samplerName[32] = "textureSampler[0]\0"; // [0] is replaced with [i]
 			for (int i = 0; i < textures.size(); i++)
 			{
 				textures[i]->BindTexture(Texture::TextureType::Texture2D, i);
-				shader->SetUniformInt("textureSampler" + std::to_string(i), i);
+				samplerName[13] = i + '0';
+				shader->SetUniformInt(samplerName, i);
 			}
 		}
 

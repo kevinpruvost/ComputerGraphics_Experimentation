@@ -86,6 +86,8 @@ Venom::ErrorCode Model::CreateSphere(float radius, int sectors, int stacks)
     meshResource->SetResourceName(name.c_str());
     Resources::AddResource(name.c_str(), meshResource);
     VertexBuffer* vertexBuffer = VertexBuffer::CreateVertexBuffer();
+    vertexBuffer->SetHasNormals(true);
+    vertexBuffer->SetHasTextureCoords(true);
     vertexBuffer->SetVertices(verticesProcessed);
     meshResource->SetVertexBuffer(vertexBuffer);
     _meshes.push_back(meshResource);
@@ -111,6 +113,8 @@ Venom::ErrorCode Model::CreateSquare()
     meshResource->SetResourceName(name.c_str());
     Resources::AddResource(name.c_str(), meshResource);
     VertexBuffer* vertexBuffer = VertexBuffer::CreateVertexBuffer();
+    vertexBuffer->SetHasNormals(true);
+    vertexBuffer->SetHasTextureCoords(true);
     vertexBuffer->SetVertices(verticesProcessed);
     meshResource->SetVertexBuffer(vertexBuffer);
     _meshes.push_back(meshResource);

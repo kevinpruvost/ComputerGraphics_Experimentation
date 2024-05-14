@@ -2,6 +2,7 @@
 
 #include <common/Rendering.h>
 #include <common/ParticleSystem.h>
+#include <common/ECS/Entity.h>
 
 #include <type_traits>
 
@@ -15,6 +16,8 @@ MainScene::MainScene(Window* window, BaseFramework* framework, GUI* g)
 	m_skyboxShader = Resources::Load<ShaderPipeline>("Skybox");
 	m_shader = Resources::Load<ShaderPipeline>("Normal_Shader");
 	m_textShader = Resources::Load<ShaderPipeline>("Text2D");
+
+	Entity * e = Entity::CreateEntity();
 
 	m_sphereModel = Resources::Load<Model>("Sphere");
 
@@ -105,10 +108,10 @@ MainScene::MainScene(Window* window, BaseFramework* framework, GUI* g)
 		p.size = glm::linearRand<float>(0.5f, 3.0f);
 		sys->EmitParticle(p);
 	});
-	m_ParticleSystem->SetObjectName("Snow Particle System");
+	m_ParticleSystem->SetName("Snow Particle System");
 
 	*m_particlesystem2 = *m_ParticleSystem;
-	m_particlesystem2->SetObjectName("Snow Particle System 2");
+	m_particlesystem2->SetName("Snow Particle System 2");
 
 	m_wireframeShader->Use();
 	m_wireframeShader->SetUniformVec3("wireframeColor", verticesColor);
@@ -123,7 +126,7 @@ MainScene::MainScene(Window* window, BaseFramework* framework, GUI* g)
 	Material * mat = Resources::Create<Material>("SunMaterial");
 	mat->AddTexture(Resources::Load<Texture>("Mars"));
 	m_sphereModel->AddMaterial(mat);
-	auto test = new Entity(m_sphereModel, Resources::Load<ShaderPipeline>("Normal_Shader"), glm::vec3(0), glm::vec3(0), glm::vec3(0.5));
+	auto test = new Object(m_sphereModel, Resources::Load<ShaderPipeline>("Normal_Shader"), glm::vec3(0), glm::vec3(0), glm::vec3(0.5));
 	m_objects.push_back(test);
 	mat = Resources::Create<Material>("Assignment5_Material");
 	mat->AddTexture(Resources::Load<Texture>("Assignment5_Texture"));
@@ -131,7 +134,7 @@ MainScene::MainScene(Window* window, BaseFramework* framework, GUI* g)
 	model->AddMaterial(mat);
 	model->SetShader(Resources::Load<ShaderPipeline>("Bezier"));
 	model->SetWireframeShader(Resources::Load<ShaderPipeline>("Bezier_Wireframe"));
-	test = new Entity(
+	test = new Object(
 		model,
 		Resources::Load<ShaderPipeline>("Bezier"), glm::vec3(5), glm::vec3(0), glm::vec3(0.5));
 	m_objects.push_back(test);
@@ -184,7 +187,7 @@ void MainScene::Update()
 
 	m_skybox->Draw();
 
-	m_ParticleSystem->Update(Time::GetLambda());
+	m_ParticleSystem->Update();
 	m_ParticleSystem->SetEmissionRate(m_ParticleSystem->GetEmissionRate() + Time::GetLambda() * 0.25f);
 
 	for (auto& obj : m_objects)

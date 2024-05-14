@@ -7,7 +7,6 @@ constexpr const float defaultFloat = -999.0f;
 
 ParticleSystem::ParticleSystem()
     : Object()
-    , Drawable3D()
     , __timeSinceLastEmission { 0.0f }
     , __paused{ false }
     , __particleColor(1.0f, 1.0f, 1.0f, 1.0f)
@@ -23,7 +22,7 @@ ParticleSystem::ParticleSystem()
     , __model(nullptr)
     , __particleGenerationFunction(nullptr)
 {
-    _guiCallback = [&]() {
+    _entity->SetGUICallback([&]() {
         ImGui::ColorEdit4("Particles Color", glm::value_ptr(__particleColor));
         ImGui::SliderFloat("Particles Size", &__particleSize, 0.1f, 10.0f);
         ImGui::SliderFloat("Particles Lifetime", &__particleLifetime, 0.1f, 100.0f);
@@ -31,7 +30,7 @@ ParticleSystem::ParticleSystem()
         ImGui::SliderInt("Max Particles", &__maxParticles, 1, 10000);
         ImGui::SliderFloat3("Initial Velocity", glm::value_ptr(__particleInitialVelocity), -10.0f, 10.0f);
         ImGui::SliderFloat3("Acceleration", glm::value_ptr(__particleAcceleration), -10.0f, 10.0f);
-    };
+    });
 }
 
 ParticleSystem::~ParticleSystem()
@@ -69,9 +68,14 @@ ParticleSystem* ParticleSystem::CreateParticleSystem()
     return shader;
 }
 
-void ParticleSystem::Draw() { RenderParticles(); }
-void ParticleSystem::Update(float deltaTime)
+void ParticleSystem::Init()
 {
+}
+
+void ParticleSystem::Draw() const { RenderParticles(); }
+void ParticleSystem::Update()
+{
+    float deltaTime = Time::GetLambda();
     assert(__particleTexture != nullptr);
     assert(__particleShaderPipeline != nullptr);
     assert(__particleLifetime != defaultFloat);
@@ -149,14 +153,16 @@ void ParticleSystem::AddParticle(const float deltaTime)
     __particles.push_back(particle);
 }
 
-void ParticleSystem::RenderParticles()
+void ParticleSystem::RenderParticles() const
 {
     Rendering::SetDepthTest(false);
     Camera * camera = __camera ? __camera : Camera::MainCamera;
     if (__model == nullptr) {
-        __model = Resources::Create<Model>(fmt::format("{}_Square_Particle_Model", GetObjectName()).c_str());
+        //__model = Resources::Create<Model>(fmt::format("{}_Square_Particle_Model", GetObjectName()).c_str());
+        __model = Resources::Create<Model>(ConcatString(_entity->GetObjectName(), "_Square_Particle_Model"));
         __model->CreateSquare();
-        Material* mat = Resources::Create<Material>(fmt::format("{}_Square_Particle_Mesh", GetObjectName()).c_str());
+        //Material* mat = Resources::Create<Material>(fmt::format("{}_Square_Particle_Mesh", GetObjectName()).c_str());
+        Material* mat = Resources::Create<Material>(ConcatString(_entity->GetObjectName(), "_Square_Particle_Mesh"));
         const auto & textures = mat->GetTextures();
         mat->AddTexture(__particleTexture);
         __model->AddMaterial(mat);

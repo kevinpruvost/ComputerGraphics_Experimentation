@@ -5,7 +5,7 @@
 #include <common/Common.h>
 #include <common/Engine/EngineObject.h>
 
-class Drawable3D : public EngineObject
+class Drawable3D
 {
 public:
     enum DrawMode
@@ -24,7 +24,7 @@ public:
     static DrawMode GetDrawMode(bool points, bool wireframe, bool solid);
 
     void SetDrawMode(DrawMode mode);
-    virtual void Draw() = 0;
+    virtual void Draw() const = 0;
 protected:
     Drawable3D();
 

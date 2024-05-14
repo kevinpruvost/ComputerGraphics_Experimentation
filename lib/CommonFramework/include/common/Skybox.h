@@ -7,8 +7,7 @@ class Skybox : public Drawable3D
 {
 public:
     Skybox(ShaderPipeline * shader, Texture * texture);
-    void Draw() override;
-    Venom::ErrorCode ReloadObjectFromEngine() override;
+    void Draw() const override;
 
 private:
     ShaderPipeline * __shader;
