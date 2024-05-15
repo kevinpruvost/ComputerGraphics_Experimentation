@@ -277,7 +277,7 @@ Venom::ErrorCode GLFWWindow::Loop()
         Logger::Print("App loop callback is not set");
         return Venom::ErrorCode::Failure;
     }
-    if (_scene == nullptr) {
+    if (_scene == nullptr && _scene->get() == nullptr) {
         Logger::Print("Scene is not set");
         return Venom::ErrorCode::Failure;
     }
@@ -288,7 +288,7 @@ Venom::ErrorCode GLFWWindow::Loop()
         if (!ProcessInput()) break;
 
         _appLoopCallback();
-        _scene->Update();
+        _scene->get()->Update();
 
         glfwSwapBuffers(__mainW);
 

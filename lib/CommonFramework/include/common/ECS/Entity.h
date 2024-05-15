@@ -14,7 +14,7 @@ typedef WPtr<Entity> EntityRef;
 template<typename T>
 using RemovePointer = typename std::remove_pointer<T>::type;
 
-class PropertyManager {
+class COMMONFRAMEWORK_API PropertyManager {
 public:
     struct Property
     {
@@ -127,7 +127,7 @@ public:
     }
 };
 
-class Entity : public MemoryPoolObject
+class COMMONFRAMEWORK_API Entity : public MemoryPoolObject
 {
 public:
     static Entity * CreateEntity(const char* const name = nullptr);
@@ -149,9 +149,17 @@ public:
 
     template<typename T>
     T * AddComponent() {
+        {
+            auto ite = __components.find(VenomComponent<T>::ID);
+            if (ite != __components.end()) {
+                return reinterpret_cast<T *>(ite->second);
+            };
+        }
         T* component = Component::CreateComponent<T>();
         component->SetEntity(this);
-        __components.push_back(component);
+        if (Scene::IsStarted())
+            component->Init();
+        __components[VenomComponent<T>::ID] = component;
         return component;
     }
 
@@ -160,7 +168,8 @@ public:
         _properties.SetProperty(name, prop);
     }
 
-    void SetGUICallback(CallbackContainer<void> callback) { _guiCallback = callback; }
+    void SetGUICallback(CallbackContainer<void> callback);
+    std::unordered_map<int, Component*>* GetComponents();
 protected:
     Entity(const char* const name);
     friend class GUI;
@@ -170,12 +179,12 @@ protected:
     std::string _objectName;
     Callback<void> _guiCallback;
 private:
-    std::vector<Component *> __components;
+    std::unordered_map<int, Component *> __components;
 };
 
 #include <common/Memory.h>
 
-class EntityPool
+class COMMONFRAMEWORK_API EntityPool
 {
 public:
     EntityPool();
@@ -184,7 +193,7 @@ public:
     static void Clear();
     static void AddEntity(Entity* object);
     static void DeleteEntity(Entity* object);
-    static std::vector<Entity*>& GetAllEntities();
+    static std::vector<Entity*> * GetAllEntities();
 
 private:
     static std::vector<Entity*> __entities;

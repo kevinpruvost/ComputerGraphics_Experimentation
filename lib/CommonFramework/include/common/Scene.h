@@ -24,11 +24,21 @@
 class Scene
 {
 public:
-    virtual void Update() = 0;
+    virtual Venom::ErrorCode Update() = 0;
+    virtual Venom::ErrorCode _Init() = 0;
+    Venom::ErrorCode Init();
+
+    void SetWindow(Window* window);
+    void SetFramework(BaseFramework* framework);
+    void SetGUI(GUI* g);
+
+    static bool IsStarted();
+
 protected:
-    Scene(Window* window, BaseFramework* framework, GUI* g);
+    Scene();
 
     Window* w;
     BaseFramework* fw;
     GUI* gui;
+    static bool _started;
 };

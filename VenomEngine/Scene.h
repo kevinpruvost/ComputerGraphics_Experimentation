@@ -5,17 +5,15 @@
 class MainScene : public Scene
 {
 public:
-	MainScene(Window* window, BaseFramework* framework, GUI* g);
-    void Update() override;
+	MainScene();
+	Venom::ErrorCode _Init() override;
+    Venom::ErrorCode Update() override;
 protected:
 	int displayMode = 1;
 	Ptr<ShaderPipeline> m_shader, m_skyboxShader, m_textShader, m_particleShader, m_wireframeShader;
 	Ptr<Model> m_sphereModel;
-	Ptr<Texture> m_textureParticles, m_backgroundTexture;
-	Ptr<ParticleSystem> m_ParticleSystem, m_particlesystem2;
 	Ptr<Text2D> m_text2D;
-	UPtr<Skybox> m_skybox;
-	Camera camera;
+	UPtr<Camera> camera;
 
 	bool cameraLock = false;
 	bool drawFaces = true;

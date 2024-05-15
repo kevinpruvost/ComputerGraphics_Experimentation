@@ -52,13 +52,13 @@ Window::Window(const WindowAPI& api)
 {
 }
 
-Venom::ErrorCode Window::Init(const Config& config)
+Venom::ErrorCode Window::Init(const Config * config)
 {
-    _settings = config.WindowSettings();
+    _settings = config->WindowSettings();
     return _Init();
 }
 
-void Window::SetScene(Scene* scene)
+void Window::SetScene(UPtr<Scene> * scene)
 {
     _scene = scene;
 }

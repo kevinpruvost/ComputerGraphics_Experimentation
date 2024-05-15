@@ -3,6 +3,7 @@
 #include <common/Model.h>
 #include <common/Texture.h>
 #include <common/Components/Drawable3D.h>
+#include <common/Components/Transform.h>
 #include <common/ShaderPipeline.h>
 #include <common/Camera.h>
 #include <common/Scene.h>
@@ -17,7 +18,7 @@ struct Particle
     float size;
 };
 
-class ParticleSystem : public Component, public Drawable3D
+class ParticleSystem : public VenomComponent<ParticleSystem>, public Drawable3D
 {
 public:
     ParticleSystem();
@@ -123,6 +124,7 @@ private:
     mutable Model* __model;
 
     Camera * __camera;
+    Transform * __transform;
 
     bool __paused;
 };

@@ -1,15 +1,20 @@
 #include "Scene.h"
 
 #include <common/Rendering.h>
-#include <common/Components/ParticleSystem.h>
+#include <common/Components/Components.h>
 #include <common/ECS/Entity.h>
 
 #include <type_traits>
 
-MainScene::MainScene(Window* window, BaseFramework* framework, GUI* g)
-	: Scene(window, framework, g)
-	, camera{ window->GetWindowWidth(), window->GetWindowHeight() }
+MainScene::MainScene()
+	: Scene()
+	, camera{nullptr}
 {
+}
+
+Venom::ErrorCode MainScene::_Init()
+{
+	camera = new Camera(w->GetWindowWidth(), w->GetWindowHeight());
 	w->LockCursor();
 	m_wireframeShader = Resources::Load<ShaderPipeline>("Wireframe");
 	m_particleShader = Resources::Load<ShaderPipeline>("Particle_Snow");
@@ -17,26 +22,36 @@ MainScene::MainScene(Window* window, BaseFramework* framework, GUI* g)
 	m_shader = Resources::Load<ShaderPipeline>("Normal_Shader");
 	m_textShader = Resources::Load<ShaderPipeline>("Text2D");
 
-	Entity * skybox = Entity::CreateEntity();
-	Skybox * skyboxComponent = skybox->AddComponent<Skybox>();
+	Entity* skybox = Entity::CreateEntity();
+	Skybox* skyboxComponent = skybox->AddComponent<Skybox>();
 	skyboxComponent->shader = Resources::Load<ShaderPipeline>("Skybox");
 	skyboxComponent->texture = Resources::Load<Texture>("Skybox_Texture");
 
-	Entity * e = Entity::CreateEntity();
-	e->AddComponent<Transform>();
+	Entity* e = Entity::CreateEntity();
+	auto transform = e->AddComponent<Transform>();
+	auto particleSystem = e->AddComponent<ParticleSystem>();
+	particleSystem->SetEmitterPosition(glm::vec3(5.0f));
+	particleSystem->SetParticleTexture(Resources::Load<Texture>("Snowflake"));
+	particleSystem->SetParticleSize(1.0f);
+	particleSystem->SetParticleColor(glm::vec4(1.0f, 1.0f, 1.0f, 1.0f));
+	particleSystem->SetParticleAcceleration(glm::vec3(0.0f, -1.0f, 0.0f));
+	particleSystem->SetParticleInitialVelocity(glm::vec3(0.0f, -1.0f, 0.0f));
+	particleSystem->SetParticleLifetime(10.0f);
+	particleSystem->SetEmissionRate(3);
+	particleSystem->SetMaxParticles(1000);
+	particleSystem->SetParticleGenerationFunction([&](ParticleSystem* sys, const float deltaTime) {
+		Particle p = sys->GetDefaultParticle();
+		p.position = glm::vec3(glm::linearRand<float>(-10.0f, 10.0f), p.position.y, glm::linearRand<float>(-10.0f, 10.0f));
+		p.size = glm::linearRand<float>(0.5f, 3.0f);
+		sys->EmitParticle(p);
+		});
+	particleSystem->SetEntityName("Snow Particle System");
+	particleSystem->SetParticleShaderPipeline(Resources::Load<ShaderPipeline>("Particle_Snow"));
 
 	m_sphereModel = Resources::Load<Model>("Sphere");
 
-	m_ParticleSystem = ParticleSystem::CreateParticleSystem();
-	m_particlesystem2 = ParticleSystem::CreateParticleSystem();
-
-	m_textureParticles = Resources::Load<Texture>("Snowflake");
-
-	m_backgroundTexture = Resources::Load<Texture>("Skybox_Texture");
-
 	// Create text objects
-	const char* fontPath = "resources/fonts/arial.ttf";
-	m_text2D = Text2D::CreateText2D(fontPath, 24);
+	m_text2D = Text2D::CreateText2D("resources/fonts/arial.ttf", 24);
 
 	w->SetOnKeyDownCallback([&](InputSystem::Key key, InputSystem::KeyModifier key_mod) {
 		switch (key)
@@ -52,8 +67,8 @@ MainScene::MainScene(Window* window, BaseFramework* framework, GUI* g)
 	w->SetWhileKeyDownCallback([&](InputSystem::Key key, InputSystem::KeyModifier key_mod) {
 		float movementSpeed = Time::GetLambda();
 
-		//Logger::DebugPrint("Yaw: %f", camera.GetYaw());
-		//Logger::DebugPrint("Position: %f %f %f", camera.GetPosition().x, camera.GetPosition().y, camera.GetPosition().z);
+		//Logger::DebugPrint("Yaw: %f", camera->GetYaw());
+		//Logger::DebugPrint("Position: %f %f %f", camera->GetPosition().x, camera->GetPosition().y, camera->GetPosition().z);
 
 		if (key_mod == InputSystem::KeyModifier::Shift)
 		{
@@ -65,22 +80,22 @@ MainScene::MainScene(Window* window, BaseFramework* framework, GUI* g)
 			switch (key)
 			{
 			case InputSystem::Key::Space:
-				camera.Translate(glm::vec3(0, movementSpeed, 0));
+				camera->Translate(glm::vec3(0, movementSpeed, 0));
 				break;
 			case InputSystem::Key::LCtrl:
-				camera.Translate(glm::vec3(0, -movementSpeed, 0));
+				camera->Translate(glm::vec3(0, -movementSpeed, 0));
 				break;
 			case InputSystem::Key::KeyboardW:
-				camera.Translate(glm::vec3(0, 0, movementSpeed));
+				camera->Translate(glm::vec3(0, 0, movementSpeed));
 				break;
 			case InputSystem::Key::KeyboardS:
-				camera.Translate(glm::vec3(0, 0, -movementSpeed));
+				camera->Translate(glm::vec3(0, 0, -movementSpeed));
 				break;
 			case InputSystem::Key::KeyboardA:
-				camera.Translate(glm::vec3(-movementSpeed, 0, 0));
+				camera->Translate(glm::vec3(-movementSpeed, 0, 0));
 				break;
 			case InputSystem::Key::KeyboardD:
-				camera.Translate(glm::vec3(movementSpeed, 0, 0));
+				camera->Translate(glm::vec3(movementSpeed, 0, 0));
 				break;
 			default:
 				break;
@@ -94,42 +109,19 @@ MainScene::MainScene(Window* window, BaseFramework* framework, GUI* g)
 
 		if (!cameraLock)
 		{
-			camera.RotateYaw(xoffset);
-			camera.RotatePitch(yoffset);
+			camera->RotateYaw(xoffset);
+			camera->RotatePitch(yoffset);
 		}
 		});
-
-	m_ParticleSystem->SetEmitterPosition(glm::vec3(5.0f));
-	m_ParticleSystem->SetParticleTexture(m_textureParticles);
-	m_ParticleSystem->SetParticleSize(1.0f);
-	m_ParticleSystem->SetParticleColor(glm::vec4(1.0f, 1.0f, 1.0f, 1.0f));
-	m_ParticleSystem->SetParticleAcceleration(glm::vec3(0.0f, -1.0f, 0.0f));
-	m_ParticleSystem->SetParticleInitialVelocity(glm::vec3(0.0f, -1.0f, 0.0f));
-	m_ParticleSystem->SetParticleLifetime(10.0f);
-	m_ParticleSystem->SetEmissionRate(3);
-	m_ParticleSystem->SetMaxParticles(1000);
-	m_ParticleSystem->SetParticleGenerationFunction([&](ParticleSystem* sys, const float deltaTime) {
-		Particle p = sys->GetDefaultParticle();
-		p.position = glm::vec3(glm::linearRand<float>(-10.0f, 10.0f), p.position.y, glm::linearRand<float>(-10.0f, 10.0f));
-		p.size = glm::linearRand<float>(0.5f, 3.0f);
-		sys->EmitParticle(p);
-	});
-	m_ParticleSystem->SetEntityName("Snow Particle System");
-
-	*m_particlesystem2 = *m_ParticleSystem;
-	m_particlesystem2->SetEntityName("Snow Particle System 2");
 
 	m_wireframeShader->Use();
 	m_wireframeShader->SetUniformVec3("wireframeColor", verticesColor);
 
-	m_ParticleSystem->SetParticleShaderPipeline(m_particleShader);
 
-	camera.SetPosition(glm::vec3(-3.0f, 0.0f, -3.0f));
-	camera.LookAt(m_ParticleSystem->GetEmitterPosition());
+	camera->SetPosition(glm::vec3(-3.0f, 0.0f, -3.0f));
+	camera->LookAt(particleSystem->GetEmitterPosition());
 
-	m_skybox = std::make_unique<Skybox>(m_skyboxShader, m_backgroundTexture);
-
-	Material * mat = Resources::Create<Material>("SunMaterial");
+	Material* mat = Resources::Create<Material>("SunMaterial");
 	mat->AddTexture(Resources::Load<Texture>("Mars"));
 	m_sphereModel->AddMaterial(mat);
 	//auto test = new Object(m_sphereModel, Resources::Load<ShaderPipeline>("Normal_Shader"), glm::vec3(0), glm::vec3(0), glm::vec3(0.5));
@@ -144,11 +136,10 @@ MainScene::MainScene(Window* window, BaseFramework* framework, GUI* g)
 	//	model,
 	//	Resources::Load<ShaderPipeline>("Bezier"), glm::vec3(5), glm::vec3(0), glm::vec3(0.5));
 	//m_objects.push_back(test);
-
-	Time::SetStartTime();
+	return Venom::ErrorCode::Success;
 }
 
-void MainScene::Update()
+Venom::ErrorCode MainScene::Update()
 {
 
 	gui->NewFrame();
@@ -163,11 +154,11 @@ void MainScene::Update()
 			else w->UnlockCursor();
 		}
 		ImGui::Text("Camera Properties:");
-		if (ImGui::SliderFloat3("Position", glm::value_ptr(camera.GetPositionRef()), -100, 100.0f))
+		if (ImGui::SliderFloat3("Position", glm::value_ptr(camera->GetPositionRef()), -100, 100.0f))
 		{
-			camera.UpdateViewMatrix();
+			camera->UpdateViewMatrix();
 		}
-		ImGui::SliderFloat("Speed", &camera.GetSpeedRef(), 0.0f, 100.0f);
+		ImGui::SliderFloat("Speed", &camera->GetSpeedRef(), 0.0f, 100.0f);
 
 		
 		if (ImGui::Checkbox("Draw Faces", &drawFaces) || ImGui::Checkbox("Draw Lines", &drawLines) || ImGui::Checkbox("Draw Points", &drawPoints))
@@ -188,8 +179,8 @@ void MainScene::Update()
 		ImGui::End();
 	}
 
-	glm::mat4 view = camera.GetViewMatrix();
-	glm::mat4 projection = camera.GetProjectionMatrix();
+	glm::mat4 view = camera->GetViewMatrix();
+	glm::mat4 projection = camera->GetProjectionMatrix();
 
 	//for (auto& obj : m_objects)
 	//{
@@ -211,4 +202,5 @@ void MainScene::Update()
 
 	ImGui::Render();
 	gui->RenderDrawData();
+	return Venom::ErrorCode::Success;
 }

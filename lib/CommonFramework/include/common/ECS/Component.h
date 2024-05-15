@@ -2,7 +2,7 @@
 
 #include <common/ECS/Entity.h>
 
-class Component
+class COMMONFRAMEWORK_API Component
 {
 public:
     virtual ~Component() = default;
@@ -27,9 +27,7 @@ protected:
     // Static member variable to hold component ID
     static int IDCounter;
     // Function to get component ID
-    static int getComponentID() {
-        return IDCounter++;
-    }
+    static int GetNewComponentID() { return IDCounter++; }
 
 private:
     friend class Entity;
@@ -41,7 +39,7 @@ private:
 };
 
 template<typename T>
-class VenomComponent : public Component
+class COMMONFRAMEWORK_API VenomComponent : public Component
 {
 public:
     static const int ID;
@@ -49,7 +47,7 @@ public:
 };
 
 template<typename T>
-const int VenomComponent<T>::ID = Component::getComponentID();
+const int VenomComponent<T>::ID = Component::GetNewComponentID();
 
 template<typename T>
 const char* VenomComponent<T>::Name = typeid(T).name();

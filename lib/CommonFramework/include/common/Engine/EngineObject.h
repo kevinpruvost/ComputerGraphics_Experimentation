@@ -3,7 +3,7 @@
 #include <common/Common.h>
 #include <common/MemoryPool.h>
 
-class EngineObject : virtual public MemoryPoolObject
+class COMMONFRAMEWORK_API EngineObject : virtual public MemoryPoolObject
 {
 public:
     virtual ~EngineObject();
@@ -25,7 +25,7 @@ private:
     const EngineObjectType __engineObjectType;
 };
 
-class EngineResource : public EngineObject
+class COMMONFRAMEWORK_API EngineResource : public EngineObject
 {
 public:
     enum class ResourceType : uint8_t

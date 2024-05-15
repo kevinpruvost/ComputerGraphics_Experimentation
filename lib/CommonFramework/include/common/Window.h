@@ -16,7 +16,7 @@ public:
 
     static Window * CreateWindowFromAPI(const WindowAPI & api);
 	
-	Venom::ErrorCode Init(const Config & config);
+	Venom::ErrorCode Init(const Config * config);
 	virtual Venom::ErrorCode _Init() = 0;
 
 	virtual Venom::ErrorCode Loop() = 0;
@@ -46,7 +46,7 @@ public:
 	virtual Venom::ErrorCode SetWindowResizable(bool enabled) = 0;
 	virtual Venom::ErrorCode SetWindowFocused(bool focused) = 0;
 
-	void SetScene(Scene * scene);
+	void SetScene(UPtr<Scene> * scene);
 
 	void SetApplicationLoopCallback(CallbackContainer<void> callback);
 
@@ -67,7 +67,7 @@ protected:
 	Callback<void> _appLoopCallback;
 	// Framebuffer size callback
 	Callback<void, int, int> _framebufferSizeCallback;
-	Scene * _scene;
+	UPtr<Scene> * _scene;
 
 private:
 	const WindowAPI __api;

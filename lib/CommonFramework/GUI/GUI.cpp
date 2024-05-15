@@ -134,15 +134,15 @@ void GUI::DrawObjectsProperties()
 {
     if (!ImGui::CollapsingHeader("Object Properties", ImGuiTreeNodeFlags_::ImGuiTreeNodeFlags_DefaultOpen))
         return;
-    std::vector<Entity *> & objects = EntityPool::GetAllEntities();
+    std::vector<Entity *> * objects = EntityPool::GetAllEntities();
     // Draws the properties of all objects
     static int item_current_idx = -1;
     if (ImGui::BeginListBox("##Objects", ImVec2(-FLT_MIN, 5 * ImGui::GetTextLineHeightWithSpacing())))
     {
-        for (int i = 0; i < objects.size(); ++i)
+        for (int i = 0; i < objects->size(); ++i)
         {
             const bool is_selected = (item_current_idx == i);
-            if (ImGui::Selectable(objects[i]->GetObjectName(), is_selected))
+            if (ImGui::Selectable(objects->at(i)->GetObjectName(), is_selected))
             {
                 if (item_current_idx == i)
                     item_current_idx = -1;
@@ -167,7 +167,7 @@ void GUI::DrawObjectsProperties()
         // Begin a new window for drawing object properties
         if (ImGui::Begin("Object Properties Window", nullptr, ImGuiWindowFlags_NoCollapse))
         {
-            DrawObjectProperties(&objects[item_current_idx]);
+            DrawObjectProperties(&objects->at(item_current_idx));
         }
         ImGui::End(); // End the window
     }

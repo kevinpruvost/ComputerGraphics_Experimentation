@@ -33,6 +33,16 @@ static const char* GenerateObjectName() {
     return objectName;
 }
 
+void Entity::SetGUICallback(CallbackContainer<void> callback)
+{
+    _guiCallback = callback;
+}
+
+std::unordered_map<int, Component*>* Entity::GetComponents()
+{
+    return &__components;
+}
+
 Entity::Entity(const char const* name)
     : MemoryPoolObject()
     , _objectName{ name ? name : GenerateObjectName() }
@@ -49,6 +59,10 @@ Entity * Entity::CreateEntity(const char* const name)
 
 Entity::~Entity()
 {
+    for (auto& pair : __components)
+    {
+        delete pair.second;
+    }
 }
 
 void* Entity::Delete()
@@ -84,7 +98,7 @@ void EntityPool::DeleteEntity(Entity* object)
     entitiesToRemove.insert(object);
 }
 
-std::vector<Entity*>& EntityPool::GetAllEntities()
+std::vector<Entity*> * EntityPool::GetAllEntities()
 {
     // If entities to remove, then remove
     for (int i = 0; entitiesToRemove.size() > 0 && i < __entities.size(); ++i)
@@ -96,7 +110,7 @@ std::vector<Entity*>& EntityPool::GetAllEntities()
             entitiesToRemove.erase(ite);
         }
     }
-    return __entities;
+    return &__entities;
 }
 
 #pragma endregion
