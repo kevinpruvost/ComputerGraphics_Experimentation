@@ -27,6 +27,9 @@ Venom::ErrorCode MainScene::_Init()
 	skyboxComponent->shader = Resources::Load<ShaderPipeline>("Skybox");
 	skyboxComponent->texture = Resources::Load<Texture>("Skybox_Texture");
 
+	Entity* e1 = Entity::CreateEntity();
+	e1->AddComponent<Transform>();
+
 	Entity* e = Entity::CreateEntity();
 	auto transform = e->AddComponent<Transform>();
 	auto particleSystem = e->AddComponent<ParticleSystem>();

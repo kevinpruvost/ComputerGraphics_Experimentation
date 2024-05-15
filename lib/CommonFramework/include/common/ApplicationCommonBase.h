@@ -6,17 +6,15 @@
 
 #include <memory>
 
-class ApplicationCommonBase
+class COMMONFRAMEWORK_API ApplicationCommonBase
 {
 public:
-    COMMONFRAMEWORK_API void SetWindow(Window * w);
-    COMMONFRAMEWORK_API void SetConfig(const Config & config);
-    virtual Venom::ErrorCode Run() = 0;
-    COMMONFRAMEWORK_API ~ApplicationCommonBase();
+    void SetConfig(const Config & config);
+    virtual Venom::ErrorCode Update() = 0;
+    ~ApplicationCommonBase();
 
 protected:
-    COMMONFRAMEWORK_API ApplicationCommonBase();
-    Window * _w;
+    ApplicationCommonBase();
     EngineSettings _engineSettings;
 };
 

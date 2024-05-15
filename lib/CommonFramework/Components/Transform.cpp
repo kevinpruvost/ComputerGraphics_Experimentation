@@ -2,12 +2,10 @@
 #include <common/Camera.h>
 
 Transform::Transform()
-    : __model(nullptr)
-    , __position(0)
-    , __rotation(0)
-    , __scale(1)
+    : __position({ 0, 0, 0 })
+    , __rotation({ 0, 0, 0 })
+    , __scale({ 1, 1, 1 })
     , __parent(nullptr)
-    , __shaderPipeline(nullptr)
 {
 }
 
@@ -22,12 +20,10 @@ void Transform::Draw() const
 
 void Transform::Init()
 {
-    _entity->SerializeProperty("Position", __position);
-    _entity->SerializeProperty("Rotation", __rotation);
-    _entity->SerializeProperty("Scale", __scale);
-    _entity->SerializeProperty("Parent", &__parent);
-    _entity->SerializeProperty("Model", &__model);
-    _entity->SerializeProperty("Shader", &__shaderPipeline);
+    SerializeProperty("Position", __position);
+    SerializeProperty("Rotation", __rotation);
+    SerializeProperty("Scale", __scale);
+    SerializeProperty("Parent", &__parent);
 }
 
 void Transform::Update()

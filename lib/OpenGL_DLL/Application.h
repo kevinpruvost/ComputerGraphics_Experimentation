@@ -8,9 +8,7 @@ class Application : public ApplicationTools
 {
 public:
     Application();
-    Venom::ErrorCode Run() override;
-    Venom::ErrorCode Initialize();
-    Venom::ErrorCode Loop();
+    Venom::ErrorCode Update() override;
     void Terminate();
 
     ~Application();

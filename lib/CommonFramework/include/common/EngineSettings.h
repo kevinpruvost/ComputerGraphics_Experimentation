@@ -2,7 +2,7 @@
 
 #include <string>
 
-enum class EngineAPI : int
+enum class GraphicsEngineAPI : int
 {
     OpenGL,
     DirectX11,
@@ -12,5 +12,5 @@ enum class EngineAPI : int
 struct EngineSettings
 {
     std::string name;
-    EngineAPI api;
+    GraphicsEngineAPI api;
 };

@@ -8,17 +8,17 @@
 class COMMONFRAMEWORK_API EngineLoader
 {
 public:
-    EngineLoader(const EngineAPI type = EngineAPI::Vulkan);
+    EngineLoader(const GraphicsEngineAPI type = GraphicsEngineAPI::Vulkan);
     ~EngineLoader();
 
-    void LoadEngine(const EngineAPI type);
-    BaseFramework * GetFramework() const;
+    void LoadEngine(const GraphicsEngineAPI type);
+    BaseFramework * GetEngine() const;
 public:
     static DLL * GetEngineDll();
 private:
     static UPtr<DLL> EngineDll;
 
 private:
-    EngineAPI __frameworkType;
+    GraphicsEngineAPI __frameworkType;
     BaseFramework* __framework;
 };

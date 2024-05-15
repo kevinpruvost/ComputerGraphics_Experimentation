@@ -43,24 +43,29 @@ Window* Window::CreateWindowFromAPI(const WindowAPI& api)
     return window;
 }
 
+bool Window::ShouldClose() const
+{
+    return __shouldClose;
+}
+
 Window::Window(const WindowAPI& api)
     : InputSystem()
     , __api{ api }
-    , _scene{ nullptr }
     , _appLoopCallback { nullptr }
     , _framebufferSizeCallback { nullptr }
+    , __shouldClose{ false }
 {
 }
 
-Venom::ErrorCode Window::Init(const Config * config)
+void Window::SetShouldClose(bool shouldClose)
 {
-    _settings = config->WindowSettings();
+    __shouldClose = shouldClose;
+}
+
+Venom::ErrorCode Window::Init(const WindowSettings& windowSettings)
+{
+    _settings = windowSettings;
     return _Init();
-}
-
-void Window::SetScene(UPtr<Scene> * scene)
-{
-    _scene = scene;
 }
 
 void Window::SetApplicationLoopCallback(CallbackContainer<void> callback)

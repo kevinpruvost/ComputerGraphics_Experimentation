@@ -6,7 +6,7 @@ class GUI_OGL_GLFW : public GUI
 {
 public:
     ~GUI_OGL_GLFW();
-    void _Init() override;
+    Venom::ErrorCode _Init() override;
     void Destroy() override;
     void NewFrame() override;
     void RenderDrawData(ImDrawData* drawData) override;

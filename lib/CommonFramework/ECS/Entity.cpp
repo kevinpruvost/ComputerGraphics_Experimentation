@@ -33,11 +33,6 @@ static const char* GenerateObjectName() {
     return objectName;
 }
 
-void Entity::SetGUICallback(CallbackContainer<void> callback)
-{
-    _guiCallback = callback;
-}
-
 std::unordered_map<int, Component*>* Entity::GetComponents()
 {
     return &__components;
@@ -46,7 +41,6 @@ std::unordered_map<int, Component*>* Entity::GetComponents()
 Entity::Entity(const char const* name)
     : MemoryPoolObject()
     , _objectName{ name ? name : GenerateObjectName() }
-    , _guiCallback(nullptr)
 {
     EntityPool::AddEntity(this);
 }

@@ -3,6 +3,7 @@
 #include <common/Logger.h>
 #include <common/Time.h>
 #include <common/Scene.h>
+#include <common/Rendering.h>
 
 #define STB_IMAGE_IMPLEMENTATION
 #include <stb/stb_image.h>
@@ -271,31 +272,26 @@ bool GLFWWindow::ProcessInput()
     return true;
 }
 
-Venom::ErrorCode GLFWWindow::Loop()
+Venom::ErrorCode GLFWWindow::Update()
 {
-    if (_appLoopCallback == nullptr) {
-        Logger::Print("App loop callback is not set");
-        return Venom::ErrorCode::Failure;
+    if (glfwWindowShouldClose(__mainW)) {
+        SetShouldClose(true);
+        return Venom::ErrorCode::Success;
     }
-    if (_scene == nullptr && _scene->get() == nullptr) {
-        Logger::Print("Scene is not set");
-        return Venom::ErrorCode::Failure;
-    }
-
-    Time::SetStartTime();
-    while (!glfwWindowShouldClose(__mainW)) {
         // Processing input
-        if (!ProcessInput()) break;
-
-        _appLoopCallback();
-        _scene->get()->Update();
-
-        glfwSwapBuffers(__mainW);
-
-        // Poll events
-        Time::SetNewLambda();
-        glfwPollEvents();
+    if (!ProcessInput()) {
+        Logger::Print("Failed to process input");
+        return Venom::ErrorCode::Failure;
     }
+
+    glfwSwapBuffers(__mainW);
+
+    Rendering::ClearColorBuffer({ 0.2f, 0.3f, 0.3f, 1.0f });
+    Rendering::ClearDepthBuffer();
+
+    // Poll events
+    Time::SetNewLambda();
+    glfwPollEvents();
     return Venom::ErrorCode::Success;
 }
 

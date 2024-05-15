@@ -1,8 +1,9 @@
 #pragma once
 
 #include <chrono>
+#include <common/DLL.h>
 
-class Time
+class COMMONFRAMEWORK_API Time
 {
 public:
     using Clock = std::chrono::steady_clock;
@@ -16,5 +17,6 @@ public:
 
 private:
     static TimePoint __startTime;
-    static double __lambda, __lambdaFromBeginning;
+    static double __lambda;
+    static double __lambdaFromBeginning;
 };

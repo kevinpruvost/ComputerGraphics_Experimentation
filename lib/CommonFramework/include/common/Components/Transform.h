@@ -37,8 +37,6 @@ protected:
 
 private:
     Transform* __parent;
-    Model* __model;
-    ShaderPipeline* __shaderPipeline;
     glm::vec3 __position;
     glm::vec3 __rotation;
     glm::vec3 __scale;

@@ -1,18 +1,20 @@
 #include <common/VenomEngine.h>
-
 #include "Scene.h"
+
+Venom::ErrorCode VenomMain()
+{
+	Venom::ErrorCode err;
+	VenomEngine engine;
+	engine.SetConfigName("Config.yaml");
+	engine.SetScene<MainScene>();
+	if ((err = engine.LaunchEngine()) != Venom::ErrorCode::Success) {
+		Logger::Print("VenomEngine Fatal Error.");
+		return err;
+	}
+	return Venom::ErrorCode::Success;
+}
 
 int main()
 {
-	VenomEngine engine;
-	Venom::ErrorCode err;
-	if ((err = engine.LoadEngine("Config.yaml")) != Venom::ErrorCode::Success)
-        return (int)err;
-	if ((err = engine.LoadScene<MainScene>()) != Venom::ErrorCode::Success)
-		return (int)err;
-	if ((err = engine.Init()) != Venom::ErrorCode::Success)
-        return (int)err;
-	if ((err = engine.Run()) != Venom::ErrorCode::Success)
-		return (int)err;
-	return (int)Venom::ErrorCode::Success;
+    return static_cast<int>(VenomMain());
 }

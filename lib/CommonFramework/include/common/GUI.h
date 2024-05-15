@@ -4,6 +4,7 @@
 #include <common/Window.h>
 #include <common/Engine/EngineLoader.h>
 #include <common/ECS/Entity.h>
+#include <common/ECS/Component.h>
 #include <imgui.h>
 
 /**
@@ -12,15 +13,15 @@
 class COMMONFRAMEWORK_API GUI
 {
 public:
-    static GUI * CreateGUIFromAPI(const WindowAPI windowApi, const EngineAPI frameworkApi);
+    static GUI * CreateGUIFromAPI(const WindowAPI windowApi, const GraphicsEngineAPI frameworkApi);
 private:
     static UPtr<DLL> __dll;
 
 public:
     GUI();
     virtual ~GUI() = default;
-    void Init();
-    virtual void _Init() = 0;
+    Venom::ErrorCode Init();
+    virtual Venom::ErrorCode _Init() = 0;
     void SetEngineAndWindowForInit(Window * window, BaseFramework * engine);
     virtual void Destroy() = 0;
     virtual void NewFrame() = 0;
@@ -59,7 +60,8 @@ public:
     void DrawMainMenuBar();
     void DrawObjectsProperties();
 private:
-    void DrawObjectProperties(Entity** obj);
+    void DrawEntityProperties(Entity** obj);
+    void DrawComponentProperties(Component** obj);
     void DrawEngineObjectProperties(const char * name, EngineObject ** obj);
     void SetStyle();
 

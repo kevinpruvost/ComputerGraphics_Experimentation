@@ -10,7 +10,7 @@ public:
     GLFWWindow();
     ~GLFWWindow();
 
-    Venom::ErrorCode Loop() override;
+    Venom::ErrorCode Update() override;
 
     Venom::ErrorCode Destroy();
 

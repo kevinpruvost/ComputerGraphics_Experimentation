@@ -21,12 +21,13 @@ ParticleSystem::ParticleSystem()
     , __emitterPosition(defaultFloat)
     , __model(nullptr)
     , __particleGenerationFunction(nullptr)
+    , __camera{ nullptr }
 {
 }
 
 void ParticleSystem::Init()
 {
-    _entity->SetGUICallback([&]() {
+    _guiCallback = ([&]() {
         ImGui::ColorEdit4("Particles Color", glm::value_ptr(__particleColor));
         ImGui::SliderFloat("Particles Size", &__particleSize, 0.1f, 10.0f);
         ImGui::SliderFloat("Particles Lifetime", &__particleLifetime, 0.1f, 100.0f);
@@ -34,7 +35,7 @@ void ParticleSystem::Init()
         ImGui::SliderInt("Max Particles", &__maxParticles, 1, 10000);
         ImGui::SliderFloat3("Initial Velocity", glm::value_ptr(__particleInitialVelocity), -10.0f, 10.0f);
         ImGui::SliderFloat3("Acceleration", glm::value_ptr(__particleAcceleration), -10.0f, 10.0f);
-        });
+    });
     __transform = _entity->AddComponent<Transform>();
 }
 

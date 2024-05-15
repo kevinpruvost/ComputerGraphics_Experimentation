@@ -23,15 +23,19 @@ GUI_OGL_GLFW::~GUI_OGL_GLFW()
     Destroy();
 }
 
-void GUI_OGL_GLFW::_Init()
+Venom::ErrorCode GUI_OGL_GLFW::_Init()
 {
     // Setup Platform/Renderer backends
-    if (!_window || !_engine) throw RuntimeException("GUI didn't get window or engine instances, call GUI::SetEngineAndWindowForInit");
+    if (!_window || !_engine) {
+        Logger::Print("GUI didn't get window or engine instances, call GUI::SetEngineAndWindowForInit");
+        return Venom::ErrorCode::Failure;
+    }
     GLFWWindow* w = (GLFWWindow*)(_window);
     Framework* fw = (Framework*)(_engine);
     ImGui_ImplGlfw_InitForOpenGL(w->GetWindow(), true);
     // Constant for OpenGL
     ImGui_ImplOpenGL3_Init(Constants::OpenGL::glsl_version);
+    return Venom::ErrorCode::Success;
 }
 
 void GUI_OGL_GLFW::Destroy()

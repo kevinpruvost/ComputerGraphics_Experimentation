@@ -58,6 +58,12 @@ Config::~Config()
 
 Config * Config::Load(const std::filesystem::path& path)
 {
+    {
+        auto ite = m_instances.find(path.string());
+        if (ite != m_instances.end())
+            m_instances.erase(ite);
+    }
+        
     // Create Config instance
     auto c = new Config(path.string());
 
@@ -110,11 +116,11 @@ EngineSettings Config::EngineSettings() const
     c4::yml::NodeRef engineNode = root["engine_settings"];
     auto api = engineNode["api"].val();
     if (api == "OpenGL")
-        settings.api = EngineAPI::OpenGL;
+        settings.api = GraphicsEngineAPI::OpenGL;
     else if (api == "Vulkan")
-        settings.api = EngineAPI::Vulkan;
+        settings.api = GraphicsEngineAPI::Vulkan;
     else if (api == "DirectX11")
-        settings.api = EngineAPI::DirectX11;
+        settings.api = GraphicsEngineAPI::DirectX11;
     else
         throw NotImplementedException("Engine API mentioned in YAML config file not recognized. (has to be OpenGL/Vulkan/DirectX11)");
     engineNode["name"] >> settings.name;

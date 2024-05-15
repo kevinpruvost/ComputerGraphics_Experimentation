@@ -11,13 +11,13 @@ public:
     virtual ~BaseFramework();
 
     // Initialization function
-    virtual bool Init() = 0;
+    virtual Venom::ErrorCode Init() = 0;
+
+    // Update function
+    virtual Venom::ErrorCode Update() = 0;
 
     // Destruction function
     virtual void Destroy() = 0;
-
-    // Launch function
-    virtual int Launch() = 0;
 
     // Get the logger
     virtual Logger * GetLogger() = 0;
@@ -26,7 +26,6 @@ public:
     virtual Config * GetConfig() = 0;
 
     void SetConfig(const Config & config);
-    void SetWindow(Window* w);
 
 protected:
     ApplicationCommonBase * _app;

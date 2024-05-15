@@ -8,7 +8,7 @@
 
 UPtr<DLL> EngineLoader::EngineDll(nullptr);
 
-EngineLoader::EngineLoader(const EngineAPI type)
+EngineLoader::EngineLoader(const GraphicsEngineAPI type)
     : __framework(nullptr)
 {
     LoadEngine(type);
@@ -20,7 +20,7 @@ EngineLoader::~EngineLoader()
 
 typedef BaseFramework* (*CreateBaseFrameworkFn)();
 
-void EngineLoader::LoadEngine(const EngineAPI type)
+void EngineLoader::LoadEngine(const GraphicsEngineAPI type)
 {
     const wchar_t * dllName = nullptr;
 
@@ -30,13 +30,13 @@ void EngineLoader::LoadEngine(const EngineAPI type)
 
     switch (type)
     {
-    case EngineAPI::OpenGL:
+    case GraphicsEngineAPI::OpenGL:
         dllName = L"OpenGL_DLL.dll";
         break;
-    case EngineAPI::DirectX11:
+    case GraphicsEngineAPI::DirectX11:
         dllName = L"DX11_DLL.dll";
         break;
-    case EngineAPI::Vulkan:
+    case GraphicsEngineAPI::Vulkan:
         dllName = L"Vulkan_DLL.dll";
         break;
     }
@@ -62,7 +62,7 @@ void EngineLoader::LoadEngine(const EngineAPI type)
     __frameworkType = type;
 }
 
-BaseFramework* EngineLoader::GetFramework() const
+BaseFramework* EngineLoader::GetEngine() const
 {
     return __framework;
 }

@@ -1,9 +1,7 @@
 #include "Framework.h"
 
 #include <common/Logger.h>
-
 #include "BufferManager.h"
-
 #include "Application.h"
 
 Framework::~Framework()
@@ -11,7 +9,7 @@ Framework::~Framework()
     Destroy();
 }
 
-bool Framework::Init()
+Venom::ErrorCode Framework::Init()
 {
     _app = new Application();
 
@@ -20,10 +18,15 @@ bool Framework::Init()
     if (!gladLoadGL())
     {
         Logger::Log("Failed to initialize GLAD");
-        return false;
+        return Venom::ErrorCode::Failure;
     }
     BufferManager::Initialize();
-    return true;
+    return Venom::ErrorCode::Success;
+}
+
+Venom::ErrorCode Framework::Update()
+{
+    return Venom::ErrorCode::Success;
 }
 
 void Framework::Destroy()
@@ -31,18 +34,6 @@ void Framework::Destroy()
     if (_app) delete _app;
     BufferManager::Destroy();
     return;
-}
-
-int Framework::Launch()
-{
-    try {
-        _app->Run();
-    }
-    catch (const std::exception& e) {
-        std::cerr << e.what() << std::endl;
-        return EXIT_FAILURE;
-    }
-    return EXIT_SUCCESS;
 }
 
 Logger* Framework::GetLogger()

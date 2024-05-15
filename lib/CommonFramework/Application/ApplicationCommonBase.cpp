@@ -14,8 +14,3 @@ void ApplicationCommonBase::SetConfig(const Config & config)
 {
     _engineSettings = config.EngineSettings();
 }
-
-void ApplicationCommonBase::SetWindow(Window* w)
-{
-    _w = w;
-}

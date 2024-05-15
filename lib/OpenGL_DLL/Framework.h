@@ -6,9 +6,9 @@ class Framework : public BaseFramework
 {
 public:
     ~Framework();
-    bool Init() override;
+    Venom::ErrorCode Init() override;
+    Venom::ErrorCode Update() override;
     void Destroy() override;
-    int Launch() override;
     Logger* GetLogger() override;
     Config* GetConfig() override;
 private:

@@ -15,6 +15,14 @@ void Rendering_OGL::_SetDepthTest(bool enable) const
         glDisable(GL_DEPTH_TEST);
 }
 
+void Rendering_OGL::_SetBlending(bool enable) const
+{
+	if (enable)
+        glEnable(GL_BLEND);
+    else
+        glDisable(GL_BLEND);
+}
+
 static GLenum GetGLBlendingFunction(Rendering::BlendingFunction func)
 {
     switch (func)
@@ -39,9 +47,9 @@ static GLenum GetGLBlendingEquation(Rendering::BlendingEquation eq)
 {
     switch (eq)
     {
-    case Rendering::BlendingEquation::Add:
+    case Rendering::BlendingEquation::ADD:
         return GL_FUNC_ADD;
-    case Rendering::BlendingEquation::Subtract:
+    case Rendering::BlendingEquation::SUBTRACT:
         return GL_FUNC_SUBTRACT;
     }
 }
@@ -139,4 +147,20 @@ void Rendering_OGL::_DrawModel(const Model* model) const
 			vertexBuffer->Draw();
 		}
 	}
+}
+
+void Rendering_OGL::_ClearDepthBuffer() const
+{
+	glClear(GL_DEPTH_BUFFER_BIT);
+}
+
+void Rendering_OGL::_ClearStencilBuffer() const
+{
+	glClear(GL_STENCIL_BUFFER_BIT);
+}
+
+void Rendering_OGL::_ClearColorBuffer(const glm::vec4& color) const
+{
+	glClearColor(color.r, color.g, color.b, color.a);
+    glClear(GL_COLOR_BUFFER_BIT);
 }
