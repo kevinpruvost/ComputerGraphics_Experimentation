@@ -14,6 +14,6 @@ set_target_properties(WinNative_ContextAPI
     PROPERTIES FOLDER "ContextAPIs"
 )
 
-target_link_libraries(WinNative_ContextAPI PRIVATE Venom)
+target_link_libraries(WinNative_ContextAPI PRIVATE VenomCore)
 
 target_compile_definitions(WinNative_ContextAPI PRIVATE CONTEXT_EXPORTS)

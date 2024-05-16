@@ -14,7 +14,7 @@ set_target_properties(GLFW_ContextAPI
     PROPERTIES FOLDER "ContextAPIs"
 )
 
-target_link_libraries(GLFW_ContextAPI PRIVATE stb Venom glfw)
+target_link_libraries(GLFW_ContextAPI PRIVATE stb VenomCore glfw)
 
 target_include_directories(GLFW_ContextAPI PUBLIC "./")
 

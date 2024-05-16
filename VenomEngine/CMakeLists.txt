@@ -24,7 +24,7 @@ add_executable (VenomEngineExe
     ${SHADERS}
 )
 
-target_link_libraries(VenomEngineExe Venom imgui glm::glm)
+target_link_libraries(VenomEngineExe VenomCore imgui glm::glm)
 
 # Copy resources directory to the build directory
 file(COPY ${CMAKE_CURRENT_SOURCE_DIR}/resources/ DESTINATION ${CMAKE_BINARY_DIR}/resources/)

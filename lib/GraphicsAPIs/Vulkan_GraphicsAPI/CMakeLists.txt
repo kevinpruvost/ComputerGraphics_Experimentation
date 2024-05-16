@@ -14,6 +14,6 @@ set_target_properties(Vulkan_GraphicsAPI
     PROPERTIES FOLDER "GraphicsAPIs"
 )
 
-target_link_libraries(Vulkan_GraphicsAPI Venom)
+target_link_libraries(Vulkan_GraphicsAPI VenomCore)
 
 include(${GRAPHICS_DLL_PROPS_PATH})

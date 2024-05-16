@@ -1,5 +1,5 @@
 $folders = @("ComputerGraphics_Experimentation",
-"lib/Venom",
+"lib/VenomCore",
 "lib/ContextAPIs",
 "lib/GraphicsAPIs",
 "lib/GUIAPIs",

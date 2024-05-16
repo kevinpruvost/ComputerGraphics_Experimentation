@@ -14,6 +14,6 @@ set_target_properties(DX12_GraphicsAPI
     PROPERTIES FOLDER "GraphicsAPIs"
 )
 
-target_link_libraries(DX12_GraphicsAPI Venom)
+target_link_libraries(DX12_GraphicsAPI VenomCore)
 
 include(${GRAPHICS_DLL_PROPS_PATH})

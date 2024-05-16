@@ -20,7 +20,7 @@ set(BUILD_SHARED_LIBS ON)
 add_subdirectory("./ExternalLibs")
 
 # Common Framework Library
-add_subdirectory("./Venom")
+add_subdirectory("./VenomCore")
 
 # Graphics API Libraries
 add_subdirectory("./GraphicsAPIs")

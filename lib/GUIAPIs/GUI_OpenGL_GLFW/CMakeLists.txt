@@ -21,4 +21,4 @@ set_target_properties(GUI_OpenGL_GLFW
 
 target_include_directories(GUI_OpenGL_GLFW PRIVATE ${EXTERNAL_LIBS_PATH}imgui/backends/)
 
-target_link_libraries(GUI_OpenGL_GLFW Venom GLFW_ContextAPI imgui OpenGL_GraphicsAPI glfw)
+target_link_libraries(GUI_OpenGL_GLFW VenomCore GLFW_ContextAPI imgui OpenGL_GraphicsAPI glfw)

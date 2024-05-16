@@ -14,7 +14,7 @@ set_target_properties(OpenGL_GraphicsAPI
     PROPERTIES FOLDER "GraphicsAPIs"
 )
 
-target_link_libraries(OpenGL_GraphicsAPI Venom glad stb freetype)
+target_link_libraries(OpenGL_GraphicsAPI VenomCore glad stb freetype)
 
 target_include_directories(OpenGL_GraphicsAPI PUBLIC "./")
 
