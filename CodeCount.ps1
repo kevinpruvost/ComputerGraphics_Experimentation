@@ -1,10 +1,8 @@
 $folders = @("ComputerGraphics_Experimentation",
-"lib/CommonFramework",
-"lib/DX11_DLL",
-"lib/OpenGL_DLL",
-"lib/Vulkan_DLL",
-"lib/GLFWWindow",
-"lib/WinNativeWindow"
+"lib/Venom",
+"lib/ContextAPIs",
+"lib/GraphicsAPIs",
+"lib/GUIAPIs",
 )  # Add your folder paths here
 
 $totalLines = 0

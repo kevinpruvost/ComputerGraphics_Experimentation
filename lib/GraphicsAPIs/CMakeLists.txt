@@ -3,9 +3,7 @@
 #
 cmake_minimum_required (VERSION 3.8)
 
-project("Libraries")
-
-set(PROJECT_PATH ${CMAKE_SOURCE_DIR}/)
+project("GUI Libraries")
 
 set(CMAKE_CXX_STANDARD 20)
 
@@ -15,18 +13,7 @@ if (POLICY CMP0141)
   set(CMAKE_MSVC_DEBUG_INFORMATION_FORMAT "$<IF:$<AND:$<C_COMPILER_ID:MSVC>,$<CXX_COMPILER_ID:MSVC>>,$<$<CONFIG:Debug,RelWithDebInfo>:EditAndContinue>,$<$<CONFIG:Debug,RelWithDebInfo>:ProgramDatabase>>")
 endif()
 
-set(BUILD_SHARED_LIBS ON)
-
-add_subdirectory("./ExternalLibs")
-
-# Common Framework Library
-add_subdirectory("./Venom")
-
 # Graphics API Libraries
-add_subdirectory("./GraphicsAPIs")
-
-# GUI Libraries
-add_subdirectory("./GUIAPIs")
-
-# Context Libraries
-add_subdirectory("./ContextAPIs")
+#add_subdirectory("./Vulkan_GraphicsAPI")
+add_subdirectory("./OpenGL_GraphicsAPI")
+#add_subdirectory("./DX12_GraphicsAPI")

@@ -8,6 +8,7 @@ project("VenomEngine")
 set(CMAKE_DEBUG_POSTFIX "")
 
 set(PROJECT_PATH ${CMAKE_SOURCE_DIR}/)
+set(EXTERNAL_LIBS_PATH ${CMAKE_SOURCE_DIR}/lib/ExternalLibs/)
 set(LIBS_PATH ${CMAKE_SOURCE_DIR}/lib/)
 set(GRAPHICS_DLL_PROPS_PATH ${CMAKE_SOURCE_DIR}/GraphicsDLLProps.cmake)
 
