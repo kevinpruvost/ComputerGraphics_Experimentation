@@ -78,7 +78,7 @@ public:
     };
     struct UniformVariableSignature
     {
-        const char * name;
+        std::string name;
         UniformVariable::Type type;
     };
 

@@ -60,7 +60,7 @@ Skybox::Skybox()
 
 void Skybox::Draw() const
 {
-    assert(shader != nullptr && texture != nullptr);
+    if (shader == nullptr || texture == nullptr) return;
 
     Rendering::SetDrawMode(Drawable3D::DrawMode::SOLID);
     Rendering::SetDepthTest(false);
@@ -81,4 +81,6 @@ void Skybox::Update()
 
 void Skybox::Init()
 {
+    SerializeProperty("Shader", &shader);
+    SerializeProperty("Texture", &texture);
 }

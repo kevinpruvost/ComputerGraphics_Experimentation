@@ -113,7 +113,8 @@ void ShaderPipeline_OGL::_SetUniformVariableSignatures()
         GLchar name[256] = { 0 };
         glGetActiveUniform(m_program, i, 256, NULL, &size, &type, name);
 
-        UniformVariableSignature signature = { name };
+        UniformVariableSignature signature;
+        signature.name = name;
         switch (type)
         {
             case GL_FLOAT:

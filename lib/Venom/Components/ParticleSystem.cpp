@@ -99,6 +99,8 @@ void ParticleSystem::Update()
             particle->lifetime -= deltaTime;
         }
 
+        if (particle == __particles.end())
+            break;
         particle->position += particle->velocity * deltaTime;
         particle->velocity += particle->acceleration * deltaTime;
     }

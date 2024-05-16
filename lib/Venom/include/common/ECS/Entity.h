@@ -4,6 +4,7 @@
 #include <common/Engine/EngineObject.h>
 #include <common/MemoryPool.h>
 #include <common/Callback.h>
+#include <common/Interfaces/IScene.h>
 #include <string>
 
 class Entity;
@@ -44,11 +45,17 @@ public:
         __components[VenomComponent<T>::ID] = component;
         return component;
     }
+    template<typename T>
+    bool HasComponent() const {
+        return __components.find(VenomComponent<T>::ID) != __components.end();
+    }
 
     std::unordered_map<int, Component*>* GetComponents();
 protected:
     Entity(const char* const name);
     friend class GUI;
+    Component* AddComponent(int componentID);
+    bool HasComponent(int componentID) const;
 protected:
     std::string _objectName;
 private:

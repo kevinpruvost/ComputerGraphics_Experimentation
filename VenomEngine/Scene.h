@@ -1,6 +1,11 @@
 #pragma once
 
 #include <common/Scene.h>
+#include <common/ShaderPipeline.h>
+#include <common/Model.h>
+#include <common/Text2D.h>
+#include <common/Camera.h>
+
 
 class MainScene : public Scene
 {

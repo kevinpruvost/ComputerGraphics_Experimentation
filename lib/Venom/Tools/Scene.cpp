@@ -1,6 +1,6 @@
 #include <common/Scene.h>
 
-bool Scene::_started = false;
+bool IScene::_started = false;
 
 Scene::Scene()
     : w{ nullptr }
@@ -35,7 +35,7 @@ void Scene::SetGUI(GUI* g)
     gui = g;
 }
 
-bool Scene::IsStarted()
+bool IScene::IsStarted()
 {
     return _started;
 }

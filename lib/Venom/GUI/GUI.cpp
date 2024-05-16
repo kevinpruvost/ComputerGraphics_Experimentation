@@ -185,6 +185,24 @@ void GUI::DrawEntityProperties(Entity** obj)
             ImGui::TreePop();
         }
     }
+    // Create Component Popup
+    if (ImGui::Button("Add Component"))
+        ImGui::OpenPopup("add_component_popup");
+    if (ImGui::BeginPopup("add_component_popup"))
+    {
+        ImGui::SeparatorText("New Component type");
+        std::vector<const char*> * componentNames = Component::GetAllComponentNames();
+        for (int i = 0; i < componentNames->size(); ++i) {
+            // Skips if already has component
+            if ((*obj)->HasComponent(i)) continue;
+
+            // Displays possible new component
+            if (ImGui::Selectable(componentNames->at(i))) {
+                (*obj)->AddComponent(i);
+            }
+        }
+        ImGui::EndPopup();
+    }
 }
 
 void GUI::DrawComponentProperties(Component** obj)

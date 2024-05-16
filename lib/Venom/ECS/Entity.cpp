@@ -1,5 +1,7 @@
 #include <common/ECS/Entity.h>
 
+#include <common/ECS/Component.h>
+
 #include <random>
 #include <cstring>
 
@@ -43,6 +45,27 @@ Entity::Entity(const char const* name)
     , _objectName{ name ? name : GenerateObjectName() }
 {
     EntityPool::AddEntity(this);
+}
+
+Component* Entity::AddComponent(int componentID)
+{
+    {
+        auto ite = __components.find(componentID);
+        if (ite != __components.end()) {
+            return ite->second;
+        };
+    }
+    Component * component = Component::CreateComponent(componentID);
+    component->SetEntity(this);
+    if (IScene::IsStarted())
+        component->Init();
+    __components[componentID] = component;
+    return component;
+}
+
+bool Entity::HasComponent(int componentID) const
+{
+    return __components.find(componentID) != __components.end();
 }
 
 Entity * Entity::CreateEntity(const char* const name)

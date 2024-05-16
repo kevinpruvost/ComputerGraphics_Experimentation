@@ -144,7 +144,10 @@ public:
 protected:
     friend class Entity;
     friend class GUI;
+
     Callback<void>& GetGUICallback();
+    Callback<void> _guiCallback;
+
     void SetEntity(Entity* entity) {
         _entity = entity;
     }
@@ -155,10 +158,10 @@ protected:
     // Static member variable to hold component ID
     static int IDCounter;
     int _componentID;
-    // Function to get component ID
-    static int GetNewComponentID(const char* componentName);
-    Callback<void> _guiCallback;
-
+    // Function to get component ID and store polymorphic constructor
+    static int GetNewComponentID(const char* componentName, Component *(*constructor)());
+    static std::vector<const char*>* GetAllComponentNames();
+    static Component* CreateComponent(int componentID);
 protected:
     std::vector<PropertyManager::Property>& GetProperties();
     template<typename T>
@@ -190,7 +193,7 @@ public:
 };
 
 template<typename T>
-const int VenomComponent<T>::ID = Component::GetNewComponentID(typeid(T).name());
+const int VenomComponent<T>::ID = Component::GetNewComponentID(typeid(T).name(), []() -> Component* { return new T(); });
 
 template<typename T>
 const char* VenomComponent<T>::Name = typeid(T).name();

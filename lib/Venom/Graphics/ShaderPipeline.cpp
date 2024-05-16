@@ -55,7 +55,7 @@ const std::vector<ShaderPipeline::UniformVariableSignature>& ShaderPipeline::Get
         _SetUniformVariableSignatures();
 #ifdef _DEBUG
         for (const auto& var : _uniformVariableSignatures)
-            Logger::DebugPrint("Uniform variable:[%s]:\"%s\"", ShaderPipeline::UniformVariable::GetTypeString(var.type), var.name);
+            Logger::DebugPrint("Uniform variable:[%s]:\"%s\"", ShaderPipeline::UniformVariable::GetTypeString(var.type), var.name.c_str());
 #endif
     }
     return _uniformVariableSignatures;
@@ -67,7 +67,7 @@ std::vector<ShaderPipeline::UniformVariableSignature>& ShaderPipeline::GetUnifor
         _SetUniformVariableSignatures();
 #ifdef _DEBUG
         for (const auto& var : _uniformVariableSignatures)
-            Logger::DebugPrint("Uniform variable:[%s]:\"%s\"", ShaderPipeline::UniformVariable::GetTypeString(var.type), var.name);
+            Logger::DebugPrint("Uniform variable:[%s]:\"%s\"", ShaderPipeline::UniformVariable::GetTypeString(var.type), var.name.c_str());
 #endif
     }
     return _uniformVariableSignatures;
@@ -221,24 +221,24 @@ void ShaderPipeline::SetDefaultValuesForUniformVariables()
         for (const auto& var : _uniformVariableSignatures)
         {
 #ifdef _DEBUG
-            Logger::DebugPrint("Uniform variable:[%s]:\"%s\"", ShaderPipeline::UniformVariable::GetTypeString(var.type), var.name);
+            Logger::DebugPrint("Uniform variable:[%s]:\"%s\"", ShaderPipeline::UniformVariable::GetTypeString(var.type), var.name.c_str());
 #endif
             switch (var.type)
             {
             case UniformVariable::Type::FLOAT:
-                SetUniformFloat(var.name, 0.0f);
+                SetUniformFloat(var.name.c_str(), 0.0f);
                 break;
             case UniformVariable::Type::INT:
-                SetUniformInt(var.name, 0);
+                SetUniformInt(var.name.c_str(), 0);
                 break;
             case UniformVariable::Type::VEC3:
-                SetUniformVec3(var.name, glm::vec3(0.0f));
+                SetUniformVec3(var.name.c_str(), glm::vec3(0.0f));
                 break;
             case UniformVariable::Type::VEC4:
-                SetUniformVec4(var.name, glm::vec4(0.0f));
+                SetUniformVec4(var.name.c_str(), glm::vec4(0.0f));
                 break;
             case UniformVariable::Type::MATRIX4:
-                SetUniformMatrix4(var.name, glm::mat4(1.0f));
+                SetUniformMatrix4(var.name.c_str(), glm::mat4(1.0f));
                 break;
             }
         }
