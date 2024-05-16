@@ -20,7 +20,7 @@ const char* Component::GetComponentName()
     return _componentNames->at(_componentID);
 }
 
-Callback<void>& Component::GetGUICallback()
+Callback<void, GUI *>& Component::GetGUICallback()
 {
     return _guiCallback;
 }

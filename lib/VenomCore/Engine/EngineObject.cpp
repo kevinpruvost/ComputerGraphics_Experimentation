@@ -42,6 +42,11 @@ std::vector<EngineResource*>& EngineResource::GetResourcesOfSameType()
     return s_resources[__type];
 }
 
+std::vector<EngineResource*>& EngineResource::GetResourcesOfType(ResourceType type)
+{
+    return s_resources[type];
+}
+
 EngineResource::ResourceType EngineResource::GetResourceType() const
 {
     return __type;

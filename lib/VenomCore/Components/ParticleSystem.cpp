@@ -3,7 +3,7 @@
 #include <common/Engine/EngineLoader.h>
 #include <common/Rendering.h>
 
-constexpr const float defaultFloat = -999.0f;
+constexpr const float defaultFloat = 1.0f;
 
 ParticleSystem::ParticleSystem()
     : VenomComponent<ParticleSystem>()
@@ -14,8 +14,8 @@ ParticleSystem::ParticleSystem()
     , __particleSize(defaultFloat)
     , __maxParticles((int)defaultFloat)
     , __emissionRate(defaultFloat)
-    , __particleInitialVelocity(defaultFloat)
-    , __particleAcceleration(defaultFloat)
+    , __particleInitialVelocity({ 0.0f, -1.0f, 0.0f })
+    , __particleAcceleration(0.0f)
     , __particleTexture(nullptr)
     , __particleShaderPipeline(nullptr)
     , __emitterPosition(defaultFloat)
@@ -27,7 +27,7 @@ ParticleSystem::ParticleSystem()
 
 void ParticleSystem::Init()
 {
-    _guiCallback = ([&]() {
+    _guiCallback = ([&](GUI * gui) {
         ImGui::ColorEdit4("Particles Color", glm::value_ptr(__particleColor));
         ImGui::SliderFloat("Particles Size", &__particleSize, 0.1f, 10.0f);
         ImGui::SliderFloat("Particles Lifetime", &__particleLifetime, 0.1f, 100.0f);
@@ -35,6 +35,16 @@ void ParticleSystem::Init()
         ImGui::SliderInt("Max Particles", &__maxParticles, 1, 10000);
         ImGui::SliderFloat3("Initial Velocity", glm::value_ptr(__particleInitialVelocity), -10.0f, 10.0f);
         ImGui::SliderFloat3("Acceleration", glm::value_ptr(__particleAcceleration), -10.0f, 10.0f);
+        if (gui->DrawEngineObjectProperties("Particle Texture", &__particleTexture, EngineResource::ResourceType::TEXTURE)) {
+            if (__model) {
+                __model->GetMaterials()[0]->SetTexture(0, __particleTexture);
+            }
+        }
+        if (gui->DrawEngineObjectProperties("Particle Shader", &__particleShaderPipeline, EngineResource::ResourceType::SHADER)) {
+            if (__model) {
+                __model->SetShader(__particleShaderPipeline);
+            }
+        }
     });
     __transform = _entity->AddComponent<Transform>();
 }
@@ -77,16 +87,10 @@ ParticleSystem* ParticleSystem::CreateParticleSystem()
 void ParticleSystem::Draw() const { RenderParticles(); }
 void ParticleSystem::Update()
 {
+    if (__particleTexture == nullptr || __particleShaderPipeline == nullptr)
+        return;
+
     float deltaTime = Time::GetLambda();
-    assert(__particleTexture != nullptr);
-    assert(__particleShaderPipeline != nullptr);
-    assert(__particleLifetime != defaultFloat);
-    assert(__particleSize != defaultFloat);
-    assert(__maxParticles != (int)defaultFloat);
-    assert(__emissionRate != defaultFloat);
-    assert(__particleInitialVelocity != glm::vec3(defaultFloat));
-    assert(__particleAcceleration != glm::vec3(defaultFloat));
-    assert(__emitterPosition != glm::vec3(defaultFloat));
 
     for (auto particle = __particles.begin(); particle != __particles.end(); ++particle)
     {
@@ -183,6 +187,7 @@ void ParticleSystem::RenderParticles() const
     Drawable3D::DrawMode drawMode = (_drawMode == Drawable3D::DrawMode::GLOBAL) ? Rendering::GetGlobalDrawMode() : _drawMode;
     for (const auto& particle : __particles)
     {
+        __particleShaderPipeline->Use();
         __particleShaderPipeline->SetUniformVec4("color", particle.color);
         glm::mat4 modelMatrix = glm::mat4(1.0f);
         modelMatrix = glm::translate(modelMatrix, particle.position);

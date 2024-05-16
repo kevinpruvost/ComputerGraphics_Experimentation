@@ -53,7 +53,7 @@ public:
         if (resource != nullptr)
         {
             Logger::Print("Resource already exists: %s", name);
-            return nullptr;
+            return dynamic_cast<T*>(resource);
         }
         resource = T::Create();
         if (AddResource(name, resource) != Venom::ErrorCode::Success)

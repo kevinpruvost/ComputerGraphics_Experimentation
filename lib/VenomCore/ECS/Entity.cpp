@@ -63,6 +63,16 @@ Component* Entity::AddComponent(int componentID)
     return component;
 }
 
+void Entity::RemoveComponent(int componentID)
+{
+    auto ite = __components.find(componentID);
+    if (ite != __components.end()) {
+        Component* component = ite->second;
+        __components.erase(ite);
+        delete component;
+    }
+}
+
 bool Entity::HasComponent(int componentID) const
 {
     return __components.find(componentID) != __components.end();

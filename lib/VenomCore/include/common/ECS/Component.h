@@ -145,8 +145,8 @@ protected:
     friend class Entity;
     friend class GUI;
 
-    Callback<void>& GetGUICallback();
-    Callback<void> _guiCallback;
+    Callback<void, GUI *>& GetGUICallback();
+    Callback<void, GUI *> _guiCallback;
 
     void SetEntity(Entity* entity) {
         _entity = entity;

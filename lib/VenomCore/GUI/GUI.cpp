@@ -1,5 +1,6 @@
 #include <common/GUI.h>
 #include <common/ShaderPipeline.h>
+#include <common/Model.h>
 
 #include <glm/gtc/type_ptr.hpp>
 
@@ -176,21 +177,21 @@ void GUI::DrawEntityProperties(Entity** obj)
 {
     ImGui::Text("%s:", (*obj)->GetObjectName());
     std::unordered_map<int, Component*> * components = (*obj)->GetComponents();
-    for (auto pair : (*components))
+    int idToRemove = -1;
+    for (auto ite = components->begin(); ite != components->end(); ++ite)
     {
-        auto component = pair.second;
-        if (ImGui::CollapsingHeader(component->GetComponentName()))
+        auto component = ite->second;
+        bool open = true;
+        if (ImGui::CollapsingHeader(component->GetComponentName(), &open))
             DrawComponentProperties(&component);
-        if (ImGui::IsItemHovered() && ImGui::IsMouseReleased(ImGuiMouseButton_Right)) {
-            ImGui::OpenPopup("right_click_component_header");
-            if (ImGui::BeginPopup("right_click_component_header"))
-            {
-                ImGui::SeparatorText("New Component type");
-                ImGui::EndPopup();
-            }
+        if (!open) {
+            idToRemove = ite->first;
         }
     }
+    if (idToRemove != -1)
+        (*obj)->RemoveComponent(idToRemove);
     // Create Component Popup
+    ImGui::SetCursorPosY(ImGui::GetCursorPosY() + 10);
     if (ImGui::Button("Add Component", { ImGui::GetWindowSize().x, 25}))
         ImGui::OpenPopup("add_component_popup");
     if (ImGui::BeginPopup("add_component_popup"))
@@ -212,11 +213,9 @@ void GUI::DrawEntityProperties(Entity** obj)
 
 void GUI::DrawComponentProperties(Component** obj)
 {
-    if (auto& cb = (*obj)->GetGUICallback())
+    auto& cb = (*obj)->GetGUICallback();
+    if (cb.get()) cb(this);
     {
-        cb();
-    }
-    else {
         auto& props = (*obj)->GetProperties();
         for (auto& prop : props)
         {
@@ -283,91 +282,106 @@ void GUI::DrawComponentProperties(Component** obj)
     }
 }
 
-void GUI::DrawEngineObjectProperties(const char * name, EngineObject** obj)
+bool GUI::DrawEngineObjectProperties(const char * name, EngineObject** obj)
 {    
     EngineObject::EngineObjectType type = (*obj)->GetEngineObjectType();
-    switch ((*obj)->GetEngineObjectType())
+    return DrawEngineObjectProperties(name, obj, type, reinterpret_cast<EngineResource*>(*obj)->GetResourceType());
+}
+
+bool GUI::DrawEngineObjectProperties(const char* name, EngineObject** obj, EngineObject::EngineObjectType type, EngineResource::ResourceType resourceType)
+{
+    bool interacted = false;
+    switch (type)
     {
-        case EngineObject::EngineObjectType::Resource:
-        {
-            EngineResource* resource = reinterpret_cast<EngineResource*>(*obj);
-            auto& resources = resource->GetResourcesOfSameType();
-            // Create dropdown
-            std::string comboName(name); comboName += "##combo";
-            if (ImGui::BeginCombo(comboName.c_str(), resource->GetResourceName())) {
-                for (int i = 0; i < resources.size(); i++) {
-                    bool isSelected = resources[i] == resource;
-                    if (ImGui::Selectable(resources[i]->GetResourceName(), isSelected))
-                    {
-                        *obj = reinterpret_cast<EngineObject*>(resources[i]);
-                    }
-
-                    // Set the initial focus when opening the combo (scrolling + keyboard navigation focus)
-                    if (isSelected)
-                        ImGui::SetItemDefaultFocus();
+    case EngineObject::EngineObjectType::Resource:
+    {
+        EngineResource* resource = reinterpret_cast<EngineResource*>(*obj);
+        auto& resources = EngineResource::GetResourcesOfType(resourceType);
+        // Create dropdown
+        std::string comboName(name); comboName += "##combo";
+        if (ImGui::BeginCombo(comboName.c_str(), resource ? resource->GetResourceName() : "None")) {
+            for (int i = 0; i < resources.size(); i++) {
+                bool isSelected = resource && resources[i] == resource;
+                if (ImGui::Selectable(resources[i]->GetResourceName(), isSelected))
+                {
+                    *obj = reinterpret_cast<EngineObject*>(resources[i]);
+                    interacted = true;
                 }
-                ImGui::EndCombo();
-            }
 
-            EngineResource::ResourceType resType = resource->GetResourceType();
-            switch (resType)
+                // Set the initial focus when opening the combo (scrolling + keyboard navigation focus)
+                if (isSelected)
+                    ImGui::SetItemDefaultFocus();
+            }
+            ImGui::EndCombo();
+        }
+
+        if (resource == nullptr)
+            return interacted;
+
+        EngineResource::ResourceType resType = resource->GetResourceType();
+        switch (resType)
+        {
+        case EngineResource::ResourceType::SHADER: {
+            ShaderPipeline* shader = reinterpret_cast<ShaderPipeline*>(resource);
+            shader->SetDefaultValuesForUniformVariables();
+            auto& vars = shader->GetUniformVariables();
+            shader->Use();
+            for (auto& var : vars)
             {
-                case EngineResource::ResourceType::SHADER: {
-                    ShaderPipeline* shader = reinterpret_cast<ShaderPipeline*>(resource);
-                    shader->SetDefaultValuesForUniformVariables();
-                    auto & vars = shader->GetUniformVariables();
-                    shader->Use();
-                    for (auto& var : vars)
-                    {
-                        // Only variables with mod_ as prefix for their name can be modified
-                        if (strncmp(var.first, "mod_", 4) != 0)
-                            continue;
-                        switch (var.second.type)
-                        {
-                            case ShaderPipeline::UniformVariable::Type::FLOAT:
-                                if (ImGui::DragFloat(var.first, &var.second.f))
-                                    shader->SetUniformFloat(var.first, var.second.f);
-                                break;
-                            case ShaderPipeline::UniformVariable::Type::INT:
-                                if (ImGui::DragInt(var.first, &var.second.i))
-                                    shader->SetUniformInt(var.first, var.second.i);
-                                break;
-                            case ShaderPipeline::UniformVariable::Type::VEC3:
-                                if (ImGui::DragFloat3(var.first, glm::value_ptr(var.second.vec3), 0.01f))
-                                    shader->SetUniformVec3(var.first, var.second.vec3);
-                                break;
-                            case ShaderPipeline::UniformVariable::Type::VEC4:
-                                if (ImGui::DragFloat4(var.first, glm::value_ptr(var.second.vec4), 0.01f))
-                                    shader->SetUniformVec4(var.first, var.second.vec4);
-                                break;
-                            //case ShaderPipeline::UniformVariable::Type::MAT3:
-                            //    ImGui::DragFloat3(var.name, &(*var.mat3)[0][0]);
-                            //    ImGui::DragFloat3(var.name, &(*var.mat3)[1][0]);
-                            //    ImGui::DragFloat3(var.name, &(*var.mat3)[2][0]);
-                            //    break;
-                            //case ShaderPipeline::UniformVariable::Type::MAT4:
-                            //    ImGui::DragFloat4(var.name, &(*var.mat4)[0][0]);
-                            //    ImGui::DragFloat4(var.name, &(*var.mat4)[1][0]);
-                            //    ImGui::DragFloat4(var.name, &(*var.mat4)[2][0]);
-                            //    ImGui::DragFloat4(var.name, &(*var.mat4)[3][0]);
-                                break;
-                            default:
-                                break;
-                        }
-                    }
+                // Only variables with mod_ as prefix for their name can be modified
+                if (strncmp(var.first, "mod_", 4) != 0)
+                    continue;
+                switch (var.second.type)
+                {
+                case ShaderPipeline::UniformVariable::Type::FLOAT:
+                    if (ImGui::DragFloat(var.first, &var.second.f))
+                        shader->SetUniformFloat(var.first, var.second.f);
                     break;
-                }
-                default: {
+                case ShaderPipeline::UniformVariable::Type::INT:
+                    if (ImGui::DragInt(var.first, &var.second.i))
+                        shader->SetUniformInt(var.first, var.second.i);
+                    break;
+                case ShaderPipeline::UniformVariable::Type::VEC3:
+                    if (ImGui::DragFloat3(var.first, glm::value_ptr(var.second.vec3), 0.01f))
+                        shader->SetUniformVec3(var.first, var.second.vec3);
+                    break;
+                case ShaderPipeline::UniformVariable::Type::VEC4:
+                    if (ImGui::DragFloat4(var.first, glm::value_ptr(var.second.vec4), 0.01f))
+                        shader->SetUniformVec4(var.first, var.second.vec4);
+                    break;
+                    //case ShaderPipeline::UniformVariable::Type::MAT3:
+                    //    ImGui::DragFloat3(var.name, &(*var.mat3)[0][0]);
+                    //    ImGui::DragFloat3(var.name, &(*var.mat3)[1][0]);
+                    //    ImGui::DragFloat3(var.name, &(*var.mat3)[2][0]);
+                    //    break;
+                    //case ShaderPipeline::UniformVariable::Type::MAT4:
+                    //    ImGui::DragFloat4(var.name, &(*var.mat4)[0][0]);
+                    //    ImGui::DragFloat4(var.name, &(*var.mat4)[1][0]);
+                    //    ImGui::DragFloat4(var.name, &(*var.mat4)[2][0]);
+                    //    ImGui::DragFloat4(var.name, &(*var.mat4)[3][0]);
+                    break;
+                default:
                     break;
                 }
             }
             break;
         }
-        default:
-        {
+        case EngineResource::ResourceType::MODEL: {
+            Model* model = reinterpret_cast<Model*>(resource);
             break;
         }
+        default: {
+            break;
+        }
+        }
+        break;
     }
+    default:
+    {
+        break;
+    }
+    }
+    return interacted;
 }
 
 void GUI::SetStyle()

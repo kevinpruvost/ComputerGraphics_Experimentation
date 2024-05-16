@@ -15,6 +15,7 @@ public:
     void SetSpecular(const glm::vec4 & specular);
     void SetShininess(const float shininess);
     void AddTexture(Texture * texture);
+    void SetTexture(int index, Texture* texture);
     const glm::vec4 & GetAmbient() const;
     const glm::vec4 & GetDiffuse() const;
     const glm::vec4 & GetSpecular() const;

@@ -75,6 +75,7 @@ std::vector<ShaderPipeline::UniformVariableSignature>& ShaderPipeline::GetUnifor
 
 void ShaderPipeline::SetUniformMatrix4(const char * name, const glm::mat4& matrix)
 {
+    Use();
     _SetUniformMatrix4(name, matrix);
     UniformVariable var = {
         UniformVariable::Type::MATRIX4
@@ -85,6 +86,7 @@ void ShaderPipeline::SetUniformMatrix4(const char * name, const glm::mat4& matri
 
 void ShaderPipeline::SetUniformVec3(const char * name, const glm::vec3& vec)
 {
+    Use();
     _SetUniformVec3(name, vec);
     UniformVariable var = {
         UniformVariable::Type::VEC3
@@ -95,6 +97,7 @@ void ShaderPipeline::SetUniformVec3(const char * name, const glm::vec3& vec)
 
 void ShaderPipeline::SetUniformVec4(const char * name, const glm::vec4& vec)
 {
+    Use();
     _SetUniformVec4(name, vec);
     UniformVariable var = {
         UniformVariable::Type::VEC4
@@ -105,6 +108,7 @@ void ShaderPipeline::SetUniformVec4(const char * name, const glm::vec4& vec)
 
 void ShaderPipeline::SetUniformFloat(const char * name, float value)
 {
+    Use();
     _SetUniformFloat(name, value);
     UniformVariable var = {
         UniformVariable::Type::FLOAT
@@ -115,6 +119,7 @@ void ShaderPipeline::SetUniformFloat(const char * name, float value)
 
 void ShaderPipeline::SetUniformInt(const char * name, int value)
 {
+    Use();
     _SetUniformInt(name, value);
     UniformVariable var = {
         UniformVariable::Type::INT
@@ -125,6 +130,7 @@ void ShaderPipeline::SetUniformInt(const char * name, int value)
 
 void ShaderPipeline::GiveUniformVariablesToOtherShader(ShaderPipeline* otherShader)
 {
+    otherShader->Use();
     for (auto& [name, var] : _uniformVariables)
     {
         switch (var.type)

@@ -45,6 +45,18 @@ void Material::AddTexture(Texture* texture)
     __textures.push_back(texture);
 }
 
+void Material::SetTexture(int index, Texture* texture)
+{
+    if (index < __textures.size())
+    {
+        __textures[index] = texture;
+    }
+    else
+    {
+        __textures.push_back(texture);
+    }
+}
+
 const glm::vec4& Material::GetAmbient() const
 {
     return __ambient;

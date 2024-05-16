@@ -99,7 +99,6 @@ void Rendering_OGL::_DrawModel(const Model* model) const
 	if (drawMode & Drawable3D::DrawMode::WIREFRAME || drawMode & Drawable3D::DrawMode::POINTS)
 	{
 		if (!wireframeShader) wireframeShader = Resources::Load<ShaderPipeline>("Wireframe");
-		wireframeShader->Use();
 		shader->GiveUniformVariablesToOtherShader(wireframeShader);
 	}
 	const auto & materials = model->GetMaterials();
@@ -134,7 +133,6 @@ void Rendering_OGL::_DrawModel(const Model* model) const
 		if (drawMode & Drawable3D::DrawMode::WIREFRAME || drawMode & Drawable3D::DrawMode::POINTS)
 		{
 			wireframeShader->Use();
-			shader->GiveUniformVariablesToOtherShader(wireframeShader);
 		}
 		if (drawMode & Drawable3D::DrawMode::WIREFRAME)
 		{

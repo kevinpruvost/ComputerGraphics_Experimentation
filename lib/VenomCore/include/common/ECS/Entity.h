@@ -46,6 +46,15 @@ public:
         return component;
     }
     template<typename T>
+    void RemoveComponent() {
+        auto ite = __components.find(VenomComponent<T>::ID);
+        if (ite != __components.end()) {
+            T* component = reinterpret_cast<T*>(ite->second);
+            __components.erase(ite);
+            delete component;
+        }
+    }
+    template<typename T>
     bool HasComponent() const {
         return __components.find(VenomComponent<T>::ID) != __components.end();
     }
@@ -55,6 +64,7 @@ protected:
     Entity(const char* const name);
     friend class GUI;
     Component* AddComponent(int componentID);
+    void RemoveComponent(int componentID);
     bool HasComponent(int componentID) const;
 protected:
     std::string _objectName;

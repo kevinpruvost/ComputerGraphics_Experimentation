@@ -59,10 +59,21 @@ public:
     //virtual bool ColorEdit3(const char* txt, float* colorRef) = 0;
     void DrawMainMenuBar();
     void DrawObjectsProperties();
-private:
     void DrawEntityProperties(Entity** obj);
     void DrawComponentProperties(Component** obj);
-    void DrawEngineObjectProperties(const char * name, EngineObject ** obj);
+    /**
+     * @brief Draws engine object properties
+     * @param name 
+     * @param obj 
+     * @return true if interaction has occured, false otherwise
+     */
+    bool DrawEngineObjectProperties(const char * name, EngineObject ** obj);
+    bool DrawEngineObjectProperties(const char * name, EngineObject ** obj, EngineObject::EngineObjectType type, EngineResource::ResourceType resourceType);
+    template<class T>
+    inline bool DrawEngineObjectProperties(const char* name, T** obj, EngineResource::ResourceType resourceType) {
+        return DrawEngineObjectProperties(name, reinterpret_cast<EngineObject**>(obj), EngineObject::EngineObjectType::Resource, resourceType);
+    }
+private:
     void SetStyle();
 
 protected:
