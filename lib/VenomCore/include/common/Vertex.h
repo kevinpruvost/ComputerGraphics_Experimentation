@@ -14,11 +14,15 @@ class VENOM_API Vertex
 public:
     Vertex();
     constexpr Vertex(const glm::vec3& __position, const glm::vec3& normal, const glm::vec2& texCoord);
+    constexpr Vertex(const glm::vec3& __position, const glm::vec3& col);
     constexpr Vertex(const glm::vec3& __position);
     ~Vertex();
 
     glm::vec3 pos;
-    glm::vec3 normals;
+    union {
+        glm::vec3 normals;
+        glm::vec3 color;
+    };
     glm::vec2 textureCoords;
 };
 

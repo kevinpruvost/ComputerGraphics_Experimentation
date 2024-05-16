@@ -70,7 +70,7 @@ void Skybox::Draw() const
     shader->SetUniformMatrix4("view", glm::mat4(glm::mat3(Camera::MainCamera->GetViewMatrix())));
     shader->SetUniformMatrix4("projection", Camera::MainCamera->GetProjectionMatrix());
     shader->SetUniformInt("textureSampler0", 0);
-    Rendering::DrawVertices(skyboxVertexBuffer);
+    Rendering::DrawTriangles(skyboxVertexBuffer);
     Rendering::SetDepthTest(true);
 }
 

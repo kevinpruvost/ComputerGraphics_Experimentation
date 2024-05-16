@@ -12,7 +12,8 @@ public:
     void _SetBlending(bool enable) const override;
     void _SetBlendingFunction(BlendingFunction src, BlendingFunction dst) const override;
     void _SetBlendingEquation(BlendingEquation eq) const override;
-    void _DrawVertices(const VertexBuffer * vertices) const override;
+    void _DrawTriangles(const VertexBuffer * vertices) const override;
+    void _DrawLines(const VertexBuffer* vertices) const override;
     void _SetDrawMode(const Drawable3D::DrawMode drawMode) const;
     void _DrawModel(const Model* model) const override;
 

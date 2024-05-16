@@ -37,7 +37,8 @@ public:
     };
     static inline void SetBlendingEquation(BlendingEquation eq) { _instance->_SetBlendingEquation(eq); }
     static inline void SetDrawMode(const Drawable3D::DrawMode drawMode) { if (_lastDrawMode == drawMode) return; _instance->_SetDrawMode(drawMode); _lastDrawMode = drawMode; }
-    static inline void DrawVertices(const VertexBuffer * vertices) { _instance->_DrawVertices(vertices); }
+    static inline void DrawTriangles(const VertexBuffer * vertices) { _instance->_DrawTriangles(vertices); }
+    static inline void DrawLines(const VertexBuffer* vertices) { _instance->_DrawLines(vertices); }
 
     static inline void SetGlobalDrawMode(const Drawable3D::DrawMode drawMode) { assert(drawMode != Drawable3D::DrawMode::GLOBAL); _globalDrawMode = drawMode; }
     static inline Drawable3D::DrawMode GetGlobalDrawMode() { return _globalDrawMode; }
@@ -52,7 +53,8 @@ protected:
     virtual void _SetBlending(bool enable) const = 0;
     virtual void _SetBlendingFunction(BlendingFunction src, BlendingFunction dst) const = 0;
     virtual void _SetBlendingEquation(BlendingEquation eq) const = 0;
-    virtual void _DrawVertices(const VertexBuffer * vertices) const = 0;
+    virtual void _DrawTriangles(const VertexBuffer * vertices) const = 0;
+    virtual void _DrawLines(const VertexBuffer* vertices) const = 0;
     virtual void _SetDrawMode(const Drawable3D::DrawMode drawMode) const = 0;
     virtual void _DrawModel(const Model* model) const = 0;
     virtual void _ClearColorBuffer(const glm::vec4& color) const = 0;

@@ -1,6 +1,8 @@
 #include <common/GUI.h>
 #include <common/ShaderPipeline.h>
 #include <common/Model.h>
+#include <common/ObjectMarker.h>
+#include <common/Components/Transform.h>
 
 #include <glm/gtc/type_ptr.hpp>
 
@@ -84,6 +86,7 @@ Venom::ErrorCode GUI::Init()
     // Adjust the main menu bar height
     // style.FramePadding.y = 10.0f; // Increase the vertical padding
     // style.FrameRounding = 0.0f;   // Optional: Set rounding to 0 for sharper corners
+    ObjectMarker::SetMarkerShaderPipeline(Resources::Load<ShaderPipeline>("3DObjectMarker"));
 
     return _Init();
 }
@@ -159,6 +162,11 @@ void GUI::DrawObjectsProperties()
 
     if (item_current_idx != -1)
     {
+        Entity* obj = objects->at(item_current_idx);
+        {
+            Transform * transform = obj->GetComponent<Transform>();
+            if (transform) ObjectMarker::DrawMarker(obj->GetComponent<Transform>()->GetPosition(), glm::vec3(3.0f));
+        }
         // Move the next window to the upper right corner of the screen
         ImGui::SetNextWindowPos(ImVec2(ImGui::GetIO().DisplaySize.x - 420, 20), ImGuiCond_Once);
         // Set the size of the window

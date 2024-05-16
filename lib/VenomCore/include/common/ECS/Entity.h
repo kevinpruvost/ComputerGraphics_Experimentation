@@ -40,7 +40,7 @@ public:
         }
         T* component = Component::CreateComponent<T>();
         component->SetEntity(this);
-        if (Scene::IsStarted())
+        if (IScene::IsStarted())
             component->Init();
         __components[VenomComponent<T>::ID] = component;
         return component;
@@ -54,6 +54,16 @@ public:
             delete component;
         }
     }
+
+    template<typename T>
+    T* GetComponent() {
+        auto ite = __components.find(VenomComponent<T>::ID);
+        if (ite != __components.end()) {
+            return reinterpret_cast<T*>(ite->second);
+        }
+        return nullptr;
+    }
+
     template<typename T>
     bool HasComponent() const {
         return __components.find(VenomComponent<T>::ID) != __components.end();

@@ -59,10 +59,18 @@ void Rendering_OGL::_SetBlendingEquation(BlendingEquation eq) const
     glBlendEquation(GetGLBlendingEquation(eq));
 }
 
-void Rendering_OGL::_DrawVertices(const VertexBuffer * vertices) const
+void Rendering_OGL::_DrawTriangles(const VertexBuffer * vertices) const
 {
     vertices->Bind();
     glDrawArrays(GL_TRIANGLES, 0, vertices->GetVertexCount());
+    vertices->Unbind();
+}
+
+void Rendering_OGL::_DrawLines(const VertexBuffer* vertices) const
+{
+	vertices->Bind();
+	glLineWidth(3.0f);
+    glDrawArrays(GL_LINES, 0, vertices->GetVertexCount());
     vertices->Unbind();
 }
 

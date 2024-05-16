@@ -15,6 +15,8 @@ engine_settings:
     name: OpenGLEngine
 resources:
     shaders:
+        - name: 3DObjectMarker
+          path: Shaders/3DObjectMarker
         - name: Background_Texture
           path: Shaders/Background_Texture
         - name: Skybox
@@ -43,6 +45,9 @@ resources:
         - name: Skybox_Texture
           type: CubeMap
           path: [Skybox/right.png, Skybox/left.png, Skybox/top.png, Skybox/bottom.png, Skybox/front.png, Skybox/back.png]
+        - name: DesertSkybox_Texture
+          type: CubeMap
+          path: [DesertSkybox/right.png, DesertSkybox/left.png, DesertSkybox/top.png, DesertSkybox/bottom.png, DesertSkybox/front.png, DesertSkybox/back.png]
         - name: Earth
           path: Planets/earth.jpg
         - name: Moon

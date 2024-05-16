@@ -16,6 +16,13 @@ constexpr Vertex::Vertex(const glm::vec3 & __position, const glm::vec3& normal, 
 
 }
 
+constexpr Vertex::Vertex(const glm::vec3& __position, const glm::vec3& col)
+    : pos{ __position }
+    , color{ col }
+    , textureCoords{ 0.0f }
+{
+}
+
 constexpr Vertex::Vertex(const glm::vec3& __position)
     : pos{ __position }
     , normals{ 0.0f }

@@ -49,15 +49,15 @@ Venom::ErrorCode VenomEngine::LoadEngine()
         return err;
     }
 
-	if ((err = LoadGUI(windowApi, engineApi)) != Venom::ErrorCode::Success) {
-		Logger::Print("GUI Init failed");
-		return err;
-	};
-
 	if ((err = LoadResources(config)) != Venom::ErrorCode::Success) {
 		Logger::Print("Resource loading failed");
 		return err;
 	}
+
+	if ((err = LoadGUI(windowApi, engineApi)) != Venom::ErrorCode::Success) {
+		Logger::Print("GUI Init failed");
+		return err;
+	};
 	return Venom::ErrorCode::Success;
 }
 
