@@ -9,7 +9,7 @@
 
 class GUI;
 
-class VENOM_API ShaderPipeline : public Resource
+class VENOM_API ShaderPipeline : public VenomResource<ShaderPipeline>
 {
 protected:
     ShaderPipeline();

@@ -5,18 +5,26 @@
 #include <type_traits>
 #include <common/Yaml.h>
 
-class Resource : public EngineResource
+class VENOM_API Resource : public EngineResource
 {
 public:
     virtual ~Resource() = default;
 
-    template<typename T>
-    static T* Create();
 protected:
     Resource(const ResourceType type);
 };
 
-class Resources
+template<class T>
+class VENOM_API VenomResource : public Resource
+{
+public:
+    VenomResource() : Resource(GetClassResourceType()) {}
+
+    static ResourceType GetClassResourceType();
+};
+#define DECLARE_VENOM_RESOURCE_STATIC(Class, Resource) template<> EngineResource::ResourceType VenomResource<Class>::GetClassResourceType() { return EngineResource::ResourceType::Resource; }
+
+class VENOM_API Resources
 {
 public:
     template <typename T>

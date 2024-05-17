@@ -4,7 +4,7 @@
 #include <common/Face.h>
 #include <common/Resources.h>
 
-class VENOM_API Texture : public Resource
+class VENOM_API Texture : public VenomResource<Texture>
 {
 public:
     virtual ~Texture() = default;

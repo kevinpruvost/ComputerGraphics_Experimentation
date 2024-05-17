@@ -12,7 +12,7 @@
 #include <assimp/scene.h>
 #include <assimp/postprocess.h>
 
-class VENOM_API Model : virtual public Drawable3D, public Resource
+class VENOM_API Model : virtual public Drawable3D, public VenomResource<Model>
 {
 public:
     virtual ~Model() = default;

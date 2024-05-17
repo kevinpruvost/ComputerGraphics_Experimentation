@@ -161,10 +161,10 @@ const std::vector<Ptr<Material>>& Model::GetMaterials() const
     return _materials;
 }
 
-
+DECLARE_VENOM_RESOURCE_STATIC(Model, MODEL);
 Model::Model()
     : Drawable3D()
-    , Resource(ResourceType::MODEL)
+    , VenomResource<Model>()
     , _shader{ nullptr }
     , _wireframeShader{ nullptr }
 {

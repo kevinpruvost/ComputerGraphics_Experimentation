@@ -7,7 +7,7 @@
 #include <common/Vertex.h>
 #include <common/Material.h>
 
-class Mesh : public Resource
+class Mesh : public VenomResource<Mesh>
 {
 public:
     virtual ~Mesh() = default;

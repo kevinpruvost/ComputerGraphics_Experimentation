@@ -6,6 +6,13 @@ class GUI;
 
 #pragma region PropertyManager
 
+struct EngineObjectContainer
+{
+    EngineObject** obj;
+    EngineObject::EngineObjectType type;
+    EngineResource::ResourceType resourceType;
+};
+
 class VENOM_API PropertyManager {
 public:
     struct Property
@@ -37,7 +44,7 @@ public:
             glm::vec4* vec4;
             glm::mat3* mat3;
             glm::mat4* mat4;
-            EngineObject** engineObject;
+            EngineObjectContainer engineObject;
             Entity** entity;
             Component** component;
         };
@@ -57,7 +64,9 @@ public:
         p.name = name;
         if constexpr (std::is_base_of<EngineObject, T>::value) {
             p.type = Property::Type::ENGINE_OBJECT_PTR;
-            p.engineObject = reinterpret_cast<EngineObject**>(prop);
+            p.engineObject.obj = reinterpret_cast<EngineObject**>(prop);
+            p.engineObject.type = T::ClassEngineObjectType;
+            p.engineObject.resourceType = T::GetClassResourceType();
         }
         else if constexpr (std::is_base_of<Entity, T>::value) {
             p.type = Property::Type::ENTITY_PTR;

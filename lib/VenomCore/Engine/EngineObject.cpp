@@ -1,5 +1,7 @@
 #include <common/Engine/EngineObjectPool.h>
 
+EngineObject::EngineObjectType EngineResource::ClassEngineObjectType = EngineObject::EngineObjectType::Resource;
+
 EngineObject::EngineObject(const EngineObjectType type)
     : __engineObjectType{ type }
 {

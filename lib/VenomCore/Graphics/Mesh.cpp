@@ -34,8 +34,9 @@ const int Mesh::GetMaterialId() const
     return _materialId;
 }
 
+DECLARE_VENOM_RESOURCE_STATIC(Mesh, MESH);
 Mesh::Mesh()
-    : Resource(ResourceType::MESH)
+    : VenomResource<Mesh>()
     , _vertexBuffer{ nullptr }
     , _materialId{ 0 }
 {

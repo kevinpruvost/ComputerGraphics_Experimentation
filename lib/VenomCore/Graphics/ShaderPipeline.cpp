@@ -3,8 +3,9 @@
 
 ShaderPipeline* currentlyUsedPipeline = nullptr;
 
+DECLARE_VENOM_RESOURCE_STATIC(ShaderPipeline, SHADER);
 ShaderPipeline::ShaderPipeline()
-    : Resource(EngineResource::ResourceType::SHADER)
+    : VenomResource<ShaderPipeline>()
     , _hasTesselationStage{ false }
     , _hasGeometryStage{ false }
 {

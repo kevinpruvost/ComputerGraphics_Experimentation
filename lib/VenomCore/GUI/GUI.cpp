@@ -259,7 +259,7 @@ void GUI::DrawComponentProperties(Component** obj)
                 ImGui::DragFloat4(prop.name, &(*prop.mat4)[3][0]);
                 break;
             case PropertyManager::Property::Type::ENGINE_OBJECT_PTR:
-                DrawEngineObjectProperties(prop.name, prop.engineObject);
+                DrawEngineObjectProperties(prop.name, prop.engineObject.obj, prop.engineObject.type, prop.engineObject.resourceType);
                 break;
             case PropertyManager::Property::Type::ENTITY_PTR:
             {
@@ -292,8 +292,17 @@ void GUI::DrawComponentProperties(Component** obj)
 
 bool GUI::DrawEngineObjectProperties(const char * name, EngineObject** obj)
 {    
-    EngineObject::EngineObjectType type = (*obj)->GetEngineObjectType();
-    return DrawEngineObjectProperties(name, obj, type, reinterpret_cast<EngineResource*>(*obj)->GetResourceType());
+    EngineObject::EngineObjectType type;
+    EngineResource::ResourceType resourceType;
+    if (*obj == nullptr) {
+        auto test1 = reinterpret_cast<EngineResource **>(obj);
+        auto test2 = reinterpret_cast<VertexBuffer **>(obj);
+    }
+    else {
+        type = (*obj)->GetEngineObjectType();
+        resourceType = reinterpret_cast<EngineResource*>(*obj)->GetResourceType();
+    }
+    return DrawEngineObjectProperties(name, obj, type, resourceType);
 }
 
 bool GUI::DrawEngineObjectProperties(const char* name, EngineObject** obj, EngineObject::EngineObjectType type, EngineResource::ResourceType resourceType)

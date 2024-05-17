@@ -3,7 +3,7 @@
 #include <common/DLL.h>
 #include <common/Texture.h>
 
-class Material : public Resource
+class Material : public VenomResource<Material>
 {
 public:
     ~Material();

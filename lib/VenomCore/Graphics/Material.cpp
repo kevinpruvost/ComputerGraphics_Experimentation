@@ -1,7 +1,8 @@
 #include <common/Material.h>
 
+DECLARE_VENOM_RESOURCE_STATIC(Material, MATERIAL);
 Material::Material()
-    : Resource(EngineResource::ResourceType::MATERIAL)
+    : VenomResource<Material>()
 {
 }
 

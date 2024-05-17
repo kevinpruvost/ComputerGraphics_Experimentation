@@ -28,6 +28,7 @@ private:
 class VENOM_API EngineResource : public EngineObject
 {
 public:
+    static EngineObjectType ClassEngineObjectType;
     enum class ResourceType : uint8_t
     {
         TEXTURE,

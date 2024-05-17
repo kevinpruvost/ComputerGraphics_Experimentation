@@ -14,8 +14,9 @@ Texture* Texture::CreateTexture()
     return texture;
 }
 
+DECLARE_VENOM_RESOURCE_STATIC(Texture, TEXTURE);
 Texture::Texture()
-    : Resource(EngineResource::ResourceType::TEXTURE)
+    : VenomResource<Texture>()
 {
 }
 
