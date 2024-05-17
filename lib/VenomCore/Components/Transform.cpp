@@ -60,6 +60,11 @@ void Transform::RotateAroundParent(const glm::vec3& rotation)
     //__position = glm::vec3(rotatedPosition);
 }
 
+void Transform::SetPosition(const glm::vec3& position)
+{
+    __position = position;
+}
+
 void Transform::Translate(const glm::vec3& translation)
 {
     __position += translation;
@@ -68,6 +73,11 @@ void Transform::Translate(const glm::vec3& translation)
 void Transform::Scale(const glm::vec3& scale)
 {
     __scale += scale;
+}
+
+void Transform::SetScale(const glm::vec3& scale)
+{
+    __scale = scale;
 }
 
 void Transform::SetParent(Transform* parent)

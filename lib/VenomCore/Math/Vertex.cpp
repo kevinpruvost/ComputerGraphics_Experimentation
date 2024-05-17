@@ -8,6 +8,15 @@ Vertex::Vertex()
 {
 }
 
+constexpr Vertex::Vertex(const glm::vec3& __position, const glm::vec3& normal, const glm::vec2& texCoord, const glm::vec3& t, const glm::vec3& b)
+    : pos{ __position }
+    , normals{ normal }
+    , textureCoords{ texCoord }
+    , tangent{ t }
+    , bitangent{ b }
+{
+}
+
 constexpr Vertex::Vertex(const glm::vec3 & __position, const glm::vec3& normal, const glm::vec2& texCoord)
     : pos{ __position }
     , normals{ normal }
@@ -38,6 +47,7 @@ VertexBuffer::VertexBuffer()
     : EngineObject(EngineObjectType::Object)
     , _hasNormals{ false }
     , _hasTextureCoords{ false }
+    , _hasTangentsAndBitangents{ false }
 {
 }
 
@@ -82,6 +92,11 @@ void VertexBuffer::SetHasTextureCoords(bool hasTextureCoords)
     _hasTextureCoords = hasTextureCoords;
 }
 
+void VertexBuffer::SetHasTangentsAndBitangents(bool hasTangentsAndBitangents)
+{
+    _hasTangentsAndBitangents = hasTangentsAndBitangents;
+}
+
 bool VertexBuffer::HasNormals() const
 {
     return _hasNormals;
@@ -90,4 +105,9 @@ bool VertexBuffer::HasNormals() const
 bool VertexBuffer::HasTextureCoords() const
 {
     return _hasTextureCoords;
+}
+
+bool VertexBuffer::HasTangentsAndBitangents() const
+{
+    return _hasTangentsAndBitangents;
 }

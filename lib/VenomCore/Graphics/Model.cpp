@@ -22,17 +22,8 @@ Venom::ErrorCode Model::CreateFromFile(const std::filesystem::path& path)
         throw RuntimeException("File does not exist: {}", path.string().c_str());
 
     const auto extension = path.extension();
-    if (extension == ".obj") {
-        ParseFbx(path);
-    } else if (extension == ".fbx")
-    {
-        ParseFbx(path);
-    }
-    else
-    {
-        Logger::Print("Unsupported file format: %s", extension.string().c_str());
+    if (ParseModel(path) != Venom::ErrorCode::Success)
         return Venom::ErrorCode::Failure;
-    }
     return Venom::ErrorCode::Success;
 }
 
@@ -161,12 +152,23 @@ const std::vector<Ptr<Material>>& Model::GetMaterials() const
     return _materials;
 }
 
+void Model::UsePBR(bool usePBR)
+{
+    _usePBR = usePBR;
+}
+
+bool Model::IsUsingPBR() const
+{
+    return _usePBR;
+}
+
 DECLARE_VENOM_RESOURCE_STATIC(Model, MODEL);
 Model::Model()
     : Drawable3D()
     , VenomResource<Model>()
     , _shader{ nullptr }
     , _wireframeShader{ nullptr }
+    , _usePBR{ false }
 {
 }
 

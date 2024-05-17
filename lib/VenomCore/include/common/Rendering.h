@@ -4,6 +4,8 @@
 #include <common/Memory.h>
 #include <common/Vertex.h>
 #include <common/Model.h>
+#include <common/Camera.h>
+#include <common/Components/Light.h>
 #include <common/Components/Drawable3D.h>
 
 class EngineLoader;
@@ -48,6 +50,10 @@ public:
     static inline void ClearDepthBuffer() { _instance->_ClearDepthBuffer(); }
     static inline void ClearStencilBuffer() { _instance->_ClearStencilBuffer(); }
 
+    // PBR
+    static inline void RenderLights() { _instance->_RenderLights(Light::GetLights()); }
+    static inline void GiveMainCameraProperties(ShaderPipeline* shader);
+
 protected:
     virtual void _SetDepthTest(bool enable) const = 0;
     virtual void _SetBlending(bool enable) const = 0;
@@ -60,6 +66,10 @@ protected:
     virtual void _ClearColorBuffer(const glm::vec4& color) const = 0;
     virtual void _ClearDepthBuffer() const = 0;
     virtual void _ClearStencilBuffer() const = 0;
+
+    // PBR
+    virtual void _RenderLights(const std::vector<Light *> * lights) const = 0;
+
     static Drawable3D::DrawMode _globalDrawMode;
     static Drawable3D::DrawMode _lastDrawMode;
 };

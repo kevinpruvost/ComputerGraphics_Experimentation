@@ -10,3 +10,10 @@ Drawable3D::DrawMode Rendering::_lastDrawMode = Drawable3D::DrawMode::NONE;
 Rendering::Rendering()
 {
 }
+
+inline void Rendering::GiveMainCameraProperties(ShaderPipeline* shader)
+{
+    shader->SetUniformMatrix4("projection", Camera::MainCamera->GetProjectionMatrix());
+    shader->SetUniformMatrix4("view", Camera::MainCamera->GetViewMatrix());
+    shader->SetUniformVec3("cameraPos", Camera::MainCamera->GetPosition());
+}

@@ -37,7 +37,7 @@ resources:
           path: Shaders/Normal_Shader
         - name: Lamp
           path: Shaders/Lamp
-        - name: Material
+        - name: PBR_Shader
           path: Shaders/Material
     textures:
         - name: Snowflake
@@ -88,3 +88,7 @@ resources:
           path: Floppa/flop.fbx
         - name: Assignment5_Model
           path: Assignment5/model.obj
+        - name: Compass
+          path: Compass/scene.gltf
+        - name: Backpack
+          path: Backpack/scene.gltf

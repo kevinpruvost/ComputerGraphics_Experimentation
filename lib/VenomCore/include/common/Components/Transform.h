@@ -19,8 +19,10 @@ public:
     void Rotate(const glm::vec3& rotation);
     void RotateAroundParent(const glm::vec3& rotation);
 
+    void SetPosition(const glm::vec3& position);
     void Translate(const glm::vec3& translation);
     void Scale(const glm::vec3& scale);
+    void SetScale(const glm::vec3& scale);
     void SetParent(Transform* parent);
 
     void SetName(const char * name);

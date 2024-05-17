@@ -51,6 +51,34 @@ Venom::ErrorCode MainScene::_Init()
 	particleSystem->SetEntityName("Snow Particle System");
 	particleSystem->SetParticleShaderPipeline(Resources::Load<ShaderPipeline>("Particle_Snow"));
 
+	Entity* lightEntity = Entity::CreateEntity();
+	lightEntity->SetEntityName("Light");
+	Light * lightComp = lightEntity->AddComponent<Light>();
+	lightComp->SetIntensity(20.0f);
+	Transform * lightTransform = lightEntity->AddComponent<Transform>();
+	Renderer * lightRenderer = lightEntity->AddComponent<Renderer>();
+	lightRenderer->SetModel(Resources::Load<Model>("Sphere"));
+	lightRenderer->SetShaderPipeline(Resources::Load<ShaderPipeline>("Normal_Shader"));
+	lightTransform->SetPosition({1.0f, 1.0f, 1.0f});
+
+	Entity * pbrEntity = Entity::CreateEntity();
+	pbrEntity->SetEntityName("Compass");
+	Transform * pbrTransform = pbrEntity->AddComponent<Transform>();
+	pbrTransform->SetPosition({ 0.0f, -3.0f, -1.0f });
+	Renderer * pbrRenderer = pbrEntity->AddComponent<Renderer>();
+	pbrRenderer->SetModel(Resources::Load<Model>("Compass"));
+	pbrRenderer->SetShaderPipeline(Resources::Load<ShaderPipeline>("PBR_Shader"));
+
+	Entity* pbrEntity2 = Entity::CreateEntity();
+	pbrEntity2->SetEntityName("Backpack");
+	Transform* pbrTransform2 = pbrEntity2->AddComponent<Transform>();
+	pbrTransform2->SetPosition({ 6.0f, -1.0f, -6.0f });
+	pbrTransform2->Rotate({ 0.0f, -1.0f, 0.0f });
+	pbrTransform2->SetScale({ 0.05f, 0.05f, 0.05f });
+	Renderer* pbrRenderer2 = pbrEntity2->AddComponent<Renderer>();
+	pbrRenderer2->SetModel(Resources::Load<Model>("Backpack"));
+	pbrRenderer2->SetShaderPipeline(Resources::Load<ShaderPipeline>("PBR_Shader"));
+
 	m_sphereModel = Resources::Load<Model>("Sphere");
 
 	// Create text objects

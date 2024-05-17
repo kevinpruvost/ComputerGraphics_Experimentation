@@ -12,7 +12,11 @@ public:
     void Init() override;
     void Update() override;
 
+    void SetModel(Model* model);
+    void SetShaderPipeline(ShaderPipeline* shaderPipeline);
+
 private:
     Transform* __transform;
     Model* __model;
+    ShaderPipeline* __shader;
 };

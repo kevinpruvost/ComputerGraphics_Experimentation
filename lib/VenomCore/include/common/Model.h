@@ -52,20 +52,25 @@ public:
     const std::vector<Ptr<Mesh>> & GetMeshes() const;
     const std::vector<Ptr<Material>> & GetMaterials() const;
 
+    void UsePBR(bool usePBR);
+    bool IsUsingPBR() const;
+
 protected:
     friend class Resources;
+    friend class GUI;
     static Model* Create();
     Model();
 
     std::vector<Ptr<Mesh>> _meshes;
     std::vector<Ptr<Material>> _materials;
     ShaderPipeline * _shader, * _wireframeShader;
+    bool _usePBR;
 
 private:
     // Parser
-    Venom::ErrorCode ParseFbx(const std::filesystem::path& path);
-    Venom::ErrorCode Assimp_ProcessNode(aiNode* node, const aiScene* scene);
-    Venom::ErrorCode Assimp_ProcessMesh(aiMesh* mesh);
+    Venom::ErrorCode ParseModel(const std::filesystem::path& path);
+    Venom::ErrorCode Assimp_ProcessNode(aiNode* node, const aiScene* scene, const aiMatrix4x4& parentTransform);
+    Venom::ErrorCode Assimp_ProcessMesh(aiMesh* mesh, const aiMatrix4x4& from);
     Venom::ErrorCode Assimp_LoadMaterials(const std::filesystem::path& modelPath, const aiScene* scene);
 };
 

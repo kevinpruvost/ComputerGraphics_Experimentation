@@ -129,6 +129,11 @@ void ShaderPipeline::SetUniformInt(const char * name, int value)
     _uniformVariables[name] = var;
 }
 
+void ShaderPipeline::SetModelMatrix(const glm::mat4& matrix)
+{
+    SetUniformMatrix4("model", matrix);
+}
+
 void ShaderPipeline::GiveUniformVariablesToOtherShader(ShaderPipeline* otherShader)
 {
     otherShader->Use();

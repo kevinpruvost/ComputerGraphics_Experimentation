@@ -391,6 +391,73 @@ bool GUI::DrawEngineObjectProperties(const char* name, EngineObject** obj, Engin
         }
         case EngineResource::ResourceType::MODEL: {
             Model* model = reinterpret_cast<Model*>(resource);
+            ImGui::Checkbox("Use PBR", &model->_usePBR);
+            if (model->_usePBR) {
+                for (auto& material : model->GetMaterials()) {
+                    if (ImGui::TreeNode(material->GetResourceName()))
+                    {
+                        if (material->__diffuseTexture)
+                            ImGui::Checkbox("Use Diffuse Texture", &material->__useDiffuseTexture);
+                        if (material->__useDiffuseTexture)
+                        {
+                            ImGui::Text("Diffuse Texture");
+                            DrawEngineObjectProperties("##Diffuse Texture", (EngineObject**)&material->__diffuseTexture, EngineObject::EngineObjectType::Resource, EngineResource::ResourceType::TEXTURE);
+                        }
+                        else
+                        {
+                            ImGui::ColorEdit4("Diffuse Color", glm::value_ptr(material->__diffuse));
+                        }
+
+                        if (material->__specularTexture)
+                            ImGui::Checkbox("Use Specular Texture", &material->__useSpecularTexture);
+                        if (material->__useSpecularTexture)
+                        {
+                            ImGui::Text("Specular Texture");
+                            DrawEngineObjectProperties("##Specular Texture", (EngineObject**)&material->__specularTexture, EngineObject::EngineObjectType::Resource, EngineResource::ResourceType::TEXTURE);
+                        }
+                        else
+                        {
+                            ImGui::ColorEdit4("Specular Color", glm::value_ptr(material->__specular));
+                        }
+
+                        if (material->__ambientTexture)
+                            ImGui::Checkbox("Use Ambient Texture", &material->__useAmbientTexture);
+                        if (material->__useAmbientTexture)
+                        {
+                            ImGui::Text("Ambient Texture");
+                            DrawEngineObjectProperties("##Ambient Texture", (EngineObject**)&material->__ambientTexture, EngineObject::EngineObjectType::Resource, EngineResource::ResourceType::TEXTURE);
+                        }
+                        else
+                        {
+                            ImGui::ColorEdit4("Ambient Color", glm::value_ptr(material->__ambient));
+                        }
+
+                        if (material->__normalTexture)
+                            ImGui::Checkbox("Use Normal Texture", &material->__useNormalTexture);
+                        if (material->__useNormalTexture)
+                        {
+                            ImGui::Text("Normal Texture");
+                            DrawEngineObjectProperties("##Normal Texture", (EngineObject**)&material->__normalTexture, EngineObject::EngineObjectType::Resource, EngineResource::ResourceType::TEXTURE);
+                        }
+
+                        if (material->__baseColorTexture)
+                            ImGui::Checkbox("Use Base Color Texture", &material->__useBaseColorTexture);
+                        if (material->__useBaseColorTexture)
+                        {
+                            ImGui::Text("Base Color Texture");
+                            DrawEngineObjectProperties("##Base Color Texture", (EngineObject**)&material->__baseColorTexture, EngineObject::EngineObjectType::Resource, EngineResource::ResourceType::TEXTURE);
+                        }
+                        else
+                        {
+                            ImGui::ColorEdit4("Base Color", glm::value_ptr(material->__baseColor));
+                        }
+
+                        ImGui::DragFloat("Shininess", &material->__shininess, 0.01f, 0.0f, 10.0f);
+
+                        ImGui::TreePop();
+                    }
+                }
+            }
             break;
         }
         default: {

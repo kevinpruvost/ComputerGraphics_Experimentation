@@ -13,6 +13,7 @@ class VENOM_API Vertex
 {
 public:
     Vertex();
+    constexpr Vertex(const glm::vec3& __position, const glm::vec3& normal, const glm::vec2& texCoord, const glm::vec3& t, const glm::vec3& b);
     constexpr Vertex(const glm::vec3& __position, const glm::vec3& normal, const glm::vec2& texCoord);
     constexpr Vertex(const glm::vec3& __position, const glm::vec3& col);
     constexpr Vertex(const glm::vec3& __position);
@@ -24,6 +25,8 @@ public:
         glm::vec3 color;
     };
     glm::vec2 textureCoords;
+    glm::vec3 tangent;
+    glm::vec3 bitangent;
 };
 
 typedef std::vector<Vertex> VertexArray;
@@ -50,11 +53,14 @@ public:
 
     void SetHasNormals(bool hasNormals);
     void SetHasTextureCoords(bool hasTextureCoords);
+    void SetHasTangentsAndBitangents(bool hasTangentsAndBitangents);
     bool HasNormals() const;
     bool HasTextureCoords() const;
+    bool HasTangentsAndBitangents() const;
 
 protected:
     VertexArray _v;
     IndexArray _i;
     bool _hasNormals, _hasTextureCoords;
+    bool _hasTangentsAndBitangents;
 };

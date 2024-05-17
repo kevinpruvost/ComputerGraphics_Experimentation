@@ -20,6 +20,9 @@ public:
     void _ClearDepthBuffer() const override;
     void _ClearStencilBuffer() const override;
     void _ClearColorBuffer(const glm::vec4& color) const override;
+
+    // PBR
+    void _RenderLights(const std::vector<Light*>* lights) const override;
 };
 
 extern "C"

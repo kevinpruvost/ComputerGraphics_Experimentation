@@ -104,6 +104,9 @@ public:
     void SetUniformFloat(const char * name, float value);
     void SetUniformInt(const char * name, int value);
 
+    // Recurrent unfiform variables
+    void SetModelMatrix(const glm::mat4& matrix);
+
     /**
      * @brief Gives Previously set uniform variables to other shaders
      * @param otherShader 

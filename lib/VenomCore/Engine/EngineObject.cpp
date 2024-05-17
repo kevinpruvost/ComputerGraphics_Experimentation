@@ -26,6 +26,8 @@ static std::unordered_map<EngineResource::ResourceType, std::vector<EngineResour
 
 const char* EngineResource::GetResourceName() const
 {
+    std::string oeuf;
+    oeuf += _resourceName;
     return _resourceName.c_str();
 }
 
