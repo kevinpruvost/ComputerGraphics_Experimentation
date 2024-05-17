@@ -1,6 +1,8 @@
+<div align="center">
+  <img src="VenomEngine\resources\VenomEngine\VenomEngineLogo_Small.png" alt="VenomEngineLogo">
+</div>
+
 # Venom Engine
-
-
 
 All of the code that is present here has been entirely written and implemented by myself alone.
 
