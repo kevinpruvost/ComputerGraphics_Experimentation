@@ -20,7 +20,7 @@ public:
     Venom::ErrorCode SetWindowSize(int width, int height) override;
     Venom::ErrorCode SetWindowPosition(int x, int y) override;
     Venom::ErrorCode SetWindowTitle(const char* title) override;
-    Venom::ErrorCode SetWindowIcon(const std::filesystem::path & iconPath) override;
+    Venom::ErrorCode SetWindowIcon(const char* iconPath) override;
     Venom::ErrorCode SetWindowVSync(VSyncModes mode) override;
     Venom::ErrorCode SetWindowFullscreen(bool enabled, int monitorIndex) override;
     Venom::ErrorCode SetWindowBorderless(bool enabled) override;

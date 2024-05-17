@@ -28,7 +28,7 @@ public:
 	virtual Venom::ErrorCode SetWindowSize(int width, int height) = 0;
 	virtual Venom::ErrorCode SetWindowPosition(int x, int y) = 0;
 	virtual Venom::ErrorCode SetWindowTitle(const char * title) = 0;
-	virtual Venom::ErrorCode SetWindowIcon(const std::filesystem::path & iconPath) = 0;
+	virtual Venom::ErrorCode SetWindowIcon(const char* iconPath) = 0;
 	enum class VSyncModes { SingleBuffer = 0, DoubleBuffer = 1, TripleBuffer = 2 };
 	virtual Venom::ErrorCode SetWindowVSync(VSyncModes mode) = 0;
 

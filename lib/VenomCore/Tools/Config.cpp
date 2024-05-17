@@ -99,6 +99,8 @@ WindowSettings Config::WindowSettings() const
     else
         throw NotImplementedException("Window API mentioned in YAML config file not recognized. (has to be GLFW/WIN32)");
     windowNode["name"] >> settings.name;
+    if (windowNode["iconPath"].readable())
+        windowNode["iconPath"] >> settings.iconPath;
     windowNode["height"] >> settings.height;
     windowNode["width"] >> settings.width;
     windowNode["resizable"] >> settings.resizable;

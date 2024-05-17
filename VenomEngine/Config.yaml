@@ -3,6 +3,7 @@ version: 0.1a
 window_settings:
     api: GLFW # GLFW or WIN32
     name: VenomEngine
+    iconPath: resources/VenomEngine/VenomEngineLogo_Small.png
     width: 1920
     height: 1080
     resizable: true

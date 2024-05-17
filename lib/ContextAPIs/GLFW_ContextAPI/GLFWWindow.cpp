@@ -164,6 +164,9 @@ Venom::ErrorCode GLFW_ContextAPI::_Init()
     glfwSetMouseButtonCallback(__mainW, mouse_button_callback);
     glfwSetWindowFocusCallback(__mainW, windowFocusCallback);
 
+    if (!_settings.iconPath.empty()) {
+        SetWindowIcon(_settings.iconPath.c_str());
+    }
 
     Logger::DebugPrint(
         "GLFW initialized with parameters :\n"
@@ -336,12 +339,13 @@ Venom::ErrorCode GLFW_ContextAPI::SetWindowTitle(const char* title)
     return Venom::ErrorCode::Success;
 }
 
-Venom::ErrorCode GLFW_ContextAPI::SetWindowIcon(const std::filesystem::path & iconPath)
+Venom::ErrorCode GLFW_ContextAPI::SetWindowIcon(const char * iconPath)
 {
     int width, height, channels;
-    unsigned char* image_stb = stbi_load(iconPath.string().c_str(), &width, &height, &channels, 0);
+    unsigned char* image_stb = stbi_load(iconPath, &width, &height, &channels, 0);
     if (!image_stb) {
-        throw RuntimeException("Couldn't load image: {}", iconPath.string().c_str());
+        Logger::Print("Failed to load image: %s", iconPath);
+        return Venom::ErrorCode::Failure;
     }
     GLFWimage image;
     image.width = width;

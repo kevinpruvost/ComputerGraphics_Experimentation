@@ -12,6 +12,7 @@ struct WindowSettings
 {
     WindowAPI api;
     std::string name;
+    std::string iconPath;
     int width;
     int height;
     bool resizable;
