@@ -247,6 +247,12 @@ void GUI::DrawComponentProperties(Component** obj)
             case PropertyManager::Property::Type::VEC4:
                 ImGui::DragFloat4(prop.name, glm::value_ptr(*prop.vec4), 0.01f);
                 break;
+            case PropertyManager::Property::Type::COLOR_RGB:
+                ImGui::ColorEdit3(prop.name, glm::value_ptr(*prop.vec3));
+                break;
+            case PropertyManager::Property::Type::COLOR_RGBA:
+                ImGui::ColorEdit4(prop.name, glm::value_ptr(*prop.vec4));
+            break;
             case PropertyManager::Property::Type::MAT3:
                 ImGui::DragFloat3(prop.name, &(*prop.mat3)[0][0]);
                 ImGui::DragFloat3(prop.name, &(*prop.mat3)[1][0]);

@@ -157,11 +157,11 @@ Venom::ErrorCode MainScene::Update()
 			else w->UnlockCursor();
 		}
 		ImGui::Text("Camera Properties:");
-		if (ImGui::SliderFloat3("Position", glm::value_ptr(camera->GetPositionRef()), -100, 100.0f))
+		if (ImGui::DragFloat3("Position", glm::value_ptr(camera->GetPositionRef()), -100, 100.0f))
 		{
 			camera->UpdateViewMatrix();
 		}
-		ImGui::SliderFloat("Speed", &camera->GetSpeedRef(), 0.0f, 100.0f);
+		ImGui::DragFloat("Speed", &camera->GetSpeedRef(), 0.0f, 100.0f);
 
 		
 		if (ImGui::Checkbox("Draw Faces", &drawFaces) || ImGui::Checkbox("Draw Lines", &drawLines) || ImGui::Checkbox("Draw Points", &drawPoints))

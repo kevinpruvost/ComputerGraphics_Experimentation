@@ -13,6 +13,18 @@ struct EngineObjectContainer
     EngineResource::ResourceType resourceType;
 };
 
+struct ColorRGBA : public glm::vec4
+{
+    using glm::vec4::vec4;
+    operator glm::vec4() { return *this; }
+};
+
+struct ColorRGB : public glm::vec3
+{
+    using glm::vec3::vec3;
+    operator glm::vec3() { return *this; }
+};
+
 class VENOM_API PropertyManager {
 public:
     struct Property
@@ -27,6 +39,8 @@ public:
             STRING,
             VEC3,
             VEC4,
+            COLOR_RGB,
+            COLOR_RGBA,
             MAT3,
             MAT4,
             ENGINE_OBJECT_PTR,
@@ -42,6 +56,8 @@ public:
             char* s;
             glm::vec3* vec3;
             glm::vec4* vec4;
+            ColorRGB* colorRGB;
+            ColorRGBA* colorRGBA;
             glm::mat3* mat3;
             glm::mat4* mat4;
             EngineObjectContainer engineObject;
@@ -114,6 +130,14 @@ public:
         else if constexpr (std::is_same<T, glm::vec4>::value) {
             p.type = Property::Type::VEC4;
             p.vec4 = &prop;
+        }
+        else if constexpr (std::is_same<T, ColorRGB>::value) {
+            p.type = Property::Type::COLOR_RGB;
+            p.colorRGB = &prop;
+        }
+        else if constexpr (std::is_same<T, ColorRGBA>::value) {
+            p.type = Property::Type::COLOR_RGBA;
+            p.colorRGBA = &prop;
         }
         else if constexpr (std::is_same<T, glm::mat3>::value) {
             p.type = Property::Type::MAT3;

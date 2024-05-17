@@ -29,12 +29,12 @@ void ParticleSystem::Init()
 {
     _guiCallback = ([&](GUI * gui) {
         ImGui::ColorEdit4("Particles Color", glm::value_ptr(__particleColor));
-        ImGui::SliderFloat("Particles Size", &__particleSize, 0.1f, 10.0f);
-        ImGui::SliderFloat("Particles Lifetime", &__particleLifetime, 0.1f, 100.0f);
-        ImGui::SliderFloat("Emission Rate", &__emissionRate, 0.1f, 100.0f);
-        ImGui::SliderInt("Max Particles", &__maxParticles, 1, 10000);
-        ImGui::SliderFloat3("Initial Velocity", glm::value_ptr(__particleInitialVelocity), -10.0f, 10.0f);
-        ImGui::SliderFloat3("Acceleration", glm::value_ptr(__particleAcceleration), -10.0f, 10.0f);
+        ImGui::DragFloat("Particles Size", &__particleSize, 0.1f, 10.0f);
+        ImGui::DragFloat("Particles Lifetime", &__particleLifetime, 0.1f, 100.0f);
+        ImGui::DragFloat("Emission Rate", &__emissionRate, 0.1f, 100.0f);
+        ImGui::DragInt("Max Particles", &__maxParticles, 1, 10000);
+        ImGui::DragFloat3("Initial Velocity", glm::value_ptr(__particleInitialVelocity), -10.0f, 10.0f);
+        ImGui::DragFloat3("Acceleration", glm::value_ptr(__particleAcceleration), -10.0f, 10.0f);
         if (gui->DrawEngineObjectProperties("Particle Texture", &__particleTexture, EngineResource::ResourceType::TEXTURE)) {
             if (__model) {
                 __model->GetMaterials()[0]->SetTexture(0, __particleTexture);
